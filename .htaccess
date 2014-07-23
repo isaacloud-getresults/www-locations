@@ -1,0 +1,5 @@
+RewriteEngine On
+
+RewriteBase /~mac/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php/$1 [NC,QSA,L]

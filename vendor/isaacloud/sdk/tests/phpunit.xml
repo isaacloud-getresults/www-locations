@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- see http://www.phpunit.de/wiki/Documentation -->
+<phpunit colors="true"
+         stderr="true"
+         bootstrap="./Bootstrap.php"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         stopOnFailure="false"
+         syntaxCheck="false">
+    <testsuites>
+        <testsuite name="IsaaCloud SDK Test Suite">
+            <directory>./issaCloud/</directory>
+        </testsuite>
+    </testsuites>
+     <filter>
+        <whitelist>
+            <directory>./issaCloud/</directory>
+        </whitelist>
+    </filter>
+</phpunit>

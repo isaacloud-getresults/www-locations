@@ -1,0 +1,51 @@
+[
+    {
+        "name": "isaacloud/sdk",
+        "version": "0.0.3",
+        "version_normalized": "0.0.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/isaacloud/php-sdk.git",
+            "reference": "79ff86fc6727ddfef39e556e4a36081cba0c2093"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/isaacloud/php-sdk/zipball/79ff86fc6727ddfef39e556e4a36081cba0c2093",
+            "reference": "79ff86fc6727ddfef39e556e4a36081cba0c2093",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "3.7.*"
+        },
+        "time": "2014-06-02 08:11:57",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "IsaaCloud\\Sdk\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Arnold Sikorski",
+                "email": "asikorski@isaacloud.com",
+                "homepage": "http://www.isaacloud.com/"
+            }
+        ],
+        "description": "IsaaCloud Sdk",
+        "homepage": "https://github.com/isaacloud/php-sdk",
+        "keywords": [
+            "api",
+            "isaacloud",
+            "rest",
+            "sdk"
+        ]
+    }
+]

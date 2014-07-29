@@ -137,7 +137,7 @@ class Google_OAuth2 extends Google_Auth {
         'scope=' . urlencode($scope),
         'access_type=' . urlencode($this->accessType),
         'approval_prompt=' . urlencode($this->approvalPrompt),
-        'hd=sosoftware.pl'
+        
  
     );
 

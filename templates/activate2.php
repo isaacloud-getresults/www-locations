@@ -8,7 +8,7 @@
         <meta name="author" content="SoInteractive">	
         <title>PRZYKLADOWA APLIKACJA </title>
 
-         <link href="../../css/bootstrap.min.css" rel="stylesheet">
+         <link href="./css/bootstrap.min.css" rel="stylesheet">
          <script src="js/jquery-1.9.1.min.js"></script>
          <script src="js/bootstrap.min.js"></script>
        
@@ -30,7 +30,7 @@
    		<div class="container">
    			<center>
    			<h4>Domain: <?php echo $_SERVER['SERVER_NAME']; ?> </h4></br>
-   			
+   			<?php //$_SESSION['domain']. ?>
    			
 1. Go to <a href="https://isaacloud.com/sign-up/"  target="_blank">isaacloud.com/sign-up/</a></br>
 2. Create Instance</br>
@@ -42,17 +42,17 @@
 Your base64 token:</br>
 <input type="text" name="base64" size="40">
 
-
+</form>
    			
    			
    			</center>
    		</div>
 	<br><br>
     	<div class="container">
-    		<center><button type="submit" name="ok" value="ok" class="btn btn-primary" style="width: 300px; height: 60px" >
+    		<center><button type="submit" name="ok" value="ok"class="btn btn-primary" style="width: 300px; height: 60px" >
          	<span class="glyphicon glyphicon-log-in"></span> OK</button></center>
          
-      </form>   	
+         	
          
          		
         </div>

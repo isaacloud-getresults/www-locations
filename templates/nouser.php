@@ -1,0 +1,1 @@
+Nie ma takiego uzytkownika

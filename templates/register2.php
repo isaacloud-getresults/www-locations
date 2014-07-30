@@ -67,25 +67,11 @@ Register your domain:</br></br>
 
 <?php
 
-//session_start();
-//$_SESSION['email']= "agolebiowska@sosoftware.pl";
-
-//echo $_SESSION['email'];
 
 
 if(  isset($_POST['join'])   &&  isset($_SESSION['email']) ) {
 
 
-
-
-//wygeneruj token
-//$token= md5($_SESSION['email'].time()); 
-$token = "abc";
-$_SESSION['activation']= $token;
-//echo "token wpisany";
-
-
-//echo "</br>";
 
 
 $domain = $_POST['domain'];

@@ -3,8 +3,6 @@
 defined('VENDOR_PATH') || define('VENDOR_PATH', realpath(__DIR__ . '/../vendor'));
 require VENDOR_PATH . '/autoload.php';
 
-//print_r ($_SERVER);
-
 
 ///////////////////////////////////    google oauth
 
@@ -12,7 +10,7 @@ require VENDOR_PATH . '/autoload.php';
 //settings
 $google_client_id 		= '549829565881-cidmn7k1pgph6joliv96soubbes1d4vb.apps.googleusercontent.com';
 $google_client_secret 	= '5PH89Qrq-gDiV5pKoqW9WRsX';
-$google_redirect_url 	= 'http://getresults.isaacloud.com/'; //path to your script
+$google_redirect_url 	= 'http://localhost/~mac/'; //path to your script
 
 
 
@@ -52,7 +50,7 @@ if (isset($_GET['code']))
 	else
 	{
 	*/
-	header('Location: http://getresults.isaacloud.com/' );
+	header('Location: http://localhost/~mac/' );
 	
 	//}
 	
@@ -73,7 +71,6 @@ if ($gClient->getAccessToken())
 {
 	  //For logged in user, get details from google using access token
 	  
-	  //w sumie mozna powywalac bo i tak tylko email jest istotny
 	  $user 				= $google_oauthV2->userinfo->get();
 	  $user_name 			= filter_var($user['name'], FILTER_SANITIZE_SPECIAL_CHARS);
 	  $email 				= filter_var($user['email'], FILTER_SANITIZE_EMAIL);
@@ -108,10 +105,9 @@ $app->client = $gClient;
 
 //Mongo Client
 
-
-    $m = new MongoClient(); 
-    $db = $m->isaa;
-    $collection = $db->users;
+$m = new MongoClient(); 
+$db = $m->isaa;
+$collection = $db->users;
 
 
 
@@ -138,7 +134,6 @@ if (isset($_SESSION['email'])){             //checking if user exists in databas
  	
  				$jest=true;
  			
- 				 echo "mongo";
  	
  				$_SESSION['clientid']=$clientid;
  				$_SESSION['secret']=$secret;
@@ -281,7 +276,8 @@ $app->get('/admin/user', function () use ($app) {
 
 /***************************** define routes  *****************************************/
 
-print_r($_SESSION);
+//print_r($_SESSION);
+
 
 
 
@@ -334,11 +330,51 @@ $app->get('/error', function () use ($app) {
 
 
 
+/*    test
+
+
+$app->get('/x', function () use ($app) {
+
+  		$app->render('activate2.php');
+ 
+
+
+ 
+ 
+})->name("x");
+
+*/
+
+
+
+
+
+
+//////////////////////////// user doesn't exist
+
+$app->get('/uerror', function () use ($app) {
+
+  		$app->render('nouser.php');
+ 
+
+ 
+  session_destroy();
+  $app->view()->setData('token', null); 
+  $app->client->revokeToken();
+ 
+ 
+  //$app->response->redirect($app->urlFor('de'), 303); 
+ 
+ 
+})->name("ue");
+
+
+
 
 ///////////////////////////   admin routes
 
 
-$app->get('/admin/dashboard', function () use ($app) {
+$app->get('/admin/dashboard', function () use ($app,$sdk) {
 
 //print_r($_SESSION);
 
@@ -348,6 +384,12 @@ if (!isset($_SESSION['token'])) {
 
 	$app->render('left.php');
     $app->render('admindashboard.php');
+    
+    
+    
+    
+
+ 
  
 
 })->name("ad");
@@ -357,11 +399,14 @@ if (!isset($_SESSION['token'])) {
 
 
 $app->get('/admin/register', function () use ($app) {
+
+ $sub=false;
+
 if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
-	$app->render('register.php');
+	 $app->render('register.php', array('sub' => $sub));  
  
 
 })->name("ar");
@@ -370,33 +415,53 @@ if (!isset($_SESSION['token'])) {
 
 
 $app->post('/admin/register', function () use ($app) {
+
+ $sub=false;
+
 if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
 
-$app->render('register.php');
 
-
-   		echo "Please check your email";
-   //dodaj do bazy nowy rekord usera o danym mailu
+    $m = new MongoClient(); 
+    $db = $m->isaa;
+    $collection = $db->users;
+    
+     $cursor = $collection->findOne(array( 'domain' => $_POST['domain'] ));
+    
+$_SESSION['domain'] = $_POST['domain'];   
+    
+  //jesli jest juz taka subdomena to przekieruj z powrotem na ar  
+    if (empty($cursor)) 
+    {
+       
+        $app->render('checkemail.php');  
+        
+//$token= md5($_SESSION['email'].time());                  /// ZMIENIC TO!!!!!
+$token = "abc";
+$_SESSION['activation']= $token;
+        
+       //dodaj do bazy nowy rekord usera o danym mailu
    
-   
-   $user=array(
+        $user=array(
                 "email" =>  $_SESSION['email'],
                 "token" =>  $_SESSION['activation'],
 			    "base64" =>  null,
-			    "domain" =>  $_SESSION['domain'],
+			    "domain" =>  $_POST['domain'],
 			    "activation" =>  "false"
    
               );
                   
-   
-    $m = new MongoClient(); 
-    $db = $m->isaa;
-    $collection = $db->users;
+        $collection->insert($user);
 
-   $collection->insert($user);
+         }
+    else
+    
+       {   
+         $sub=true;
+         $app->render('register.php', array('sub' => $sub));   
+       }
 
 
 })->name("sar");
@@ -418,7 +483,7 @@ $app->get('/admin/activate/:code', function ($code) use ($app) {
     $db = $m->isaa;
     $collection = $db->users;
 
- $cursor = $collection->findOne(array( 'token' => $code ));
+    $cursor = $collection->findOne(array( 'token' => $code ));
    
 
     if(!empty($cursor))                                             // token istnieje
@@ -529,15 +594,36 @@ $app->render('left.php');
 
 
 $app->get('/admin/global', function () use ($app) {
-if (!isset($_SESSION['token'])) {
-             $app->response->redirect($app->urlFor('e'), 303);
-        }
-$app->render('left.php');
-  		$app->render('global.php');
- 
 
+  		$app->render('global.php');
 
 })->name("gl");
+
+
+
+
+$app->get('/admin/restaurant', function () use ($app) {
+
+  		$app->render('restaurant.php');
+ 
+})->name("rest");
+
+
+$app->get('/admin/meetingroom', function () use ($app) {
+
+  		$app->render('meetingroom.php');
+
+})->name("meet");
+
+
+
+$app->get('/admin/kitchen', function () use ($app) {
+
+  		$app->render('kitchen.php');
+ 
+})->name("kit");
+
+
 
 
 
@@ -547,22 +633,19 @@ $app->render('left.php');
 $app->get('/dashboard', function () use ($app,$sdk,$jest) {
 
 
-var_dump($jest);
-
-
-
 
   	if (!isset($_SESSION['token'])) {
-             $app->response->redirect($app->urlFor('e'), 303);
-        }
+            $app->response->redirect($app->urlFor('e'), 303);
+       }
         
 /******************* logged-in user's data (session variables) **************************/
 
-//print_r($res);
+$a=$_SESSION["email"];
 $sdk->path("cache/users")
- 				//->withParameters(array("userId" =>1))
-                ->withFields("id","firstName","lastName","level")
+ 				->withQuery(array("email" => $a))
+                ->withFields("firstName","lastName","level")
 				->withQueryParameters(array("fields" => array("firstName","lastName","leaderboards","email")));
+
 
   
 $res = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
@@ -585,7 +668,7 @@ endforeach;
         
         //sprawdzenie czy w danej instancji jest taki user
         if (!isset($_SESSION["id"]))
-        {          $app->response->redirect($app->urlFor('e'), 303);           }
+        {          $app->response->redirect($app->urlFor('ue'), 303);           }
         
         
         

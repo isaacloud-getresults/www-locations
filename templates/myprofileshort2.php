@@ -10,10 +10,10 @@
   						<dd><?php if(empty($myprofile["lastName"])) echo "---------"; else echo $myprofile["lastName"]; ?></dd>
   						
   						<dt>Score:</dt>
-  						<dd><?php echo $myprofile["leaderboards"]["1"]["score"]; ?></dd>
+  						<dd><?php if(empty($myprofile["leaderboards"]["1"]["score"])) echo "---------"; else echo $myprofile["leaderboards"]["1"]["score"]; ?></dd>
   						
   						<dt>Position:</dt>
-  						<dd><?php echo $myprofile["leaderboards"]["1"]["position"]; ?></dd>
+  						<dd><?php if(empty($myprofile["leaderboards"]["1"]["score"])) echo "---------"; else echo $myprofile["leaderboards"]["1"]["position"]; ?></dd>
   						
   						
 					</dl>       

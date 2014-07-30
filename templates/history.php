@@ -12,7 +12,7 @@
  	?>
            
            
-       <?php  if(sizeof($ids)==0) echo "<center>"."Empty"."</center>"; 
+       <?php  if($size==0) echo "<center>"."Empty"."</center>"; 
        
        			else{ ?>    
            

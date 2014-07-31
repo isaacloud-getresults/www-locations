@@ -11,7 +11,7 @@ require VENDOR_PATH . '/autoload.php';
 //settings
 $google_client_id 		= '549829565881-cidmn7k1pgph6joliv96soubbes1d4vb.apps.googleusercontent.com';
 $google_client_secret 	= '5PH89Qrq-gDiV5pKoqW9WRsX';
-$google_redirect_url 	= 'http://localhost/~mac/'; //path to your script
+$google_redirect_url 	= 'http://getresults.isaacloud.com/'; //path to your script
 
 
 
@@ -47,7 +47,7 @@ if (isset($_GET['code']))
 	$gClient->authenticate($_GET['code']);
 	$_SESSION['token'] = $gClient->getAccessToken();
 
-	header('Location: http://localhost/~mac/' );
+	header('Location: http://getresults.isaacloud.com/' );
 	
 	
 	return;
@@ -424,8 +424,8 @@ $_SESSION['domain'] = $_POST['domain'];
        
         $app->render('checkemail.php');  
         
-		//$token= md5($_SESSION['email'].time());                  /// ZMIENIC TO!!!!!
-		$token = "abc";
+		$token= md5($_SESSION['email'].time());                  /// ZMIENIC TO!!!!!
+		//$token = "abc";
 		$_SESSION['activation']= $token;
         
        

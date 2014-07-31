@@ -8,7 +8,7 @@
         <meta name="author" content="SoInteractive">	
         <title>PRZYKLADOWA APLIKACJA </title>
 
-         <link href="./css/bootstrap.min.css" rel="stylesheet">
+         <link href="css/bootstrap.min.css" rel="stylesheet">
          <script src="js/jquery-1.9.1.min.js"></script>
          <script src="js/bootstrap.min.js"></script>
        
@@ -60,3 +60,9 @@
     	<div class="modal-body row">
     	 
   			<div class="col-md-4">
+  			
+  			
+  			
+  			
+  			
+  			

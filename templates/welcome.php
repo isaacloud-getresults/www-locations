@@ -34,7 +34,7 @@
 	<br><br>
     	<div class="container">
     		<center><button class="btn btn-primary" id="login" style="width: 300px; height: 60px" >
-         	<span class="glyphicon glyphicon-log-in"></span> <a href="<?php echo $url; ?>"><font color="white">Log in </font></a>  </button></center>
+         	<span class="glyphicon glyphicon-log-in"></span> <a href="<?php echo $url; ?>"><font color="white">Log in using Google </font></a>  </button></center>
          
          	
          
@@ -43,7 +43,10 @@
 	<br><br><br>
  	<div class="container">   	
 		<hr />
-		<h5><center>Contact: xyz@sointeractive.pl</center></h5>
+		<center>
+	<address>
+  		<strong>Contact: </strong><a href="mailto:#"> xyz@sointeractive.pl</a>
+	</address></center>
 	</div>
      
     </body>

@@ -3,4 +3,11 @@
 
    
 <p class="text-center"> Currently in the <?php echo $roomid["label"]." "; ?> there are 
-	<?php echo sizeof($userscount); ?> users. </p>
+	 
+	
+	
+<?php 
+ $size= sizeof($userscount);
+if($size==0) echo "0"; else echo $size;
+
+?> users. </p>

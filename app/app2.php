@@ -1,10 +1,11 @@
 <?php
 
+
 defined('VENDOR_PATH') || define('VENDOR_PATH', realpath(__DIR__ . '/../vendor'));
 require VENDOR_PATH . '/autoload.php';
 
 
-///////////////////////////////////    google oauth
+//////////////////////////////////    google oauth
 
 
 //settings
@@ -23,6 +24,8 @@ require_once './src/contrib/Google_Oauth2Service.php';
 //start session
 session_destroy();
 session_start();
+
+
 
 $gClient = new Google_Client();
 
@@ -43,20 +46,10 @@ if (isset($_GET['code']))
 { 
 	$gClient->authenticate($_GET['code']);
 	$_SESSION['token'] = $gClient->getAccessToken();
-	
-	/*
-	if (  isset($_SESSION['user']))
-	{header('Location: http://localhost/~mac/user' );}
-	else
-	{
-	*/
+
 	header('Location: http://localhost/~mac/' );
 	
-	//}
 	
-	
-	
-	//header('Location: ' . filter_var($google_redirect_url, FILTER_SANITIZE_URL));
 	return;
 }
 
@@ -122,7 +115,7 @@ if (isset($_SESSION['email'])){             //checking if user exists in databas
     if(!empty($cursor))                                             
 	{
 	
-	    foreach ($cursor as $user) 
+	    foreach ($cursor as $user): 
 
 
 
@@ -141,7 +134,7 @@ if (isset($_SESSION['email'])){             //checking if user exists in databas
  	      		}
  	      		
 		
- 	      		
+ 	      endforeach;		
  	      		
  	      		
 	}
@@ -273,15 +266,10 @@ $app->get('/admin/user', function () use ($app) {
 });
 
 
-
-/***************************** define routes  *****************************************/
-
-//print_r($_SESSION);
+/*******************************     Define routes    **********************************/
 
 
-
-
-////////////////////////////////  root
+////////////////////////////////  root   /////////////////////////////////////////////
 
 $app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
  
@@ -309,7 +297,7 @@ $app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
 
 
 
-////////////////////////////////  error
+////////////////////////////////  error   /////////////////////////////////////////////
 
 
 $app->get('/error', function () use ($app) {
@@ -330,27 +318,8 @@ $app->get('/error', function () use ($app) {
 
 
 
-/*    test
 
-
-$app->get('/x', function () use ($app) {
-
-  		$app->render('activate2.php');
- 
-
-
- 
- 
-})->name("x");
-
-*/
-
-
-
-
-
-
-//////////////////////////// user doesn't exist
+//////////////////////////// user doesn't exist   ///////////////////////////////////////
 
 $app->get('/uerror', function () use ($app) {
 
@@ -371,38 +340,55 @@ $app->get('/uerror', function () use ($app) {
 
 
 
-///////////////////////////   admin routes
+/****************************  admin routes  ******************************************/
 
+
+
+//////////////////////////// admin dashboard : menu, statistics ////////////////////////
 
 $app->get('/admin/dashboard', function () use ($app,$sdk) {
 
-//print_r($_SESSION);
+	if (!isset($_SESSION['token'])) {
+           	  $app->response->redirect($app->urlFor('e'), 303);
+        	}
 
-if (!isset($_SESSION['token'])) {
-             $app->response->redirect($app->urlFor('e'), 303);
-        }
+	$app->render('header3.php');
+	$app->render('menu.php');
+	
+	//get statistics 
+	
+	$sdk->path("cache/users")
+				->withQueryParameters(array("limit" => 0,"fields" => array("firstName","lastName","leaderboards","email", "gainedAchievements", "counterValues")));
 
-	$app->render('left.php');
-    $app->render('admindashboard.php');
-    
-    
-    
-    
 
- 
- 
+  
+$res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
+	$sdk->path("queues/notifications");
+
+$res3 = $sdk->api("queues/notifications", "get",$sdk->getParameters(),  $sdk->getQueryParameters()  );
+
+
+	$sdk->path("queues/events/done");
+
+$res4 = $sdk->api("queues/events/done", "get",$sdk->getParameters(),  $sdk->getQueryParameters()  );
+
+
+    $app->render('admindashboard.php', array('res1' => $res1, 'res3' => $res3, 'res4' => $res4) );
+	$app->render('footer.php');
+    
 
 })->name("ad");
 
 
 
-
+//////////////////////////  admin register (get)  //////////////////////////////////////
 
 $app->get('/admin/register', function () use ($app) {
 
  $sub=false;
 
-if (!isset($_SESSION['token'])) {
+	if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
@@ -412,13 +398,13 @@ if (!isset($_SESSION['token'])) {
 })->name("ar");
 
 
-
+//////////////////////////  admin register (post)   ///////////////////////////////////
 
 $app->post('/admin/register', function () use ($app) {
 
  $sub=false;
 
-if (!isset($_SESSION['token'])) {
+	if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
@@ -428,21 +414,22 @@ if (!isset($_SESSION['token'])) {
     $db = $m->isaa;
     $collection = $db->users;
     
-     $cursor = $collection->findOne(array( 'domain' => $_POST['domain'] ));
+    $cursor = $collection->findOne(array( 'domain' => $_POST['domain'] ));
     
 $_SESSION['domain'] = $_POST['domain'];   
     
-  //jesli jest juz taka subdomena to przekieruj z powrotem na ar  
+  // if domain exists -> redirect to  ar  
     if (empty($cursor)) 
     {
        
         $app->render('checkemail.php');  
         
-//$token= md5($_SESSION['email'].time());                  /// ZMIENIC TO!!!!!
-$token = "abc";
-$_SESSION['activation']= $token;
+		//$token= md5($_SESSION['email'].time());                  /// ZMIENIC TO!!!!!
+		$token = "abc";
+		$_SESSION['activation']= $token;
         
-       //dodaj do bazy nowy rekord usera o danym mailu
+       
+ //add new user
    
         $user=array(
                 "email" =>  $_SESSION['email'],
@@ -466,16 +453,14 @@ $_SESSION['activation']= $token;
 
 })->name("sar");
 
-
-
-
+//////////////////////// admin activate code //////////////////////////////////////////
 
 
 $app->get('/admin/activate/:code', function ($code) use ($app) {
 
 
 
-/// sprawdz w bazie czy jest token i user nieaktywny jesli tak to aktywuj 
+	/// check in database if the user and token are active (if not->activate)
 
     $_SESSION['activation']= $code;
 
@@ -486,10 +471,10 @@ $app->get('/admin/activate/:code', function ($code) use ($app) {
     $cursor = $collection->findOne(array( 'token' => $code ));
    
 
-    if(!empty($cursor))                                             // token istnieje
+    if(!empty($cursor)) // token exists
 	{
 
-              	if ($cursor["activation"] == "false")    // jeszcze nie jest aktywny
+              	if ($cursor["activation"] == "false")    // it hasn't activated yet
      	        { 
  	
  	                
@@ -504,7 +489,7 @@ $app->get('/admin/activate/:code', function ($code) use ($app) {
 	}
 
 
-    else { echo "nieprawidlowy token";   }
+    else echo "nieprawidlowy token";   
 
 
 
@@ -513,7 +498,7 @@ $app->get('/admin/activate/:code', function ($code) use ($app) {
 
 
 
-
+/////////////////////////////// admin activate ////////////////////////////////////////
 
 $app->post('/admin/activate/activate', function () use ($app) {
 
@@ -527,7 +512,7 @@ $app->post('/admin/activate/activate', function () use ($app) {
     $cursor = $collection->findOne(array( 'token' => $_SESSION['activation'] ));
    
 
-    if(!empty($cursor))                                             // token istnieje
+    if(!empty($cursor))   // token exists
 	{     	
  	                
  	//update database
@@ -547,140 +532,224 @@ $app->post('/admin/activate/activate', function () use ($app) {
 })->name("scct");
 
 
-
+/////////////////// admin mobile : menu, QR Codes and links to appstore for mobile app. ///
 
 $app->get('/admin/mobile', function () use ($app) {
 
-if (!isset($_SESSION['token'])) {
+	if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
-$app->render('left.php');
-  		$app->render('mobile.php');
- 
-
+        
+    $app->render('header3.php');
+	$app->render('menu.php');
+ 	$app->render('mobile.php');
+    $app->render('footer.php');    
+        
 
 })->name("mo");
 
 
-
+///// admin www : menu, QR Codes and links to: kitchen, meeting room, restaurant, general and user profile //
 
 $app->get('/admin/www', function () use ($app) {
 if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
-$app->render('left.php');
-  		$app->render('www.php');
- 
+
+ 	$app->render('header3.php');
+	$app->render('menu.php');
+	$app->render('www.php');
+    $app->render('footer.php'); 
 
 
 })->name("ww");
 
 
-
+//////////////////// admin setup :  beacon's localization   /////////////////////////
 
 
 $app->get('/admin/setup', function () use ($app) {
 if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
-$app->render('left.php');
-  		$app->render('setup.php');
+        
+        $app->render('header3.php');
+        $app->render('menu.php');
+  		$app->render('setup.php'); // to do
+  		$app->render('footer.php'); 
  
 
 
 })->name("se");
 
 
+////////////////////   admin global : statistics, global feed  ///////////////////////////
 
+$app->get('/admin/global', function () use ($app, $sdk) {
 
-$app->get('/admin/global', function () use ($app) {
+  		$app->render('column.php');
+  		$app->render('global.php');// general statictics -> to do
+        $app->render('midd2.php');
+        
+        //select from isaacloud
+        
+            	
+  		$sdk->path("cache/users")
+  				 ->withOrder(array("updatedAt"=>"DESC"))
+                ->withFields("firstName","lastName")
+				->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName")));   	
+    	
+$res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
+	
+    	$sdk->path("queues/notifications")
+    	 		//->withQuery(array("typeId"=> ?)) <-uzupelnic
+                 ->withOrder(array("updatedAt"=>"DESC"))
+                ->withFields("data")
+				 ->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId","typeId", "updatedAt")));
 
-  		$app->render('global.php');
+$res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+    	
+    	//print_r($res);	
+    	
+    	$app->render('global2.php', array('data' => $res, 'person' => $res1));// global feed ->to do
+        	
+  		
 
 })->name("gl");
 
 
-
+////////////////////// admin restaurant: list of users, feed ////////////////////////////
 
 $app->get('/admin/restaurant', function () use ($app) {
 
-  		$app->render('restaurant.php');
- 
+  		
+  		$app->render('column.php');
+    	$app->render('restaurant.php'); //<- list of users (to do)
+    	$app->render('midd2.php');
+  		$app->render('restaurant2.php'); //feed (to do)
+  		
 })->name("rest");
+
+////////////////////// admin meeting_room: list of users, feed ////////////////////////////
 
 
 $app->get('/admin/meetingroom', function () use ($app) {
 
-  		$app->render('meetingroom.php');
+  		
+  		
+  		$app->render('column.php');
+    	$app->render('meetingroom.php'); //<- list of users (to do)
+    	$app->render('midd2.php');
+  		$app->render('meetingroom2.php'); //feed (to do)
+  		
+  		
 
 })->name("meet");
 
+////////////////////// admin kitchen: list of users, feed ////////////////////////////
 
+$app->get('/admin/kitchen', function () use ($app,$sdk) {
 
-$app->get('/admin/kitchen', function () use ($app) {
+		$app->render('column.php');
+//users
+   $sdk->path("cache/users")
+           ->withQuery(array("counterValues.counter" => 6, "counterValues.counter" => 1))
+            ->withOrder (array("leaderboards.1.position"=>"ASC" ))
+			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
+				
 
-  		$app->render('kitchen.php');
+$res4 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
+   
+//Room's name
+  
+$pref="cache/users/groups/"; 
+$p=$pref."1"; // 1 ->id for kitchen
+
+	$sdk->path($p)
+				->withQueryParameters(array("fields" => array("label")));
+				
+
+$res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+
+		
+    	$app->render('kitchen.php', array('users' => $res4, 'roomid' => $res5) );
+    	$app->render('midd2.php');
+    	
+  	$sdk->path("cache/users")
+  				->withQuery(array("counterValues.counter" => 6, "counterValues.counter" => 1))
+  				->withOrder(array("updatedAt"=>"DESC"))
+             	->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName")));   	
+    	
+$res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
+    	
+
+    	
+    	 $sdk->path("queues/notifications")
+                ->withQuery(array("typeId" =>4))
+                ->withOrder(array("updatedAt"=>"DESC"))
+				->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
+
+$res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+
+    	
+    	$app->render('kitchen2.php', array('data' => $res, 'person' => $res1));
+    	
+
  
 })->name("kit");
 
 
+/**************************** user routes **********************************************/
 
 
 
-////////////////////////////////  user routes
+/// dashboard : my profile, list of all rooms  //////////////////////////////////////////
 
-
-$app->get('/dashboard', function () use ($app,$sdk,$jest) {
-
+$app->get('/dashboard', function () use ($app,$sdk) {
 
 
   	if (!isset($_SESSION['token'])) {
-            $app->response->redirect($app->urlFor('e'), 303);
-       }
+             $app->response->redirect($app->urlFor('e'), 303);
+        }
         
 /******************* logged-in user's data (session variables) **************************/
 
 $a=$_SESSION["email"];
 $sdk->path("cache/users")
  				->withQuery(array("email" => $a))
-                ->withFields("firstName","lastName","level")
-				->withQueryParameters(array("fields" => array("firstName","lastName","leaderboards","email")));
-
+				->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email")));
 
   
 $res = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
-
 foreach ($res as $r): 
-        if($r["email"]==($_SESSION["email"])){
+    
 
 			$_SESSION["lastName"]=$r["lastName"];
 			$_SESSION["firstName"]=$r["firstName"];
 			$_SESSION["id"]=$r["id"];
 
-
-		}
+	
 endforeach; 
 
 
 /***************************************************************************************/  
         
         
-        //sprawdzenie czy w danej instancji jest taki user
-        if (!isset($_SESSION["id"]))
-        {          $app->response->redirect($app->urlFor('ue'), 303);           }
+           //sprawdzenie czy w danej instancji jest taki user
+        if (!isset($_SESSION["id"])) {
+                 $app->response->redirect($app->urlFor('ue'), 303); 
+             } 
         
         
-        
-  	$myid=	$_SESSION["id"];
-  	$pref="cache/users/";
-	$p=$pref.$myid;	
+$myid=$_SESSION["id"];
+$pref="cache/users/";
+$p=$pref.$myid;	
   
 
     	$sdk->path($p)
- 				//->withParameters(array("userId" =>1))
-                ->withFields("id","firstName","lastName","level")
-				->withQueryParameters(array("fields" => array("firstName","lastName","leaderboards","email")));
+				->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","leaderboards","email")));
 
   
 $res = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
@@ -688,17 +757,12 @@ $res = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() )
 		$app->render('header.php'); //header
 		$app->render('myprofileshort.php', array('myprofile' => $res)); //first column
    
-   
-   
-   
+ 
     	$sdk->path("cache/users/groups")
-               
-                ->withOrder(array("id"=>"ASC"))
-                 ->withFields("counterValues","level")
-				 ->withQueryParameters(array("fields" => array("counterValues","level","label")));
+    			->withOrder(array("id"=>"ASC"))
+				->withQueryParameters(array("limit" =>0,"fields" => array("counterValues","label")));
     
 
-  
 $res = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
 		$app->render('midd.php'); // part between column
@@ -719,15 +783,12 @@ if (!isset($_SESSION['token'])) {
 
   		$app->render('header.php');
   		
-  	$myid=$_SESSION["id"];
-  	$pref="cache/users/";
-	$p=$pref.$myid;	
+$myid=$_SESSION["id"];
+$pref="cache/users/";
+$p=$pref.$myid;	
   
     	$sdk->path($p)
-               // ->withParameters(array("userId" =>1))
-                ->withOrder(array("gainedAchievements.achievement"=>"ASC"))
-                ->withFields("firstName","lastName")
-				->withQueryParameters(array("fields" => array("firstName","lastName","gainedAchievements","email","leaderboards")));
+    			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","gainedAchievements","email","leaderboards")));
     
 
   
@@ -739,8 +800,7 @@ $res = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() )
      
     	 $sdk->path("/cache/achievements")
     	 	->withOrder(array("label"=>"ASC"))
-            ->withFields("name")
-			->withQueryParameters(array("fields" => array("name","id","label")));
+			->withQueryParameters(array("limit" =>0,"fields" => array("name","label")));
 				 
 $res1 = $sdk->api("/cache/achievements", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
@@ -762,15 +822,13 @@ if (!isset($_SESSION['token'])) {
   		$app->render('header.php');
   		
   		
- 	$myid=$_SESSION["id"];
-  	$pref="cache/users/";
-	$p=$pref.$myid; 
+$myid=$_SESSION["id"];
+$pref="cache/users/";
+$p=$pref.$myid; 
   	
   
     	$sdk->path($p)
-            
-                 ->withFields("firstName","lastName")
-				 ->withQueryParameters(array("fields" => array("firstName","lastName","email","leaderboards")));
+				 ->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email","leaderboards")));
     
 
   
@@ -780,10 +838,9 @@ $res = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() )
   		$app->render('users1.php', array('user' => $res)); //first column
    		$app->render('midd.php');
    		
-   $sdk->path("cache/users")
+   		$sdk->path("cache/users")
                 ->withOrder (array("leaderboards.1.position"=>"ASC"))
-                 ->withFields("firstName","lastName")
-				 ->withQueryParameters(array("fields" => array("firstName","lastName","email","leaderboards")));
+				->withQueryParameters(array("limit" =>0, "fields" => array("firstName","lastName","email","leaderboards")));
     
 
   
@@ -792,35 +849,17 @@ $res = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryPar
    		
     	$app->render('users2.php', array('users' => $res)); //second column
   		$app->render('footer.php');   
+  		
 })->name("l");
 
-
-
-
-
-
-
-
-
-////////////////////////////////  logout
+///////// logout /////////////////////////////////////////////////////////////////////////
 
 $app->get('/logout', function () use ($app,$sdk) {
 
 session_destroy();
- // $app->render('logout.php');
   $app->view()->setData('token', null);
-  
-
-  
-  if (  isset($_SESSION['user']))
-	{ $app->response->redirect($app->urlFor('user'), 303); }
-	else
-	{ $app->response->redirect($app->urlFor('root'), 303); }
-  
-  
-  
+  $app->response->redirect($app->urlFor('root'), 303); 
   $app->client->revokeToken();
-  
   
   
   
@@ -828,16 +867,11 @@ session_destroy();
 
 
 
-//////////////// empty
+//////////////// empty /////////////////////////////////////////////////////////////////
 
 $app->get('/users', function () use ($app) {
 
 })->name("u");
-
-
-
-
-
 
 
 /**************************** Routes with variables *************************************/
@@ -854,21 +888,16 @@ if (!isset($_SESSION['token'])) {
 
  
     	$app->render('header2.php');
-    
-    
- //list of  users in x room  
-$pref="cache/users/groups/";
-$suf="/users";
-$p=$pref.$id.$suf;
 
-    $sdk->path($p)
-                // ->withParameters(array("userId" =>1))
-                ->withOrder (array("id"=>"ASC"))
-                ->withFields("firstName","lastName")
-				->withQueryParameters(array("fields" => array("firstName","lastName","email")));
 
-$res = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
-    
+   		$sdk->path("cache/users")
+              	->withQuery(array("counterValues.counter" => 6, "counterValues.value" => $id))
+              	->withOrder (array("leaderboards.1.position"=>"ASC"))
+				->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
+				
+
+$res = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
     
 //Room's name
   
@@ -876,20 +905,17 @@ $pref="cache/users/groups/";
 $p=$pref.$id;
 
     $sdk->path($p)
-                // ->withParameters(array("userId" =>1))
-                ->withFields("label");
-				// ->withQueryParameters(array("fields" => array("firstName","lastName","email")));
+				->withQueryParameters(array("limit" =>0,"fields" => array("label")));
 
 $res2 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
     
 
 		$app->render('currentroom.php', array('roomid' => $res2,'userscount' => $res )); // first column
       	$app->render('midd.php');
-   		$app->render('roomusers.php', array('users' => $res)); // second column
+   		$app->render('roomusers.php', array('users' => $res, 'roomid' => $res2)); // second column
     	$app->render('footer.php');
+    	
 })->name("ri");
-
-
 
 
 ////// User profile //////////////////////////////////////////////////////////////////////
@@ -910,9 +936,7 @@ $p=$pref.$id;
 
     
     $sdk->path($p)
-                // ->withParameters(array("userId" =>1))
-                ->withFields("firstName","lastName")
-				 ->withQueryParameters(array("fields" => array("firstName","lastName","email","leaderboards")));
+				 ->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email","leaderboards")));
     
 $res2 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
     
@@ -922,10 +946,6 @@ $res2 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() 
     	// second column is empty
     	$app->render('footer.php');
 })->name("ui");
-
-
-
-
 
 
 /***************************** run application  *****************************************/

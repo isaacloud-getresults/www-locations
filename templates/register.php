@@ -75,14 +75,14 @@ Register your domain:</br></br>
 
 if(  isset($_POST['join'])   &&  isset($_SESSION['email']) ) {
 
-
+echo "generuje token";
 
 
 //wygeneruj token
 //$token= md5($_SESSION['email'].time()); 
 $token = "abc";
 $_SESSION['activation']= $token;
-//echo "token wpisany";
+echo "token wpisany";
 
 
 //echo "</br>";

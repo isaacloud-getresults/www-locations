@@ -589,6 +589,12 @@ if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
    
+// echo   $_POST['beacon1'];
+ 
+ $uid = $_POST['beacon1'];
+ 
+   
+   
    
      		$sdk->path("admin/conditions")
   			    ->withQuery(array("rightSide" =>"kitchen"))
@@ -597,23 +603,36 @@ if (!isset($_SESSION['token'])) {
     	
 $res1 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
   
-  /// zebrac id tego condition, update condition o tym id!!!
+  
+  //echo "</br>";
+  //echo $res1[0]['id'];
+ // echo "</br>";
   
   
-  var_dump($res1); 
+  $condid=$res1[0]['id'];
+  
+  
+  //var_dump($res1); 
    
-   
-   
-        
-                 	
-$sdk->path("admin/conditions/conditionid")
-  			    ->withQuery(array("rightSide" =>"tutaj uid"))
-               //->withFields("name");
-			  	
+  // echo "</br>";
+ 
 
-$sdk->api("admin/conditions", "put", $sdk->getParameters(),  $sdk->getQueryParameters() );    
-        
-        
+$pre="admin/conditions/";
+ $p=$pre.$condid;     
+    
+    
+             	
+$sdk->path($p);
+
+			  	
+			  	
+$res2 = $sdk->api($p, "put", $sdk->getParameters(),  $sdk->getQueryParameters() ,  array('rightSide' =>  $uid)  );        
+       
+       
+       // var_dump($res2); 
+       
+     
+       
         $app->render('header3.php');
         $app->render('menu.php');
   		$app->render('setup.php'); 
@@ -747,6 +766,91 @@ $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->ge
 
  
 })->name("kit");
+
+
+
+
+
+
+////////////////////// kitchen: no login required ////////////////////////////
+
+$app->get('/kitchen/:b', function ($b) use ($app,$sdk) {
+
+
+
+
+
+
+   $dane=base64_decode($b);
+ 				list ($clientid, $secret) = explode(":", $dane);
+ 			
+
+
+		//Configuration connection into IsaaCloud server
+		$isaaConf = array(
+        "clientId" => $clientid,
+        "secret" => $secret
+		);
+
+		//create new instance of IsaaCloud SDK
+		$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
+
+
+
+		$app->render('column.php');
+//users
+   $sdk->path("cache/users")
+           ->withQuery(array("counterValues.counter" => 6, "counterValues.counter" => 1))
+            ->withOrder (array("leaderboards.1.position"=>"ASC" ))
+			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
+				
+
+$res4 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
+   
+//Room's name
+  
+$pref="cache/users/groups/"; 
+$p=$pref."1"; // 1 ->id for kitchen
+
+	$sdk->path($p)
+				->withQueryParameters(array("fields" => array("label")));
+				
+
+$res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+
+		
+    	$app->render('kitchen.php', array('users' => $res4, 'roomid' => $res5) );
+    	$app->render('midd2.php');
+    	
+  	$sdk->path("cache/users")
+  				->withQuery(array("counterValues.counter" => 6, "counterValues.counter" => 1))
+  				->withOrder(array("updatedAt"=>"DESC"))
+             	->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName")));   	
+    	
+$res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
+    	
+
+    	
+    	 $sdk->path("queues/notifications")
+                ->withQuery(array("typeId" =>4))
+                ->withOrder(array("updatedAt"=>"DESC"))
+				->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
+
+$res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+
+    	
+    	$app->render('kitchen2.php', array('data' => $res, 'person' => $res1));
+    	
+
+ 
+})->name("kitnolog");
+
+
+
+
+
+
 
 
 /**************************** user routes **********************************************/

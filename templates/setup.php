@@ -18,7 +18,7 @@ Beacon 1 UID: <input type="text" name="beacon1"></br>
 if(  isset($_POST['ok'])   ) {
 
 
-echo "ok wpisano";
+echo "Setup finished.";
 
 }
 

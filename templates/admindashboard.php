@@ -1,13 +1,13 @@
 <h1><strong>Statistics</strong></h1>	
 	
 	
-	
+
 	<?php
 
 
 
-echo sizeof($res1) . " users";
-echo "</br>";
+echo "<h4>".sizeof($res1)." users"."</h4>";
+
 
 $points=0;
  $achievements = 0;
@@ -22,31 +22,10 @@ if (!empty($res1[$i]['counterValues'][0]['value']))
 }
 
 
-
-echo $points . " points";
-echo "</br>";
-echo $achievements . " achievements";
-echo "</br>";
-echo $kitchen . " kitchen visits";
-echo "</br>";
-
-
-
-//var_dump($res3);
-
-echo sizeof($res3) . " notifications";
-echo "</br>";
-
-
-//var_dump($res4);
-
-echo sizeof($res4) . " events";
-echo "</br>";
-
-
-
-
-
-
+echo "<h4>".$points." points"."</h4>";
+echo "<h4>".$achievements." achievements"."</h4>";
+echo "<h4>".$kitchen." kitchen visits"."</h4>";
+echo "<h4>".sizeof($res3)." notifications"."</h4>";
+echo "<h4>".sizeof($res4)." events"."</h4>";
 
 ?>

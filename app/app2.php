@@ -568,19 +568,68 @@ if (!isset($_SESSION['token'])) {
 //////////////////// admin setup :  beacon's localization   /////////////////////////
 
 
-$app->get('/admin/setup', function () use ($app) {
+$app->get('/admin/setup', function () use ($app,$sdk) {
 if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
-        
+ 
         $app->render('header3.php');
-        $app->render('menu.php');
-  		$app->render('setup.php'); // to do
+        $app->render('menu.php'); 
+  		 $app->render('setup.php');
   		$app->render('footer.php'); 
  
 
 
 })->name("se");
+
+
+
+$app->post('/admin/setup', function () use ($app,$sdk) {
+if (!isset($_SESSION['token'])) {
+             $app->response->redirect($app->urlFor('e'), 303);
+        }
+   
+   
+     		$sdk->path("admin/conditions")
+  			    ->withQuery(array("rightSide" =>"kitchen"))
+                ->withFields("name");
+			  	
+    	
+$res1 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
+  
+  /// zebrac id tego condition, update condition o tym id!!!
+  
+  
+  var_dump($res1); 
+   
+   
+   
+        
+                 	
+$sdk->path("admin/conditions/conditionid")
+  			    ->withQuery(array("rightSide" =>"tutaj uid"))
+               //->withFields("name");
+			  	
+
+$sdk->api("admin/conditions", "put", $sdk->getParameters(),  $sdk->getQueryParameters() );    
+        
+        
+        $app->render('header3.php');
+        $app->render('menu.php');
+  		$app->render('setup.php'); 
+  		$app->render('footer.php'); 
+ 
+
+
+})->name("pse");
+
+
+
+
+
+
+
+
 
 
 ////////////////////   admin global : statistics, global feed  ///////////////////////////

@@ -655,9 +655,29 @@ $res2 = $sdk->api($p, "put", $sdk->getParameters(),  $sdk->getQueryParameters() 
 
 $app->get('/admin/global', function () use ($app, $sdk) {
 
-  		$app->render('column.php');
-  		$app->render('global.php');// general statictics -> to do
-        $app->render('midd2.php');
+   		$app->render('column.php');
+  		
+  	//get statictics
+  	
+  			$sdk->path("cache/users")
+				->withQueryParameters(array("limit" => 0,"fields" => array("firstName","lastName","leaderboards","email", "gainedAchievements", "counterValues")));
+
+
+  
+$res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
+			$sdk->path("queues/notifications");
+
+$res3 = $sdk->api("queues/notifications", "get",$sdk->getParameters(),  $sdk->getQueryParameters()  );
+
+
+			$sdk->path("queues/events/done");
+
+$res4 = $sdk->api("queues/events/done", "get",$sdk->getParameters(),  $sdk->getQueryParameters()  );
+
+
+    	$app->render('global.php', array('res1' => $res1, 'res3' => $res3, 'res4' => $res4) );
+  		$app->render('midd2.php');
         
         //select from isaacloud
         
@@ -668,19 +688,18 @@ $app->get('/admin/global', function () use ($app, $sdk) {
 				->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName")));   	
     	
 $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
-	
-    	$sdk->path("queues/notifications")
-    	 		//->withQuery(array("typeId"=> ?)) <-uzupelnic
-                 ->withOrder(array("updatedAt"=>"DESC"))
-                ->withFields("data")
-				 ->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId","typeId", "updatedAt")));
+
+    $sdk->path("queues/notifications")
+               ->withQuery(array("typeId" =>1,"typeId" =>4 ))
+                ->withOrder(array("updatedAt"=>"DESC"))
+				->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
 
 $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+	
     	
     	//print_r($res);	
     	
     	$app->render('global2.php', array('data' => $res, 'person' => $res1));// global feed ->to do
-        	
   		
 
 })->name("gl");
@@ -793,7 +812,7 @@ var_dump($cursor);
     if(!empty($cursor))                                             
 	{
 	
-	
+//zrobic podstrone na niewlasciwe kody!!!!!	
 
 
 //var_dump($cursor);
@@ -943,11 +962,29 @@ $collection = $db->users;
 
 
 
-
-
   		$app->render('column.php');
-  		$app->render('global.php');// general statictics -> to do
-        $app->render('midd2.php');
+  		
+  	//get statictics
+  	
+  			$sdk->path("cache/users")
+				->withQueryParameters(array("limit" => 0,"fields" => array("firstName","lastName","leaderboards","email", "gainedAchievements", "counterValues")));
+
+
+  
+$res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
+			$sdk->path("queues/notifications");
+
+$res3 = $sdk->api("queues/notifications", "get",$sdk->getParameters(),  $sdk->getQueryParameters()  );
+
+
+			$sdk->path("queues/events/done");
+
+$res4 = $sdk->api("queues/events/done", "get",$sdk->getParameters(),  $sdk->getQueryParameters()  );
+
+
+    	$app->render('global.php', array('res1' => $res1, 'res3' => $res3, 'res4' => $res4) );
+  		$app->render('midd2.php');
         
         //select from isaacloud
         
@@ -958,18 +995,20 @@ $collection = $db->users;
 				->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName")));   	
     	
 $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
-	
-    	$sdk->path("queues/notifications")
-    	 		//->withQuery(array("typeId"=> ?)) <-uzupelnic
-                 ->withOrder(array("updatedAt"=>"DESC"))
-                ->withFields("data")
-				 ->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId","typeId", "updatedAt")));
+
+    $sdk->path("queues/notifications")
+               ->withQuery(array("typeId" =>1,"typeId" =>4 ))
+                ->withOrder(array("updatedAt"=>"DESC"))
+				->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
 
 $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+	
     	
     	//print_r($res);	
     	
     	$app->render('global2.php', array('data' => $res, 'person' => $res1));// global feed ->to do
+        	
+
         	
   		
 

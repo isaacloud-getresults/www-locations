@@ -372,6 +372,9 @@ $app->get('/admin/register', function () use ($app) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
+		$token= md5($_SESSION['email'].time());                  
+		$_SESSION['activation']= $token;
+
 	 $app->render('register.php', array('sub' => $sub));  
  
 
@@ -396,18 +399,13 @@ $app->post('/admin/register', function () use ($app) {
     
     $_SESSION['domain'] = $_POST['domain'];   
     
-    // if domain exists -> redirect to  ar  
+
     if (empty($cursor)) 
     {
+       $sub=false;
        
-        $app->render('checkemail.php');  
-        
-		$token= md5($_SESSION['email'].time());                  /// ZMIENIC TO!!!!!
-		//$token = "abc";
-		$_SESSION['activation']= $token;
-        
+        $app->render('checkemail.php');      
        
- //add new user
    
         $user=array(
                 "email" =>  $_SESSION['email'],
@@ -644,7 +642,7 @@ $app->get('/admin/global', function () use ($app, $sdk) {
         $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
 
         $sdk->path("queues/notifications")
-               ->withQuery(array("typeId" =>1,"typeId" =>4 ))
+             ->withQuery(array("typeId" =>1,"typeId" =>4 ))
                 ->withOrder(array("updatedAt"=>"DESC"))
 				->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
 

@@ -772,17 +772,47 @@ $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->ge
 
 
 
-////////////////////// kitchen: no login required ////////////////////////////
+////////////////////// kitchen: no login required ////////////////////////////      use objectid    53da382c5af6d8ecbcf7f4b5
 
 $app->get('/kitchen/:b', function ($b) use ($app,$sdk) {
 
 
+$m = new MongoClient(); 
+$db = $m->isaa;
+$collection = $db->users;
+
+//echo $b;
+
+     
+   $cursor = $collection->findOne(array( '_id' => new MongoId($b)));
+   
+
+    if(!empty($cursor))                                             
+	{
+	
+	
 
 
+//var_dump($cursor);
 
 
-   $dane=base64_decode($b);
+              	if ($cursor["base64"] != null)                                                /// user exists and owns an instance
+     	        { 
+ 	
+
+ 	
+ 	
+ 	             $dane=base64_decode($cursor["base64"]);
  				list ($clientid, $secret) = explode(":", $dane);
+
+
+ 	      		}
+ 	      		
+ 	      		
+ 	      		
+	}
+
+
  			
 
 
@@ -845,6 +875,104 @@ $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->ge
 
  
 })->name("kitnolog");
+
+
+
+
+
+
+////////////////////    global : no login required  ///////////////////////////         use objectid    53da382c5af6d8ecbcf7f4b5
+
+$app->get('/global/:b', function ($b) use ($app, $sdk) {
+
+
+
+
+
+$m = new MongoClient(); 
+$db = $m->isaa;
+$collection = $db->users;
+
+//echo $b;
+
+     
+   $cursor = $collection->findOne(array( '_id' => new MongoId($b)));
+   
+
+    if(!empty($cursor))                                             
+	{
+	
+	
+
+
+//var_dump($cursor);
+
+
+              	if ($cursor["base64"] != null)                                                /// user exists and owns an instance
+     	        { 
+ 	
+
+ 	
+ 	
+ 	             $dane=base64_decode($cursor["base64"]);
+ 				list ($clientid, $secret) = explode(":", $dane);
+
+
+ 	      		}
+ 	      		
+ 	      		
+ 	      		
+	}
+
+
+ 			
+
+
+		//Configuration connection into IsaaCloud server
+		$isaaConf = array(
+        "clientId" => $clientid,
+        "secret" => $secret
+		);
+
+		//create new instance of IsaaCloud SDK
+		$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
+
+
+
+
+
+
+  		$app->render('column.php');
+  		$app->render('global.php');// general statictics -> to do
+        $app->render('midd2.php');
+        
+        //select from isaacloud
+        
+            	
+  		$sdk->path("cache/users")
+  				 ->withOrder(array("updatedAt"=>"DESC"))
+                ->withFields("firstName","lastName")
+				->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName")));   	
+    	
+$res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
+	
+    	$sdk->path("queues/notifications")
+    	 		//->withQuery(array("typeId"=> ?)) <-uzupelnic
+                 ->withOrder(array("updatedAt"=>"DESC"))
+                ->withFields("data")
+				 ->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId","typeId", "updatedAt")));
+
+$res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+    	
+    	//print_r($res);	
+    	
+    	$app->render('global2.php', array('data' => $res, 'person' => $res1));// global feed ->to do
+        	
+  		
+
+})->name("glnolog");
+
+
 
 
 

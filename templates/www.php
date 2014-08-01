@@ -11,7 +11,7 @@
 							<div id="qrcode" ></div>
 									<script type="text/javascript">
 										var qrcode = new QRCode(document.getElementById("qrcode"), {
-										text : "link do Kitchen...............",
+										text : "http://getresults.isaacloud.com/kitchen/53da382c5af6d8ecbcf7f4b5",
 										width : 180,
 										height : 180
 											});
@@ -72,7 +72,7 @@
 							<div id="qrcode3" ></div>
 									<script type="text/javascript">
 										var qrcode = new QRCode(document.getElementById("qrcode3"), {
-										text : "link do general.....................",
+										text : "http://getresults.isaacloud.com/global/53da382c5af6d8ecbcf7f4b5",
 										width : 180,
 										height : 180
 											});

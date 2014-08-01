@@ -786,6 +786,9 @@ $collection = $db->users;
      
    $cursor = $collection->findOne(array( '_id' => new MongoId($b)));
    
+   
+var_dump($cursor);   
+   
 
     if(!empty($cursor))                                             
 	{
@@ -793,7 +796,7 @@ $collection = $db->users;
 	
 
 
-var_dump($cursor);
+//var_dump($cursor);
 
 
               	if ($cursor["base64"] != null)                                                /// user exists and owns an instance

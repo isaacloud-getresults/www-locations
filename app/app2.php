@@ -728,8 +728,8 @@ $app->get('/admin/kitchen', function () use ($app,$sdk) {
 		
 //users
         $sdk->path("cache/users")
-           //->withQuery(array("counterValues.counter" => 6, "counterValues.counter" => 1))
-           // ->withOrder (array("leaderboards.1.position"=>"ASC" ))
+           ->withQuery(array("counterValues.counter" => 1))
+            ->withOrder (array("leaderboards.1.position"=>"ASC" ))
 			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
 				
 
@@ -753,8 +753,8 @@ $app->get('/admin/kitchen', function () use ($app,$sdk) {
     	
   	   $sdk->path("cache/users")
   			//	->withQuery(array("counterValues.counter" => 6, "counterValues.counter" => 1))
-  			//	->withOrder(array("updatedAt"=>"DESC"))
-             	->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName")));   	
+  			//->withOrder(array("updatedAt"=>"DESC"))
+             	->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName", "counterValues")));   	
     	
        $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
     	

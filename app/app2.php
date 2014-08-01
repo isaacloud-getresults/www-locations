@@ -19,8 +19,14 @@ $google_redirect_url 	= 'http://getresults.isaacloud.com/'; //path to your scrip
 require_once './src/Google_Client.php';
 require_once './src/contrib/Google_Oauth2Service.php';
 
+
+
+
+
+
 //start session
 session_destroy();
+session_name('gr');
 session_start();
 
 
@@ -50,7 +56,8 @@ if (isset($_GET['code']))
 
 if (isset($_SESSION['token'])) 
 { 
-	$gClient->setAccessToken($_SESSION['token']);
+	$gClient->setAccessToken($_SESSION['token']);        
+	
 }
 
 
@@ -721,8 +728,8 @@ $app->get('/admin/kitchen', function () use ($app,$sdk) {
 		
 //users
         $sdk->path("cache/users")
-           ->withQuery(array("counterValues.counter" => 6, "counterValues.counter" => 1))
-            ->withOrder (array("leaderboards.1.position"=>"ASC" ))
+           //->withQuery(array("counterValues.counter" => 6, "counterValues.counter" => 1))
+           // ->withOrder (array("leaderboards.1.position"=>"ASC" ))
 			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
 				
 
@@ -745,8 +752,8 @@ $app->get('/admin/kitchen', function () use ($app,$sdk) {
     	$app->render('midd2.php');
     	
   	   $sdk->path("cache/users")
-  				->withQuery(array("counterValues.counter" => 6, "counterValues.counter" => 1))
-  				->withOrder(array("updatedAt"=>"DESC"))
+  			//	->withQuery(array("counterValues.counter" => 6, "counterValues.counter" => 1))
+  			//	->withOrder(array("updatedAt"=>"DESC"))
              	->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName")));   	
     	
        $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	

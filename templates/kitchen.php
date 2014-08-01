@@ -27,7 +27,7 @@ else {
 					foreach ($users as $user):
 						$size=sizeof($user["counterValues"]);
 						for($i=0;$i<$size;$i++){
- 							if(($user["counterValues"][$i]["counter"]==6) and ($user["counterValues"][$i]["value"]== $roomid["id"]) ){
+ 							if(($user["counterValues"][$i]["counter"]==1) and ($user["counterValues"][$i]["value"]== $roomid["id"]) ){
  							
  					 ?>
  					<tr>

@@ -529,9 +529,24 @@ if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
+
+//zapytanie do bazy o id dla danego maila
+//na podstawie tego url do qr kodu
+
+
+      $m = new MongoClient(); 
+      $db = $m->isaa;
+      $collection = $db->users;
+    
+      
+       $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
+      
+     $qrurl = $cursor["_id"];
+
+
  	$app->render('header3.php');
 	$app->render('menu.php');
-	$app->render('www.php');
+	$app->render('www.php'  ,  array('qrurl' => $qrurl) );
     $app->render('footer.php'); 
 
 

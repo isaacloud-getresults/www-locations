@@ -1,6 +1,6 @@
 <h1> WWW Apps </h1><br>
 	
-				
+			
  
     				<div class="modal-body row">
 				 		<div class="col-md-4" >
@@ -10,8 +10,9 @@
 							
 							<div id="qrcode" ></div>
 									<script type="text/javascript">
+									var kod="<?=$qrurl?>";
 										var qrcode = new QRCode(document.getElementById("qrcode"), {
-										text : "http://getresults.isaacloud.com/kitchen/53d63daa776946f76a8b4567",
+										text : ("http://getresults.isaacloud.com/kitchen/"+kod),
 										width : 180,
 										height : 180
 											});
@@ -29,6 +30,7 @@
 							
 							<div id="qrcode1" ></div>
 									<script type="text/javascript">
+									var kod="<?=$qrurl?>";
 										var qrcode = new QRCode(document.getElementById("qrcode1"), {
 										text : "link do meeting room.................",
 										width : 180,
@@ -46,6 +48,7 @@
 							
 							<div id="qrcode2" ></div>
 									<script type="text/javascript">
+									var kod="<?=$qrurl?>";
 										var qrcode = new QRCode(document.getElementById("qrcode2"), {
 										text : "link do restaurant......................",
 										width : 180,
@@ -71,8 +74,9 @@
 							
 							<div id="qrcode3" ></div>
 									<script type="text/javascript">
+									var kod="<?=$qrurl?>";
 										var qrcode = new QRCode(document.getElementById("qrcode3"), {
-										text : "http://getresults.isaacloud.com/global/53d63daa776946f76a8b4567",
+										text : ("http://getresults.isaacloud.com/global/"+kod),
 										width : 180,
 										height : 180
 											});
@@ -90,6 +94,7 @@
 							
 							<div id="qrcode4" ></div>
 									<script type="text/javascript">
+									var kod="<?=$qrurl?>";
 										var qrcode = new QRCode(document.getElementById("qrcode4"), {
 										text : "link do  user profile..............",
 										width : 180,

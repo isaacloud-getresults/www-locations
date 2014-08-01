@@ -43,7 +43,7 @@ if (isset($_GET['code']))
 	$gClient->authenticate($_GET['code']);
 	$_SESSION['token'] = $gClient->getAccessToken();
 
-	header('http://getresults.isaacloud.com/' );	
+	header('Location: http://getresults.isaacloud.com/' );		
 	return;
 }
 

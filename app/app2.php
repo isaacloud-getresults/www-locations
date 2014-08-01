@@ -791,7 +791,7 @@ $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->ge
 
 
 
-////////////////////// kitchen: no login required ////////////////////////////      use objectid    53da382c5af6d8ecbcf7f4b5
+////////////////////// kitchen: no login required ////////////////////////////      use objectid    53d63daa776946f76a8b4567
 
 $app->get('/kitchen/:b', function ($b) use ($app,$sdk) {
 
@@ -806,7 +806,7 @@ $collection = $db->users;
    $cursor = $collection->findOne(array( '_id' => new MongoId($b)));
    
    
-var_dump($cursor);   
+//var_dump($cursor);   
    
 
     if(!empty($cursor))                                             
@@ -835,7 +835,8 @@ var_dump($cursor);
 	}
 
 
- 			
+ 	else
+ 	{$app->response->redirect($app->urlFor('e'), 303);}		
 
 
 		//Configuration connection into IsaaCloud server
@@ -903,7 +904,7 @@ $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->ge
 
 
 
-////////////////////    global : no login required  ///////////////////////////         use objectid    53da382c5af6d8ecbcf7f4b5
+////////////////////    global : no login required  ///////////////////////////         use objectid    53d63daa776946f76a8b4567
 
 $app->get('/global/:b', function ($b) use ($app, $sdk) {
 
@@ -947,7 +948,8 @@ $collection = $db->users;
 	}
 
 
- 			
+ 		 	else
+ 	{$app->response->redirect($app->urlFor('e'), 303);}		
 
 
 		//Configuration connection into IsaaCloud server

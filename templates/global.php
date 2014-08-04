@@ -16,12 +16,12 @@ $points=0;
   $kitchen = 0;
 for ($i=0;$i<sizeof($res1);$i++)
 {
-if (!empty($res1[$i]['leaderboards'][1]['score']))
-{$points=$points+ $res1[$i]['leaderboards'][1]['score'];}
+if (!empty($res1[$i]['leaderboards'][$instanceConf['leaderboard']]['score']))
+{$points=$points+ $res1[$i]['leaderboards'][$instanceConf['leaderboard']]['score'];}
 if (!empty($res1[$i]['gainedAchievements']))
 {$achievements=$achievements+ sizeof($res1[$i]['gainedAchievements']);}
-if (!empty($res1[$i]['counterValues'][0]['value']))
-{$kitchen=$kitchen+ $res1[$i]['counterValues'][0]['value'];}
+//if (!empty($res1[$i]['counterValues'][0]['value']))
+//{$kitchen=$kitchen+ $res1[$i]['counterValues'][0]['value'];}   //na razie nie dziala
 
 }
 

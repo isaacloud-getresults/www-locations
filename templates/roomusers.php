@@ -28,14 +28,14 @@ else {
 		foreach ($users as $user):
 			$size=sizeof($user["counterValues"]);
 			for($i=0;$i<$size;$i++){
- 				if(($user["counterValues"][$i]["counter"]==6) and ($user["counterValues"][$i]["value"]== $roomid["id"])){
+ 				if(($user["counterValues"][$i]["counter"]==$instanceConf['counterid']) and ($user["counterValues"][$i]["value"]== $roomid["id"])){    
  	?>
  			<tr>
 
  				<td><a href="./users/<?php echo $user["id"];?>"><?php  echo $user["email"];?></a></td>
             		<td><?php if((empty($user["firstName"]))||(empty($user["lastName"]))) echo "----------"; 
             			else echo $user["firstName"]." ".$user["lastName"]; ?></td>
-            	<td><?php if(empty($user["leaderboards"][1]["score"])) echo "0"; else echo $user["leaderboards"][1]["score"];?></td>	
+            	<td><?php if(empty($user["leaderboards"][$instanceConf['leaderboard']]["score"])) echo "0"; else echo $user["leaderboards"][$instanceConf['leaderboard']]["score"];?></td>	
             			
             </tr>
  	<?php 

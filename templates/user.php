@@ -11,10 +11,10 @@
   						<dd><?php if(empty($users["lastName"])) echo "---------"; else echo $users["lastName"]; ?></dd>
   						
   						<dt>Score:</dt>
-  						<dd><?php echo $users["leaderboards"]["1"]["score"]; ?></dd>
+  						<dd><?php echo $users["leaderboards"][$instanceConf['leaderboard']]["score"]; ?></dd>
   						
   						<dt>Position:</dt>
-  						<dd><?php echo $users["leaderboards"]["1"]["position"]; ?></dd>
+  						<dd><?php echo $users["leaderboards"][$instanceConf['leaderboard']]["position"]; ?></dd>
   						
   						
 					</dl>       

@@ -20,13 +20,13 @@
                     <?php foreach ($users as $user): ?>
                     <?php if(!empty($user["leaderboards"]["1"]["position"])){ ?>
                         <tr >
-                            <td><?php echo $user["leaderboards"]["1"]["position"]; ?></td>
+                            <td><?php echo $user["leaderboards"][$instanceConf['leaderboard']]["position"]; ?></td>
                             	<td><a href="./users/<?php echo $user["id"];?>"><?php echo $user["email"]; ?></a></td>
                         		 <td><?php 
                             			if((empty($user["firstName"]))||(empty($user["lastName"]))) echo "-------------";
                             			else echo $user["firstName"]." ".$user["lastName"]; ?></td>
                            
-                            <td><?php echo $user["leaderboards"]["1"]["score"]; ?></td>
+                            <td><?php echo $user["leaderboards"][$instanceConf['leaderboard']]["score"]; ?></td>
             
                            
                         </tr> <?php } ?>

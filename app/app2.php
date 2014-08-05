@@ -5,7 +5,7 @@ defined('VENDOR_PATH') || define('VENDOR_PATH', realpath(__DIR__ . '/../vendor')
 require VENDOR_PATH . '/autoload.php';
 
 
-
+//print_r($_SERVER);
 
 //////////////////////////////////    google oauth
 
@@ -45,17 +45,19 @@ $gClient->setDeveloperKey($google_developer_key);
 $google_oauthV2 = new Google_Oauth2Service($gClient);
 
 
+echo $_SESSION['user'];
+
 
 if (isset($_GET['code'])) 
 { 
 	$gClient->authenticate($_GET['code']);
 	$_SESSION['token'] = $gClient->getAccessToken();
 
-if (  $_SESSION['user'] )
- 
-  { header('Location: http://getresults.isaacloud.com/user' );}
-  else
-  {header('Location: http://getresults.isaacloud.com/' );}	
+
+if ($_SESSION['user']==false)
+{   header('Location: http://getresults.isaacloud.com/' );	}
+else
+{  header('Location: http://getresults.isaacloud.com/user' );  }
 	
 		    
 	return;
@@ -85,6 +87,17 @@ if ($gClient->getAccessToken())
   else 
  {
 	//For Guest user, get google login url
+	
+	
+	
+	if (  $_SERVER["REDIRECT_URL"] == "/~mac/user" ) //jesli wchodzi ze stronki user to przekieruj na user, jak nie to admin
+	{ $state = 'user'; }
+	else 
+	{ $state = 'admin'; }
+	
+	
+
+    $gClient->setState($state);
 	$authUrl = $gClient->createAuthUrl();          
  }
 

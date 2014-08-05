@@ -52,8 +52,10 @@ if (isset($_GET['code']))
 	$_SESSION['token'] = $gClient->getAccessToken();
 
 if (  $_SESSION['user'] )
-
-  header('Location: http://getresults.isaacloud.com/' );
+ 
+  { header('Location: http://getresults.isaacloud.com/user' );}
+  else
+  {header('Location: http://getresults.isaacloud.com/' );}	
 	
 		    
 	return;
@@ -308,15 +310,13 @@ $app->get('/admin/user', function () use ($app) {
 
 
 
+
+
 ////////////////////////////////  root   /////////////////////////////////////////////
 
 $app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
  
- if (isset($_SESSION['user']))
- { header('Location: http://getresults.isaacloud.com/user' );}
- 
- 
- 
+
  
  	if(isset($authUrl))
  				 {               // not logged in  

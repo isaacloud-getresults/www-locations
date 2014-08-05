@@ -11,7 +11,7 @@ require VENDOR_PATH . '/autoload.php';
 //settings
 $google_client_id 		= '549829565881-cidmn7k1pgph6joliv96soubbes1d4vb.apps.googleusercontent.com';
 $google_client_secret 	= '5PH89Qrq-gDiV5pKoqW9WRsX';
-$google_redirect_url 	= 'http://localhost/~mac/'; //path to your script
+$google_redirect_url 	= 'http://getresults.isaacloud.com/'; //path to your script
 
 
 
@@ -49,7 +49,7 @@ if (isset($_GET['code']))
 	$gClient->authenticate($_GET['code']);
 	$_SESSION['token'] = $gClient->getAccessToken();
 
-	header('Location: http://localhost/~mac/' );		
+	header('Location: http://getresults.isaacloud.com/' );		
 	return;
 }
 
@@ -167,11 +167,14 @@ if (isset($_SESSION['email'])){             //checking if user exists in databas
 ///////////config
 
 
+//default values for accessing arrays
+$leaderboard=1;   /// default values: leaderboard[0] = null, leaderboard [1] = array -> score, position
+$counter=0;  /// default: counterValues[0] = array ->counter (id), value
+
+//values set by user for each instance
 $kitid=4;    /// kitchen id
 $meetid=5;   /// meeting room id
 $offset=3;   /// ignore first 3 rooms
-$leaderboard=1;   ///leaderboard[0] = null, leaderboard [1] = array -> score, position
-$counter=0;  /// counterValues[0] = array ->counter (id), value
 $counterid=1;   /// checking counter with id 1
 
 
@@ -985,8 +988,12 @@ $app->get('/room/:id', function($id) use ($app,$sdk,$instanceConf){
 
        $res = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
+
+
     
-    var_dump($res);
+//var_dump(  $res["1"]["counterValues"]);
+    
+  // var_dump($res);
     
    //Room's name
   
@@ -998,7 +1005,7 @@ $app->get('/room/:id', function($id) use ($app,$sdk,$instanceConf){
 
       $res2 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
     
-	  $app->render('currentroom.php', array('roomid' => $res2,'userscount' => $res )); // first column
+	  $app->render('currentroom.php', array('roomid' => $res2,'res' => $res,   'instanceConf' => $instanceConf , 'id' => $id, )); // first column
       $app->render('midd.php');
    	  $app->render('roomusers.php', array('users' => $res, 'roomid' => $res2, 'instanceConf' => $instanceConf )); // second column
       $app->render('footer.php');

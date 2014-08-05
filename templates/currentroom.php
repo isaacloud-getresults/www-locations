@@ -7,7 +7,21 @@
 	
 	
 <?php 
- $size= sizeof($userscount);
-if($size==0) echo "0"; else echo $size;
+$ucount=0;
+for ($i=0;$i<sizeof($res);$i++)
+{
+
+for ($j=0;$j<sizeof($res[$i]["counterValues"]);$j++)
+{
+if ($res[$i]["counterValues"][$j]["counter"]==$instanceConf['counterid'] && $res[$i]["counterValues"][$j]["value"]==$id)
+$ucount++;
+}}
+echo $ucount;
+
+
+
+
+
+
 
 ?> users. </p>

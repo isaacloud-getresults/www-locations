@@ -363,7 +363,7 @@ if (isset($_SESSION['email'])){
 
  $subdomain = array_shift(explode(".",$_SERVER['HTTP_HOST']));
     
-    
+    echo $subdomain;
 
 $m = new MongoClient(); 
 $db = $m->isaa;

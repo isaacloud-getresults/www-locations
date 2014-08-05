@@ -52,10 +52,8 @@ if (isset($_GET['code']))
 	$_SESSION['token'] = $gClient->getAccessToken();
 
 if (  $_SESSION['user'] )
- 
-  { header('Location: http://getresults.isaacloud.com/user' );}
-  else
-  {header('Location: http://getresults.isaacloud.com/' );}	
+
+  header('Location: http://getresults.isaacloud.com/' );
 	
 		    
 	return;
@@ -307,11 +305,21 @@ $app->get('/admin/user', function () use ($app) {
 /*******************************     Define routes    **********************************/
 
 
+
+echo $_SESSION['subdomain'];
+
+
+
+
 ////////////////////////////////  root   /////////////////////////////////////////////
 
 $app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
  
-
+ if ($_SESSION['user'])
+ { header('Location: http://getresults.isaacloud.com/user' );}
+ 
+ 
+ 
  
  	if(isset($authUrl))
  				 {               // not logged in  
@@ -363,7 +371,9 @@ if (isset($_SESSION['email'])){
 
  $subdomain = array_shift(explode(".",$_SERVER['HTTP_HOST']));
     
-    echo $subdomain;
+    $_SESSION['subdomain']=$subdomain;
+    
+   
 
 $m = new MongoClient(); 
 $db = $m->isaa;

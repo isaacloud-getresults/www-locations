@@ -5,6 +5,8 @@ defined('VENDOR_PATH') || define('VENDOR_PATH', realpath(__DIR__ . '/../vendor')
 require VENDOR_PATH . '/autoload.php';
 
 
+
+
 //////////////////////////////////    google oauth
 
 
@@ -26,7 +28,7 @@ require_once './src/contrib/Google_Oauth2Service.php';
 
 //start session
 session_destroy();
-session_name('b');
+session_name('c' );
 session_start();
 
 
@@ -49,7 +51,13 @@ if (isset($_GET['code']))
 	$gClient->authenticate($_GET['code']);
 	$_SESSION['token'] = $gClient->getAccessToken();
 
-	header('Location: http://getresults.isaacloud.com/' );		
+if (  $_SESSION['user'] )
+ 
+  { header('Location: http://getresults.isaacloud.com/user' );}
+  else
+  {header('Location: http://getresults.isaacloud.com/' );}	
+	
+		    
 	return;
 }
 
@@ -311,6 +319,9 @@ $app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
     			 }
      else
          {                     //logged in  
+         
+
+         
           if  ($jest)          // if exists in database go to admin dashboard else register
                 {     
                 $app->response->redirect($app->urlFor('ad'), 303);   
@@ -322,6 +333,116 @@ $app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
  
  
 })->name("root");
+
+
+
+
+////////////////////////////////  root  - user route  /////////////////////////////////////////////
+
+$app->get('/user', function () use ($app,$sdk,$authUrl,$jest) {
+ 
+var_dump($_SESSION);
+ 
+ 	if(isset($authUrl))
+ 				 {      
+ 				 ////ustawiac jakas dodatkowa zmienna zeby redirect byl z powrotem do usera
+ 				 
+ 				 $_SESSION['user']= true;
+ 				 
+ 				 
+ 				          // not logged in  
+    			 $app->render('welcome.php', array( 'url' => $authUrl));
+    			 
+    			 }
+     else
+         {                     //logged in  
+         
+        
+          
+if (isset($_SESSION['email'])){             
+
+ $subdomain = array_shift(explode(".",$_SERVER['HTTP_HOST']));
+    
+    
+
+$m = new MongoClient(); 
+$db = $m->isaa;
+$collection = $db->users;
+    
+    
+   $ok=false; 
+    
+    $cursor = $collection->find(array( 'domain' => $subdomain ));
+   
+
+    if(!empty($cursor))                                             
+	{
+	
+	    foreach ($cursor as $user): 
+
+
+
+              	if ($user["base64"] != null)                                               
+     	        { 
+ 	
+ 	             $dane=base64_decode($user["base64"]);
+ 				list ($clientid, $secret) = explode(":", $dane);
+ 	
+ 				$ok=true;
+ 			
+ 	
+ 				$_SESSION['clientid']=$clientid;
+ 				$_SESSION['secret']=$secret;
+
+ 	      		}
+ 	      		
+		
+ 	      endforeach;		
+ 	      		
+ 	      		
+	}
+
+
+
+     
+     
+     
+     if (isset($_SESSION['clientid']) && isset($_SESSION['secret']))      // isaacloud instance config
+    {
+
+		//Configuration connection into IsaaCloud server
+		$isaaConf = array(
+        "clientId" => $_SESSION['clientid'],
+        "secret" => $_SESSION['secret']
+		);
+
+		//create new instance of IsaaCloud SDK
+		$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
+	}
+
+
+
+
+
+}
+
+
+            if  ($ok)        
+          
+          
+                {     
+                $app->response->redirect($app->urlFor('d'), 303);        // jesli jest to dashboard
+                }
+
+          else {  $app->response->redirect($app->urlFor('ue'), 303);   }    // jesli nie to error
+
+    }
+ 
+
+ 
+})->name("rootuser");
+
+
 
 
 

@@ -1,12 +1,20 @@
 <?php 
 
 $s= sizeof($users);
-if($s==0) echo "<center>Empty</center>";
+$tab = 0;
+foreach ($users as $user):
+	$sz=sizeof($user["counterValues"]);
+	if($sz!=0){
+	for ($i=0; $i< $sz; $i++) {
+		if($user["counterValues"][$i]["value"]==$roomid["id"])
+			$tab=$i+1;
+			}
+		}
+endforeach;
+if($tab==0) echo "<center>Empty</center>";
 else {
 
 ?>
-
-
 
 
 

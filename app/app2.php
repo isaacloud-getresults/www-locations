@@ -26,7 +26,7 @@ require_once './src/contrib/Google_Oauth2Service.php';
 
 //start session
 session_destroy();
-session_name('a');
+session_name('b');
 session_start();
 
 
@@ -283,7 +283,7 @@ $app->get('/admin/admin/mobile', function () use ($app) {
 });
 
 $app->get('/admin/admin/setup', function () use ($app) {
-    $app->response->redirect($app->urlFor('se'), 303); 
+    $app->response->redirect($app->urlFor('set'), 303); 
 });
 
 
@@ -593,14 +593,41 @@ if (!isset($_SESSION['token'])) {
 //////////////////// admin setup :  beacon's location (get)  /////////////////////////
 
 
-$app->get('/admin/setup', function () use ($app,$sdk) {
+$app->get('/admin/setup', function () use ($app, $sdk) {
 if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
- 
+        
         $app->render('header3.php');
-        $app->render('menu.php'); 
-  		 $app->render('setup.php');
+        $app->render('menu.php');
+        
+        
+            $sdk->path("cache/games")
+				->withQueryParameters(array("limit" =>0,"fields" => array("conditions","segments", "name")));
+				
+    $res = $sdk->api("cache/games", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );      
+    
+    // print_r($res);  
+ 
+          $sdk->path("cache/users/groups")
+				->withQueryParameters(array("limit" =>0,"fields" => array("label","segments")));
+				
+    $res1 = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
+          
+       // print_r($res1);  
+  
+     
+     
+      $sdk->path("admin/conditions")
+      		->withOrder(array("id"=>"ASC"));
+				
+				
+    $res2 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
+      
+       // print_r($res2);  
+    
+     
+  		$app->render('setup.php', array('games' => $res, 'groups' => $res1, 'conditions' => $res2 )); // in progress
   		$app->render('footer.php'); 
  
 
@@ -613,44 +640,68 @@ if (!isset($_SESSION['token'])) {
 
 
 
-$app->post('/admin/setup', function () use ($app,$sdk) {
-
+$app->post('/admin/setup', function () use ($app, $sdk) {
 if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
- 
-  $uid = $_POST['beacon1'];
- 
-   
-     		$sdk->path("admin/conditions")
-  			    ->withQuery(array("rightSide" =>"kitchen"))
-                ->withFields("name");
-			  	
-    	
-  $res1 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
-  
-  
-  $condid=$res1[0]['id'];
-  
-  $pre="admin/conditions/";
-  $p=$pre.$condid;     
-     
-             	
-  $sdk->path($p);
-
-			  	
-			  	
-  $res2 = $sdk->api($p, "put", $sdk->getParameters(),  $sdk->getQueryParameters() ,  array('rightSide' =>  $uid)  );        
-       
        
         $app->render('header3.php');
         $app->render('menu.php');
-  		$app->render('setup.php'); 
+        
+        // games
+            $sdk->path("cache/games")
+				->withQueryParameters(array("limit" =>0,"fields" => array("conditions","segments", "name")));
+				
+    $res = $sdk->api("cache/games", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );      
+       // groups
+          $sdk->path("cache/users/groups")
+				->withQueryParameters(array("limit" =>0,"fields" => array("label","segments")));
+				
+    $res1 = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
+        
+         //conditions
+      $sdk->path("admin/conditions")
+      		->withOrder(array("id"=>"ASC"));
+					
+    $res2 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
+  
+     /*********************** check ***************************/
+    $uid = $_POST["beacon1"];
+	$location= $_POST["location"];
+	$loc= explode(" ", $location);
+	$data = $_SESSION["dane"];
+
+	
+		foreach($data as $dat):
+			if(($loc[0]==$dat["name"]) && ($loc[1]==$dat["nr"]))
+			$con=  $dat["condition"];
+		
+		endforeach;
+
+	 	foreach ($res2 as $condition):
+	 	 			
+	 	 	if($con == $condition["id"] )
+	 	 		$c_id=$con;
+	 	 				
+	 	endforeach;
+	 
+
+	if($c_id){
+		echo "Success!";
+	$pre="admin/conditions/";
+  	$p=$pre.$c_id;  
+  	
+  	$sdk->path($p);  	
+			  	
+ 	$res2 = $sdk->api($p, "put", $sdk->getParameters(),  $sdk->getQueryParameters() ,  array('rightSide' =>  $uid)  ); 
+  	}
+  	else
+  		echo "There's no condition for selected id";
   		$app->render('footer.php'); 
- 
 
 
-})->name("pse");
+
+})->name("set");
 
 
 

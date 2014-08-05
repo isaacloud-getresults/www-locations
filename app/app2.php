@@ -306,16 +306,13 @@ $app->get('/admin/user', function () use ($app) {
 
 
 
-echo $_SESSION['subdomain'];
-
-
 
 
 ////////////////////////////////  root   /////////////////////////////////////////////
 
 $app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
  
- if ($_SESSION['user'])
+ if (isset($_SESSION['user']))
  { header('Location: http://getresults.isaacloud.com/user' );}
  
  

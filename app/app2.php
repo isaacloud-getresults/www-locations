@@ -90,9 +90,9 @@ if ($gClient->getAccessToken())
 	
 	
 	if (  $_SERVER["REDIRECT_URL"] == "/user" ) //jesli wchodzi ze stronki user to przekieruj na user, jak nie to admin
-	{ $state = 'user';     	 $_SESSION['user']= true;}
+	{ $state = 'user';    if (!isset($_SESSION['user'] ))    { $_SESSION['user']= true;}}
 	else 
-	{ $state = 'admin';     $_SESSION['user']= false;}
+	{ $state = 'admin';   if (!isset($_SESSION['user']))   {$_SESSION['user']= false;}}
 	
 	
 

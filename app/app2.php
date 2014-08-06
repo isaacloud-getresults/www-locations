@@ -117,76 +117,6 @@ $app = new \Slim\Slim($config);
 // Google Client
 $app->client = $gClient;
 
-//Mongo Client
-$m = new MongoClient(); 
-$db = $m->isaa;
-$collection = $db->users;
-
-
-
-if (isset($_SESSION['email'])){             //checking if user exists in database
-
-
-     
-
-
-$sub = array_shift(explode(".",$_SERVER['SERVER_NAME']));
-
-    
-    $cursor = $collection->find(array( 'domain' => $sub ));
-   
-
-    if(!empty($cursor))                                             
-	{
-	
-	    foreach ($cursor as $user): 
-
-
-
-              	if ($user["base64"] != null)                                            
-     	        { 
- 	
- 	             $dane=base64_decode($user["base64"]);
- 				list ($clientid, $secret) = explode(":", $dane);
- 	
- 				$jest=true;
- 			
- 	
- 				$_SESSION['clientid']=$clientid;
- 				$_SESSION['secret']=$secret;
-
- 	      		}
- 	      		
-		
- 	      endforeach;		
- 	      		
- 	      		
-	}
-
-
-
-     
-     
-     
-     if (isset($_SESSION['clientid']) && isset($_SESSION['secret']))      // isaacloud intance config
-    {
-
-		//Configuration connection into IsaaCloud server
-		$isaaConf = array(
-        "clientId" => $_SESSION['clientid'],
-        "secret" => $_SESSION['secret']
-		);
-
-		//create new instance of IsaaCloud SDK
-		$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
-	}
-
-
-
-
-
-}
-
 
 
 ///////////config
@@ -343,6 +273,88 @@ $app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
          {                     //logged in  
          
 
+
+
+
+
+
+$m = new MongoClient(); 
+$db = $m->isaa;
+$collection = $db->users;
+
+
+
+if (isset($_SESSION['email'])){             //checking if user exists in database
+
+
+
+    
+    $cursor = $collection->find(array( 'email' => $_SESSION['email'] ));
+   
+
+    if(!empty($cursor))                                             
+	{
+	
+	    foreach ($cursor as $user): 
+
+
+
+              	if ($user["base64"] != null)                                            
+     	        { 
+ 	
+ 	             $dane=base64_decode($user["base64"]);
+ 				list ($clientid, $secret) = explode(":", $dane);
+ 	
+ 				$jest=true;
+ 			
+ 	
+ 				$_SESSION['clientid']=$clientid;
+ 				$_SESSION['secret']=$secret;
+
+ 	      		}
+ 	      		
+		
+ 	      endforeach;		
+ 	      		
+ 	      		
+	}
+
+
+
+     
+     
+     
+     if (isset($_SESSION['clientid']) && isset($_SESSION['secret']))      // isaacloud intance config
+    {
+
+		//Configuration connection into IsaaCloud server
+		$isaaConf = array(
+        "clientId" => $_SESSION['clientid'],
+        "secret" => $_SESSION['secret']
+		);
+
+		//create new instance of IsaaCloud SDK
+		$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
+	}
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
          
           if  ($jest)          // if exists in database go to admin dashboard else register
                 {     
@@ -383,11 +395,8 @@ var_dump($_SESSION);
           
 if (isset($_SESSION['email'])){             
 
- $subdomain = array_shift(explode(".",$_SERVER['HTTP_HOST']));          /// google redirect nie obsluzy subdomen
-    
-    $_SESSION['subdomain']=$subdomain;
-    
-   
+
+ 
 
 $m = new MongoClient(); 
 $db = $m->isaa;
@@ -396,7 +405,11 @@ $collection = $db->users;
     
    $ok=false; 
     
-    $cursor = $collection->find(array( 'email' => $_SESSION['email'] ));
+  
+  $sub = array_shift(explode(".",$_SERVER['SERVER_NAME']));
+
+    
+    $cursor = $collection->find(array( 'domain' => $sub ));
    
 
     if(!empty($cursor))                                             

@@ -127,8 +127,13 @@ $collection = $db->users;
 if (isset($_SESSION['email'])){             //checking if user exists in database
 
 
+     
+
+
+$sub = array_shift(explode(".",$_SERVER['SERVER_NAME']));
+
     
-    $cursor = $collection->find(array( 'email' => $_SESSION['email'] ));
+    $cursor = $collection->find(array( 'domain' => $sub ));
    
 
     if(!empty($cursor))                                             
@@ -138,7 +143,7 @@ if (isset($_SESSION['email'])){             //checking if user exists in databas
 
 
 
-              	if ($user["base64"] != null)                                                /// user exists and owns an instance
+              	if ($user["base64"] != null)                                            
      	        { 
  	
  	             $dane=base64_decode($user["base64"]);

@@ -5,7 +5,7 @@ defined('VENDOR_PATH') || define('VENDOR_PATH', realpath(__DIR__ . '/../vendor')
 require VENDOR_PATH . '/autoload.php';
 
 
-//print_r($_SERVER);
+print_r($_SERVER);
 
 //////////////////////////////////    google oauth
 
@@ -90,7 +90,7 @@ if ($gClient->getAccessToken())
 	
 	
 	
-	if (  $_SERVER["REDIRECT_URL"] == "http://getresults.isaacloud.com/user" ) //jesli wchodzi ze stronki user to przekieruj na user, jak nie to admin
+	if (  $_SERVER["REDIRECT_URL"] == "getresults.isaacloud.com/user" ) //jesli wchodzi ze stronki user to przekieruj na user, jak nie to admin
 	{ $state = 'user';     	 $_SESSION['user']= true;}
 	else 
 	{ $state = 'admin'; }

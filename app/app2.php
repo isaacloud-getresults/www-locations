@@ -363,7 +363,6 @@ $app->get('/user', function () use ($app,$sdk,$authUrl,$jest) {
  
  	if(isset($authUrl))
  				 {      
- 				 ////ustawiac jakas dodatkowa zmienna zeby redirect byl z powrotem do usera
  				 
  				 $_SESSION['user']= true;
  				 
@@ -392,7 +391,7 @@ $collection = $db->users;
     
    $ok=false; 
     
-    $cursor = $collection->find(array( 'email' => $_SESSION['email'] ));
+    $cursor = $collection->find(array( 'subdomain' => $subdomain ));
    
 
     if(!empty($cursor))                                             

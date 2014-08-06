@@ -5,7 +5,7 @@ defined('VENDOR_PATH') || define('VENDOR_PATH', realpath(__DIR__ . '/../vendor')
 require VENDOR_PATH . '/autoload.php';
 
 
-//var_dump($_SERVER);
+//print_r($_SERVER);
 
 //////////////////////////////////    google oauth
 
@@ -45,7 +45,7 @@ $gClient->setDeveloperKey($google_developer_key);
 $google_oauthV2 = new Google_Oauth2Service($gClient);
 
 
-//echo $_SESSION['user'];
+echo $_SESSION['user'];
 
 
 if (isset($_GET['code'])) 
@@ -54,10 +54,10 @@ if (isset($_GET['code']))
 	$_SESSION['token'] = $gClient->getAccessToken();
 
 
-if (  $_SESSION["user"] == true )
-{   header('Location: http://getresults.isaacloud.com/user' );	}
+if ($_SESSION['user']==false)
+{   header('Location: http://getresults.isaacloud.com/' );	}
 else
-{  header('Location: http://getresults.isaacloud.com/' );  }
+{  header('Location: http://getresults.isaacloud.com/user' );  }
 	
 		    
 	return;
@@ -90,8 +90,8 @@ if ($gClient->getAccessToken())
 	
 	
 	
-	if (  $_SERVER["REDIRECT_URI"] == "http://getresults.isaacloud.com/user" ) //jesli wchodzi ze stronki user to przekieruj na user, jak nie to admin
-	{ $state = 'user'; }
+	if (  $_SERVER["REDIRECT_URL"] == "http://getresults.isaacloud.com/user" ) //jesli wchodzi ze stronki user to przekieruj na user, jak nie to admin
+	{ $state = 'user';     	 $_SESSION['user']= true;}
 	else 
 	{ $state = 'admin'; }
 	
@@ -320,7 +320,7 @@ $app->get('/admin/user', function () use ($app) {
 /*******************************     Define routes    **********************************/
 
 
-var_dump ($_SESSION);
+var_dump($_SESSION);
 
 
 
@@ -359,12 +359,13 @@ $app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
 
 $app->get('/user', function () use ($app,$sdk,$authUrl,$jest) {
  
-//var_dump($_SESSION);
+var_dump($_SESSION);
  
  	if(isset($authUrl))
  				 {      
+ 				 ////ustawiac jakas dodatkowa zmienna zeby redirect byl z powrotem do usera
  				 
- 				 $_SESSION['user']= true;
+ 			
  				 
  				 
  				          // not logged in  
@@ -503,18 +504,11 @@ $app->get('/uerror', function () use ($app) {
 
 //////////////////////////// admin dashboard : menu, statistics ////////////////////////
 
-$app->get('/admin/dashboard', function () use ($app,$sdk,$instanceConf, $state) {
+$app->get('/admin/dashboard', function () use ($app,$sdk,$instanceConf) {
 
 	if (!isset($_SESSION['token'])) {
            	  $app->response->redirect($app->urlFor('e'), 303);
         	}
-
-
-
-
-
-
-
 
 	$app->render('header3.php');
 	$app->render('menu.php');

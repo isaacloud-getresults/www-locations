@@ -4,7 +4,7 @@
 defined('VENDOR_PATH') || define('VENDOR_PATH', realpath(__DIR__ . '/../vendor'));
 require VENDOR_PATH . '/autoload.php';
 
-
+session_destroy();
 print_r($_SERVER);
 
 //////////////////////////////////    google oauth
@@ -27,7 +27,7 @@ require_once './src/contrib/Google_Oauth2Service.php';
 
 
 //start session
-session_destroy();
+
 session_name('c' );
 session_start();
 
@@ -45,7 +45,6 @@ $gClient->setDeveloperKey($google_developer_key);
 $google_oauthV2 = new Google_Oauth2Service($gClient);
 
 
-echo $_SESSION['user'];
 
 
 if (isset($_GET['code'])) 
@@ -93,7 +92,7 @@ if ($gClient->getAccessToken())
 	if (  $_SERVER["REDIRECT_URL"] == "/user" ) //jesli wchodzi ze stronki user to przekieruj na user, jak nie to admin
 	{ $state = 'user';     	 $_SESSION['user']= true;}
 	else 
-	{ $state = 'admin'; }
+	{ $state = 'admin';     $_SESSION['user']= false;}
 	
 	
 

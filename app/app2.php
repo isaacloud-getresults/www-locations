@@ -338,6 +338,13 @@ $app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
          {                     //logged in  
          
 
+
+
+       if ($_SESSION['user']==true)      
+        {    $app->response->redirect($app->urlFor('rootuser'), 303);  }
+
+       else
+      {
          
           if  ($jest)          // if exists in database go to admin dashboard else register
                 {     
@@ -345,6 +352,13 @@ $app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
                 }
 
           else {  $app->response->redirect($app->urlFor('ar'), 303);   }
+
+
+         }
+
+
+
+
 
     }
  

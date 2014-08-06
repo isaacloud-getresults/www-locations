@@ -90,7 +90,7 @@ if ($gClient->getAccessToken())
 	
 	
 	
-	if (  $_SERVER["REDIRECT_URL"] == "getresults.isaacloud.com/user" ) //jesli wchodzi ze stronki user to przekieruj na user, jak nie to admin
+	if (  $_SERVER["REDIRECT_URL"] == "/user" ) //jesli wchodzi ze stronki user to przekieruj na user, jak nie to admin
 	{ $state = 'user';     	 $_SESSION['user']= true;}
 	else 
 	{ $state = 'admin'; }

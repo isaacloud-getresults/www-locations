@@ -5,7 +5,7 @@ defined('VENDOR_PATH') || define('VENDOR_PATH', realpath(__DIR__ . '/../vendor')
 require VENDOR_PATH . '/autoload.php';
 
 
-//print_r($_SERVER);
+//var_dump($_SERVER);
 
 //////////////////////////////////    google oauth
 
@@ -45,7 +45,7 @@ $gClient->setDeveloperKey($google_developer_key);
 $google_oauthV2 = new Google_Oauth2Service($gClient);
 
 
-echo $_SESSION['user'];
+//echo $_SESSION['user'];
 
 
 if (isset($_GET['code'])) 
@@ -54,10 +54,10 @@ if (isset($_GET['code']))
 	$_SESSION['token'] = $gClient->getAccessToken();
 
 
-if ($_SESSION['user']==false)
-{   header('Location: http://getresults.isaacloud.com/' );	}
+if (  $_SESSION["user"] == true )
+{   header('Location: http://getresults.isaacloud.com/user' );	}
 else
-{  header('Location: http://getresults.isaacloud.com/user' );  }
+{  header('Location: http://getresults.isaacloud.com/' );  }
 	
 		    
 	return;
@@ -90,7 +90,7 @@ if ($gClient->getAccessToken())
 	
 	
 	
-	if (  $_SERVER["REDIRECT_URL"] == "/~mac/user" ) //jesli wchodzi ze stronki user to przekieruj na user, jak nie to admin
+	if (  $_SERVER["REDIRECT_URI"] == "http://getresults.isaacloud.com/user" ) //jesli wchodzi ze stronki user to przekieruj na user, jak nie to admin
 	{ $state = 'user'; }
 	else 
 	{ $state = 'admin'; }
@@ -320,7 +320,7 @@ $app->get('/admin/user', function () use ($app) {
 /*******************************     Define routes    **********************************/
 
 
-
+var_dump ($_SESSION);
 
 
 
@@ -359,7 +359,7 @@ $app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
 
 $app->get('/user', function () use ($app,$sdk,$authUrl,$jest) {
  
-var_dump($_SESSION);
+//var_dump($_SESSION);
  
  	if(isset($authUrl))
  				 {      
@@ -379,7 +379,7 @@ var_dump($_SESSION);
           
 if (isset($_SESSION['email'])){             
 
- $subdomain = array_shift(explode(".",$_SERVER['HTTP_HOST']));
+ $subdomain = array_shift(explode(".",$_SERVER['HTTP_HOST']));          /// google redirect nie obsluzy subdomen
     
     $_SESSION['subdomain']=$subdomain;
     
@@ -392,7 +392,7 @@ $collection = $db->users;
     
    $ok=false; 
     
-    $cursor = $collection->find(array( 'domain' => $subdomain ));
+    $cursor = $collection->find(array( 'email' => $_SESSION['email'] ));
    
 
     if(!empty($cursor))                                             
@@ -504,11 +504,18 @@ $app->get('/uerror', function () use ($app) {
 
 //////////////////////////// admin dashboard : menu, statistics ////////////////////////
 
-$app->get('/admin/dashboard', function () use ($app,$sdk,$instanceConf) {
+$app->get('/admin/dashboard', function () use ($app,$sdk,$instanceConf, $state) {
 
 	if (!isset($_SESSION['token'])) {
            	  $app->response->redirect($app->urlFor('e'), 303);
         	}
+
+
+
+
+
+
+
 
 	$app->render('header3.php');
 	$app->render('menu.php');

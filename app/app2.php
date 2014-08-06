@@ -90,10 +90,8 @@ if ($gClient->getAccessToken())
 	
 	
 	
-	$userurl= "http://".$_SESSION['subdomain']."getresults.isaacloud.com/user";
-	
-	if (strpos($_SERVER["REDIRECT_URI"], 'user') !== false)
-	{ $state = 'user';   	 $_SESSION['user']= true;  }
+	if (  $_SERVER["REDIRECT_URI"] == "http://getresults.isaacloud.com/user" ) //jesli wchodzi ze stronki user to przekieruj na user, jak nie to admin
+	{ $state = 'user'; }
 	else 
 	{ $state = 'admin'; }
 	
@@ -393,7 +391,7 @@ $collection = $db->users;
     
    $ok=false; 
     
-    $cursor = $collection->find(array( 'domain' =>  $_SESSION['subdomain'] ));
+    $cursor = $collection->find(array( 'email' => $_SESSION['email'] ));
    
 
     if(!empty($cursor))                                             

@@ -23,7 +23,7 @@ require_once './src/contrib/Google_Oauth2Service.php';
 
 //start session
 
-session_name('c' );
+session_name('d' );
 session_start();
 
 
@@ -132,46 +132,8 @@ $collection = $db->users;
 
 
 
-if (isset($_SESSION['email'])){             //checking if user exists in database
-
-
-    
-    $cursor = $collection->find(array( 'email' => $_SESSION['email'] ));
-   
-
-    if(!empty($cursor))                                             
-	{
-	
-	    foreach ($cursor as $user): 
-
-
-
-              	if ($user["base64"] != null)                                                /// user exists and owns an instance
-     	        { 
- 	
- 	             $dane=base64_decode($user["base64"]);
- 				list ($clientid, $secret) = explode(":", $dane);
- 	
- 				$jest=true;
- 			
- 	
- 				$_SESSION['clientid']=$clientid;
- 				$_SESSION['secret']=$secret;
-
- 	      		}
- 	      		
-		
- 	      endforeach;		
- 	      		
- 	      		
-	}
-
-
-
      
-     
-     
-     if (isset($_SESSION['clientid']) && isset($_SESSION['secret']))      // isaacloud intance config
+     if (isset($_SESSION['clientid']) && isset($_SESSION['secret']))      // isaacloud instance config
     {
 
 		//Configuration connection into IsaaCloud server
@@ -184,11 +146,6 @@ if (isset($_SESSION['email'])){             //checking if user exists in databas
 		$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
 	}
 
-
-
-
-
-}
 
 
 
@@ -344,7 +301,54 @@ $app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
       $app->render('welcome.php', array( 'url' => $authUrl));
      }
      else
-                 {                     //logged in  
+                 {      
+                 
+                 
+                 
+                 
+                 if (isset($_SESSION['email'])   ){             //checking if user exists in database    //lepiej przeniesc ten check do roota
+
+    $m = new MongoClient(); 
+$db = $m->isaa;
+$collection = $db->users;
+    
+    $cursor = $collection->find(array( 'email' => $_SESSION['email'] ));
+   
+
+    if(!empty($cursor))                                             
+	{
+	
+	    foreach ($cursor as $user): 
+
+
+
+              	if ($user["base64"] != null)                                                /// user exists and owns an instance
+     	        { 
+ 	
+ 	             $dane=base64_decode($user["base64"]);
+ 				list ($clientid, $secret) = explode(":", $dane);
+ 	
+ 				$jest=true;
+ 			
+ 	
+ 				$_SESSION['clientid']=$clientid;
+ 				$_SESSION['secret']=$secret;
+
+ 	      		}
+ 	      		
+		
+ 	      endforeach;		
+ 	      		
+ 	      		
+	}
+
+
+
+}
+                 
+   
+                 
+                                //logged in  
                          if  ($jest)          // if exists in database go to admin dashboard else register
                               {     
                               $app->response->redirect($app->urlFor('ad'), 303);   
@@ -403,22 +407,7 @@ $app->get('/user', function () use ($app,$sdk,$authUrl,$jest) {
  	      		
  	      		
 	 											  }
-
-
-     
-   						      if (isset($_SESSION['clientid']) && isset($_SESSION['secret']))      // isaacloud instance config
-   							  {
-
-									//Configuration connection into IsaaCloud server
-									$isaaConf = array(
-     							   "clientId" => $_SESSION['clientid'],
-    							    "secret" => $_SESSION['secret']
-									);
-
-									//create new instance of IsaaCloud SDK
-									$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
-							  }
-
+   
 				  }
 
 
@@ -1143,7 +1132,7 @@ $app->get('/ulogout', function () use ($app,$sdk) {
    if (isset($_SESSION['domain']))
    { 
      $u= "http://".$_SESSION['domain'].".getresults.isaacloud.com/user";
- //  $u = "http://".$_SESSION['domain']."/~mac/user";
+  // $u = "http://".$_SESSION['domain']."/~mac/user";
    
      $app->response->redirect($u);
    }

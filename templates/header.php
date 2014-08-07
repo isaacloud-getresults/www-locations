@@ -31,7 +31,7 @@
     	<br>
 		<div class="container" >
 			<p align="right"> Logged in as <?php echo $_SESSION["email"]; ?>   <button type="button" class="btn btn-default" id="confirm">
-			<span class="glyphicon glyphicon-log-out"></span>  <a href="./logout" onclick="return logoutask();"> Log out</a> </button><p>
+			<span class="glyphicon glyphicon-log-out"></span>  <a href="./ulogout" onclick="return logoutask();"> Log out</a> </button><p>
 		</div><br>    	
 
     	<div class="container">

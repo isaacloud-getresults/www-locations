@@ -5,9 +5,9 @@ defined('VENDOR_PATH') || define('VENDOR_PATH', realpath(__DIR__ . '/../vendor')
 require VENDOR_PATH . '/autoload.php';
 
 
-print_r($_SERVER);
+//print_r($_SERVER);
 //var_dump($_REQUEST);
-var_dump($_GET);
+//var_dump($_GET);
 
 
 
@@ -70,7 +70,7 @@ if (isset($_GET['code']))
  {
  $domain = end(explode('user', $_GET['state']));
  $_SESSION['domain']=$domain;
- var_dump($_SESSION);
+ //var_dump($_SESSION);
  header('Location: http://getresults.isaacloud.com/user' );
  }
 
@@ -281,7 +281,7 @@ $app->get('/room/users/:x', function ($x) use ($app) {
 
 
 $app->get('/room/logout', function () use ($app) {
-    $app->response->redirect($app->urlFor('o'), 303); 
+    $app->response->redirect($app->urlFor('uo'), 303); 
 });
 
 
@@ -311,7 +311,7 @@ $app->get('/users/details', function () use ($app) {
 
 
 $app->get('/users/logout', function () use ($app) {
-    $app->response->redirect($app->urlFor('o'), 303); 
+    $app->response->redirect($app->urlFor('uo'), 303); 
 });
 
 
@@ -350,7 +350,7 @@ $app->get('/admin/user', function () use ($app) {
 /*******************************     Define routes    **********************************/
 
 
-var_dump($_SESSION);
+//var_dump($_SESSION);
 
 
 
@@ -427,11 +427,11 @@ $app->get('/user', function () use ($app,$sdk,$authUrl,$jest) {
          		
         
           
-if (isset($_SESSION['email'])){             
+if (isset($_SESSION['email']) && isset($_SESSION['domain'])){             
 
         
     
-    
+    $ok=false;
    
 
 $m = new MongoClient(); 
@@ -1104,7 +1104,7 @@ $app->get('/dashboard', function () use ($app,$sdk, $instanceConf) {
  
      $sdk->path("cache/users/groups")
     			->withOrder(array("id"=>"ASC"))
-				->withQueryParameters(array("limit" =>0,"fields" => array("counterValues","label")));
+				->withQueryParameters(array("limit" =>0, "offset"=>2,"fields" => array("counterValues","label")));
     
 
      $res = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
@@ -1198,18 +1198,41 @@ $app->get('/leaderboard', function () use ($app,$sdk,$instanceConf) {
   		
 })->name("l");
 
-///////// logout /////////////////////////////////////////////////////////////////////////
+///////// admin logout /////////////////////////////////////////////////////////////////////////
 
 $app->get('/logout', function () use ($app,$sdk) {
 
   session_destroy();
   $app->view()->setData('token', null);
+   $app->client->revokeToken();
   $app->response->redirect($app->urlFor('root'), 303); 
-  $app->client->revokeToken();
+ 
   
   
   
 })->name("o");
+
+
+
+/////////user  logout /////////////////////////////////////////////////////////////////////////
+
+$app->get('/ulogout', function () use ($app,$sdk) {
+
+  session_destroy();
+  $app->view()->setData('token', null);
+   $app->client->revokeToken();
+   
+   
+ // $app->response->redirect($app->urlFor('rootuser'), 303); 
+ 
+ 
+ $u= "http://".$_SESSION['domain']."getresults.isaacloud.com/";
+  header('Location: $u' );
+  
+
+  
+  
+})->name("uo");
 
 
 
@@ -1332,8 +1355,9 @@ $app->get('/kitchen/:b', function ($b) use ($app,$sdk,$instanceConf,$cr, $id_k) 
 		$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
 
 
-
-		/***** types of notification ***********/
+		
+		
+/***** types of notification ***********/
   		$sdk->path("admin/notifications/types");
 
 $res9 = $sdk->api("admin/notifications/types", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
@@ -1355,7 +1379,7 @@ $pref="cache/users/groups/";
 $p=$pref.$id_k; // id for kitchen
 
 		$sdk->path($p)
-			->withQueryParameters(array("fields" => array("label")));
+			->withQueryParameters(array("fields" => array("name")));
 
 $res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 	
@@ -1365,7 +1389,7 @@ $res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() 
          // nootyfication id for selected room
          
          foreach ($res9 as $type):
-         	if($type['name']==$res5['label']) $room=$type['id'];
+         	if($type['name']==$res5['name']) $room=$type['id'];
          
          endforeach;
          
@@ -1390,7 +1414,9 @@ $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->ge
     	$app->render('kitchen.php', array('users' => $res4, 'roomid' => $res5) );
     	$app->render('midd2.php');
     	$app->render('kitchen2.php', array('data' => $res, 'person' => $res1));
-    	
+	
+
+ 
  
 })->name("kitnolog");
 

@@ -1,6 +1,11 @@
 <?php
 
 
+
+if (isset($_SESSION)) {session_destroy();}
+
+
+
 /**
  * @author Arnold Sikorski <asikorski@sointeractive.pl>
  */

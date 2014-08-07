@@ -4,8 +4,14 @@
 defined('VENDOR_PATH') || define('VENDOR_PATH', realpath(__DIR__ . '/../vendor'));
 require VENDOR_PATH . '/autoload.php';
 
-session_destroy();
-print_r($_SERVER);
+
+//print_r($_SERVER);
+//var_dump($_REQUEST);
+var_dump($_GET);
+
+
+
+
 
 //////////////////////////////////    google oauth
 
@@ -52,11 +58,13 @@ if (isset($_GET['code']))
 	$gClient->authenticate($_GET['code']);
 	$_SESSION['token'] = $gClient->getAccessToken();
 
+ 
+ if ($_GET['state']=="admin")
+ 
+ {header('Location: http://getresults.isaacloud.com/' );	}
+ else if ($_GET['state']=="user")
+ {header('Location: http://getresults.isaacloud.com/user' );}
 
-if ($_SESSION['user']==false)
-{   header('Location: http://getresults.isaacloud.com/' );	}
-else
-{  header('Location: http://getresults.isaacloud.com/user' );  }
 	
 		    
 	return;
@@ -87,14 +95,14 @@ if ($gClient->getAccessToken())
  {
 	//For Guest user, get google login url
 	
-	
-	
+	if ($init==false)
+{	
 	if (  $_SERVER["REDIRECT_URL"] == "/user" ) //jesli wchodzi ze stronki user to przekieruj na user, jak nie to admin
-	{ $state = 'user';    if (!isset($_SESSION['user'] ))    { $_SESSION['user']= true;}}
+	{ $state = 'user';   }
 	else 
-	{ $state = 'admin';   if (!isset($_SESSION['user']))   {$_SESSION['user']= false;}}
+	{ $state = 'admin';  }
 	
-	
+}	
 
     $gClient->setState($state);
 	$authUrl = $gClient->createAuthUrl();          
@@ -207,6 +215,16 @@ $instanceConf = array(
 		);
 
 
+
+
+//////////////////// def-> admin rooms ///////////////////////////////////////////////
+$cr=1; // room's counter
+$id_k = 4; // kitchen's id
+$id_mr = 5; // meeting romm's id
+$id_r = 6; //restaurant's id
+
+
+//////////////////////////////////////////////////////////////////////////////////////
 
 
 ////////////
@@ -329,9 +347,17 @@ var_dump($_SESSION);
 $app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
  
 
+
+
+
  
  	if(isset($authUrl))
  				 {               // not logged in  
+ 				 
+ 				 
+ 				// $_SESSION['user']= false;
+ 				 
+ 				 
     			 $app->render('welcome.php', array( 'url' => $authUrl));
     			 }
      else
@@ -340,11 +366,8 @@ $app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
 
 
 
-       if ($_SESSION['user']==true)      
-        {    $app->response->redirect($app->urlFor('rootuser'), 303);  }
 
-       else
-      {
+
          
           if  ($jest)          // if exists in database go to admin dashboard else register
                 {     
@@ -354,7 +377,7 @@ $app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
           else {  $app->response->redirect($app->urlFor('ar'), 303);   }
 
 
-         }
+         
 
 
 
@@ -371,8 +394,9 @@ $app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
 ////////////////////////////////  root  - user route  /////////////////////////////////////////////
 
 $app->get('/user', function () use ($app,$sdk,$authUrl,$jest) {
- 
-var_dump($_SESSION);
+
+
+
  
  	if(isset($authUrl))
  				 {      
@@ -386,6 +410,8 @@ var_dump($_SESSION);
      else
          {                     //logged in  
          
+         
+         		
         
           
 if (isset($_SESSION['email'])){             
@@ -861,48 +887,51 @@ if (!isset($_SESSION['token'])) {
 
 $app->get('/admin/global', function () use ($app, $sdk,$instanceConf) {
 
- if (!isset($_SESSION['token'])) {
-             $app->response->redirect($app->urlFor('e'), 303);
-        }
-
-
-   		$app->render('column.php');
+  		$app->render('column.php');
   		
-  	//get statistics
+  	//get statictics
   	
   			$sdk->path("cache/users")
 				->withQueryParameters(array("limit" => 0,"fields" => array("firstName","lastName","leaderboards","email", "gainedAchievements", "counterValues")));
 
-        $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
-	    $sdk->path("queues/notifications");
-
-        $res3 = $sdk->api("queues/notifications", "get",$sdk->getParameters(),  $sdk->getQueryParameters()  );
+  $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
 
-	    $sdk->path("queues/events/done");
+			$sdk->path("queues/notifications");
 
-        $res4 = $sdk->api("queues/events/done", "get",$sdk->getParameters(),  $sdk->getQueryParameters()  );
+$res3 = $sdk->api("queues/notifications", "get",$sdk->getParameters(),  $sdk->getQueryParameters()  );
 
 
-    	$app->render('global.php', array('res1' => $res1, 'res3' => $res3, 'res4' => $res4, 'instanceConf' => $instanceConf  ) );
+			$sdk->path("queues/events/done");
+
+$res4 = $sdk->api("queues/events/done", "get",$sdk->getParameters(),  $sdk->getQueryParameters()  );
+
+
+    	$app->render('global.php', array('res1' => $res1, 'res3' => $res3, 'res4' => $res4, 'instanceConf' => $instanceConf) );
   		$app->render('midd2.php');
-           	
+        
+        //select from isaacloud
+        
+            	
   		$sdk->path("cache/users")
-  				 ->withOrder(array("updatedAt"=>"DESC"))
-                ->withFields("firstName","lastName")
+  			
 				->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName")));   	
     	
-        $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
+$res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
 
-        $sdk->path("queues/notifications")
+    $sdk->path("queues/notifications")
+               ->withQuery(array("typeId" =>1 ))
                 ->withOrder(array("updatedAt"=>"DESC"))
 				->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
 
-        $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+$res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
 	
     	
-    	$app->render('global2.php', array('data' => $res, 'person' => $res1));
+    	//print_r($res);	
+    	
+    	$app->render('global2.php', array('data' => $res, 'person' => $res1));// global feed ->to do
+        	
   		
 
 })->name("gl");
@@ -945,62 +974,72 @@ if (!isset($_SESSION['token'])) {
 
 ////////////////////// admin kitchen: list of users, feed ////////////////////////////
 
-$app->get('/admin/kitchen', function () use ($app,$sdk,$instanceConf) {
+
+$app->get('/admin/kitchen', function () use ($app,$sdk,$cr, $id_k) {
+
+		
+		
+/***** types of notification ***********/
+  		$sdk->path("admin/notifications/types");
+
+$res9 = $sdk->api("admin/notifications/types", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+//print_r($res9);  
 
 
- if (!isset($_SESSION['token'])) {
-             $app->response->redirect($app->urlFor('e'), 303);
-        }
+/***** users ****************************/
+   		$sdk->path("cache/users")
+        	->withQuery(array("counterValues.counter" =>$cr ))
+          	->withOrder (array("leaderboards.1.position"=>"ASC" ))
+		->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
+				
+$res4 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+//print_r($res4);
+
+/***** Room's name *********************/
+  
+$pref="cache/users/groups/"; 
+$p=$pref.$id_k; // id for kitchen
+
+		$sdk->path($p)
+			->withQueryParameters(array("fields" => array("name")));
+
+$res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+	
+//echo $res5['label']; // <- room's name
 
 
+         // nootyfication id for selected room
+         
+         foreach ($res9 as $type):
+         	if($type['name']==$res5['name']) $room=$type['id'];
+         
+         endforeach;
+         
+         ////////////////////////////////////
+		
+/****** all users *******************/   	
+  		$sdk->path("cache/users")
+             ->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName", "counterValues")));   	
+    	
+$res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
+
+/********* notifications ************/
+    	 $sdk->path("queues/notifications")
+            ->withQuery(array("typeId" =>$room))
+            ->withOrder(array("updatedAt"=>"DESC"))
+			->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
+
+$res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+
+/********* render *************/
 		$app->render('column.php');
-		
-		
-		$order="leaderboards".$instanceConf['leaderboard']."position";
-		
-    //users
-        $sdk->path("cache/users")
-            ->withOrder (array($order=>"ASC" ))
-			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
-				
-
-        $res4 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
-  
-    //Room's name
-  
-        $pref="cache/users/groups/"; 
-        $p=$pref.$instanceConf['kitid'];                  
-
-	    $sdk->path($p)
-				->withQueryParameters(array("fields" => array("label")));
-				
-
-        $res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
-
-		
-    	$app->render('kitchen.php', array('users' => $res4, 'roomid' => $res5, 'instanceConf' => $instanceConf ) );
+    	$app->render('kitchen.php', array('users' => $res4, 'roomid' => $res5) );
     	$app->render('midd2.php');
-    	
-  	    $sdk->path("cache/users")
-
-  				->withOrder(array("updatedAt"=>"DESC"))
-             	->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName")));   	
-    	
-        $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
-    	
-    	$sdk->path("queues/notifications")
-                ->withQuery(array("typeId" =>$instanceConf['kitid']))                         
-                ->withOrder(array("updatedAt"=>"DESC"))
-				->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
-
-        $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
-
-    	
     	$app->render('kitchen2.php', array('data' => $res, 'person' => $res1));
-    	
+	
+
  
 })->name("kit");
-
 
 /**************************** user routes **********************************************/
 
@@ -1247,7 +1286,7 @@ $app->get('/users/:id', function($id) use ($app,$sdk,$instanceConf){
 
 ////////////////////// kitchen: no login required ////////////////////////////      use objectid    53d63daa776946f76a8b4567
 
-$app->get('/kitchen/:b', function ($b) use ($app,$sdk,$instanceConf) {
+$app->get('/kitchen/:b', function ($b) use ($app,$sdk,$instanceConf,$cr, $id_k) {
 
 
       $m = new MongoClient(); 
@@ -1281,50 +1320,62 @@ $app->get('/kitchen/:b', function ($b) use ($app,$sdk,$instanceConf) {
 
 
 
+		/***** types of notification ***********/
+  		$sdk->path("admin/notifications/types");
+
+$res9 = $sdk->api("admin/notifications/types", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+//print_r($res9);  
+
+
+/***** users ****************************/
+   		$sdk->path("cache/users")
+        	->withQuery(array("counterValues.counter" =>$cr ))
+          	->withOrder (array("leaderboards.1.position"=>"ASC" ))
+		->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
+				
+$res4 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+//print_r($res4);
+
+/***** Room's name *********************/
+  
+$pref="cache/users/groups/"; 
+$p=$pref.$id_k; // id for kitchen
+
+		$sdk->path($p)
+			->withQueryParameters(array("fields" => array("label")));
+
+$res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+	
+//echo $res5['label']; // <- room's name
+
+
+         // nootyfication id for selected room
+         
+         foreach ($res9 as $type):
+         	if($type['name']==$res5['label']) $room=$type['id'];
+         
+         endforeach;
+         
+         ////////////////////////////////////
+		
+/****** all users *******************/   	
+  		$sdk->path("cache/users")
+             ->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName", "counterValues")));   	
+    	
+$res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
+
+/********* notifications ************/
+    	 $sdk->path("queues/notifications")
+            ->withQuery(array("typeId" =>$room))
+            ->withOrder(array("updatedAt"=>"DESC"))
+			->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
+
+$res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+
+/********* render *************/
 		$app->render('column.php');
-		
-		
-    //users
-    
-    	$order="leaderboards".$instanceConf['leaderboard']."position";
-    
-        $sdk->path("cache/users")
-            ->withOrder (array($order=>"ASC" ))
-			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
-				
-
-        $res4 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
-  
-    //Room's name
-  
-        $pref="cache/users/groups/"; 
-        $p=$pref.$instanceConf['kitid']; // 1 ->id for kitchen                                                                   ///   kitchen id
-
-	    $sdk->path($p)
-				->withQueryParameters(array("fields" => array("label")));
-				
-
-        $res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
-
-		
-    	$app->render('kitchen.php', array('users' => $res4, 'roomid' => $res5, 'instanceConf' => $instanceConf ) );
+    	$app->render('kitchen.php', array('users' => $res4, 'roomid' => $res5) );
     	$app->render('midd2.php');
-    	
-  	    $sdk->path("cache/users")
-
-  				->withOrder(array("updatedAt"=>"DESC"))
-             	->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName")));   	
-    	
-        $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
-    	
-    	$sdk->path("queues/notifications")
-                ->withQuery(array("typeId" =>$instanceConf['kitid']))                                                                /// kitchen id
-                ->withOrder(array("updatedAt"=>"DESC"))
-				->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
-
-        $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
-
-    	
     	$app->render('kitchen2.php', array('data' => $res, 'person' => $res1));
     	
  
@@ -1369,43 +1420,51 @@ $app->get('/global/:b', function ($b) use ($app, $sdk,$instanceConf) {
 		//create new instance of IsaaCloud SDK
 		$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
 
-
-  		$app->render('column.php');
+	$app->render('column.php');
   		
-     	//get statistics
+  	//get statictics
   	
-  		$sdk->path("cache/users")
+  			$sdk->path("cache/users")
 				->withQueryParameters(array("limit" => 0,"fields" => array("firstName","lastName","leaderboards","email", "gainedAchievements", "counterValues")));
 
-  
-       $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
-	   $sdk->path("queues/notifications");
+  $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
-       $res3 = $sdk->api("queues/notifications", "get",$sdk->getParameters(),  $sdk->getQueryParameters()  );
 
-	   $sdk->path("queues/events/done");
+			$sdk->path("queues/notifications");
 
-       $res4 = $sdk->api("queues/events/done", "get",$sdk->getParameters(),  $sdk->getQueryParameters()  );
+$res3 = $sdk->api("queues/notifications", "get",$sdk->getParameters(),  $sdk->getQueryParameters()  );
 
-       $app->render('global.php', array('res1' => $res1, 'res3' => $res3, 'res4' => $res4, 'instanceConf' => $instanceConf ) );
-  	   $app->render('midd2.php');
-                        	
-  	   $sdk->path("cache/users")
-  				 ->withOrder(array("updatedAt"=>"DESC"))
-                ->withFields("firstName","lastName")
+
+			$sdk->path("queues/events/done");
+
+$res4 = $sdk->api("queues/events/done", "get",$sdk->getParameters(),  $sdk->getQueryParameters()  );
+
+
+    	$app->render('global.php', array('res1' => $res1, 'res3' => $res3, 'res4' => $res4, 'instanceConf' => $instanceConf) );
+  		$app->render('midd2.php');
+        
+        //select from isaacloud
+        
+            	
+  		$sdk->path("cache/users")
+  			
 				->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName")));   	
     	
-       $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
+$res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
 
-       $sdk->path("queues/notifications")
+    $sdk->path("queues/notifications")
+               ->withQuery(array("typeId" =>1 ))
                 ->withOrder(array("updatedAt"=>"DESC"))
 				->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
 
-       $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
-		
+$res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+	
     	
-       $app->render('global2.php', array('data' => $res, 'person' => $res1));// global feed ->to do
+    	//print_r($res);	
+    	
+    	$app->render('global2.php', array('data' => $res, 'person' => $res1));// global feed ->to do
+  	
         	
 		
 

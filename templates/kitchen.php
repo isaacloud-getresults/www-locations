@@ -18,6 +18,8 @@ else {
 
 
 
+
+
   <table class="table table-striped table-hover">
                 <thead>
                     <tr>
@@ -35,7 +37,7 @@ else {
 					foreach ($users as $user):
 						$size=sizeof($user["counterValues"]);
 						for($i=0;$i<$size;$i++){
- 							if(($user["counterValues"][$i]["counter"]==$instanceConf['counterid']) and ($user["counterValues"][$i]["value"]== $roomid["id"]) ){
+ 							if(($user["counterValues"][$i]["counter"]==1) and ($user["counterValues"][$i]["value"]== $roomid["id"]) ){
  							
  					 ?>
  					<tr>
@@ -45,7 +47,7 @@ else {
             				else echo $user["firstName"]." ".$user["lastName"]; ?></td>
             			<td align="right">
             			<span class="badge ">
-            			<?php if(empty($user["leaderboards"][$instanceConf['leaderboard']]["score"])) echo "0"; else echo $user["leaderboards"][$instanceConf['leaderboard']]["score"];?></span>
+            			<?php if(empty($user["leaderboards"][1]["score"])) echo "0"; else echo $user["leaderboards"][1]["score"];?></span>
             			</td>	
             			
                		</tr>

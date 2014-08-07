@@ -1221,10 +1221,16 @@ $app->get('/ulogout', function () use ($app,$sdk) {
  // $app->response->redirect($app->urlFor('rootuser'), 303); 
  
  if (isset($_SESSION['domain']))
-{ $u= "http://".$_SESSION['domain']."getresults.isaacloud.com/user";
-  header("Location: ".$u );
+{ 
+
+$u= "http://".$_SESSION['domain']."getresults.isaacloud.com/user";
+ //  $u = "http://".$_SESSION['domain']."/~mac/user";
+   
+   $app->response->redirect($u);
   }
-  else {  header('Location: http://getresults.isaacloud.com/' );}
+  else { 
+ $app->response->redirect($app->urlFor('root'), 303);
+   }
 
 
 

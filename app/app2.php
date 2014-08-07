@@ -5,7 +5,7 @@ defined('VENDOR_PATH') || define('VENDOR_PATH', realpath(__DIR__ . '/../vendor')
 require VENDOR_PATH . '/autoload.php';
 
 
-//print_r($_SERVER);
+print_r($_SERVER);
 //var_dump($_REQUEST);
 var_dump($_GET);
 
@@ -58,12 +58,21 @@ if (isset($_GET['code']))
 	$gClient->authenticate($_GET['code']);
 	$_SESSION['token'] = $gClient->getAccessToken();
 
+
+
+
+
  
  if ($_GET['state']=="admin")
  
  {header('Location: http://getresults.isaacloud.com/' );	}
- else if ($_GET['state']=="user")
- {header('Location: http://getresults.isaacloud.com/user' );}
+ else if (strpos($_GET['state'],'user') !== false) 
+ {
+ $domain = end(explode('user', $_GET['state']));
+ $_SESSION['domain']=$domain;
+ var_dump($_SESSION);
+ header('Location: http://getresults.isaacloud.com/user' );
+ }
 
 	
 		    
@@ -95,14 +104,18 @@ if ($gClient->getAccessToken())
  {
 	//For Guest user, get google login url
 	
-	if ($init==false)
-{	
+	
 	if (  $_SERVER["REDIRECT_URL"] == "/user" ) //jesli wchodzi ze stronki user to przekieruj na user, jak nie to admin
-	{ $state = 'user';   }
+	{ 
+	//pobierz nazwe subdomeny, wpisz tez do state
+	
+	$sub = array_shift(explode(".",$_SERVER['SERVER_NAME']));  
+	
+	$state = 'user'.$sub;   }
 	else 
 	{ $state = 'admin';  }
 	
-}	
+	
 
     $gClient->setState($state);
 	$authUrl = $gClient->createAuthUrl();          
@@ -416,7 +429,7 @@ $app->get('/user', function () use ($app,$sdk,$authUrl,$jest) {
           
 if (isset($_SESSION['email'])){             
 
- $sub = array_shift(explode(".",$_SERVER['SERVER_NAME']));         
+        
     
     
    
@@ -428,7 +441,7 @@ $collection = $db->users;
     
    $ok=false; 
     
-    $cursor = $collection->find(array( 'domain' => $sub ));
+    $cursor = $collection->find(array( 'domain' => $_SESSION['domain'] ));   //// tutaj pobrac to!!!!
    
 
     if(!empty($cursor))                                             

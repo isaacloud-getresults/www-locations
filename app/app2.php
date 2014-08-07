@@ -1223,7 +1223,7 @@ $app->get('/ulogout', function () use ($app,$sdk) {
  if (isset($_SESSION['domain']))
 { 
 
-$u= "http://".$_SESSION['domain']."getresults.isaacloud.com/user";
+$u= "http://".$_SESSION['domain'].".getresults.isaacloud.com/user";
  //  $u = "http://".$_SESSION['domain']."/~mac/user";
    
    $app->response->redirect($u);

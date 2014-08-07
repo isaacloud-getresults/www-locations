@@ -350,7 +350,7 @@ $app->get('/admin/user', function () use ($app) {
 /*******************************     Define routes    **********************************/
 
 
-//var_dump($_SESSION);
+var_dump($_SESSION);
 
 
 
@@ -1229,7 +1229,7 @@ $app->get('/ulogout', function () use ($app,$sdk) {
 { $u= "http://".$_SESSION['domain']."getresults.isaacloud.com/user";
   header("Location: ".$u );
   }
-  else {  $app->response->redirect($app->urlFor('root'), 303); }
+  else {  header('Location: http://getresults.isaacloud.com/' );}
 
   
   

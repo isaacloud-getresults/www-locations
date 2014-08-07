@@ -1225,10 +1225,11 @@ $app->get('/ulogout', function () use ($app,$sdk) {
    
  // $app->response->redirect($app->urlFor('rootuser'), 303); 
  
- 
- $u= "http://".$_SESSION['domain']."getresults.isaacloud.com/";
-  header('Location: $u' );
-  
+ if (isset($_SESSION['domain']))
+{ $u= "http://".$_SESSION['domain']."getresults.isaacloud.com/user";
+  header("Location: ".$u );
+  }
+  else {  $app->response->redirect($app->urlFor('root'), 303); }
 
   
   

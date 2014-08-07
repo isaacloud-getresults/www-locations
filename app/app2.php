@@ -334,6 +334,9 @@ $collection = $db->users;
  				$_SESSION['clientid']=$clientid;
  				$_SESSION['secret']=$secret;
 
+                $_SESSION['profileqr']=$user["domain"];    // get subdomain name for user profile link
+
+
  	      		}
  	      		
 		
@@ -678,9 +681,12 @@ $app->get('/admin/www', function () use ($app) {
     $qrurl = $cursor["_id"];         //get Object id of IsaaCloud instance, generate url for QR code
 
 
+
+
+
  	$app->render('header3.php');
 	$app->render('menu.php');
-	$app->render('www.php'  ,  array('qrurl' => $qrurl) );
+	$app->render('www.php'  ,  array('qrurl' => $qrurl, 'profileqr' => $_SESSION['profileqr']) );
     $app->render('footer.php'); 
 
 
@@ -760,6 +766,9 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
   
   
      /*********************** check ***************************/
+     
+    if((empty($_POST["beacon1"])) || (empty($_POST["location"]))) echo "Nie podano wszystkich danych!";
+    else {
     $uid = $_POST["beacon1"];
 	$location= $_POST["location"];
 	$loc= explode(" ", $location);
@@ -780,21 +789,21 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
 	 	endforeach;
 	 
 
-	if($c_id)
-	{
+	if($c_id){
 		echo "Success!";
-	    $pre="admin/conditions/";
-  	    $p=$pre.$c_id;  
+	$pre="admin/conditions/";
+  	$p=$pre.$c_id;  
   	
-  	    $sdk->path($p);  	
+  	$sdk->path($p);  	
 			  	
- 	   $res2 = $sdk->api($p, "put", $sdk->getParameters(),  $sdk->getQueryParameters() ,  array('rightSide' =>  $uid)  ); 
+ 	$res2 = $sdk->api($p, "put", $sdk->getParameters(),  $sdk->getQueryParameters() ,  array('rightSide' =>  $uid)  ); 
   	}
   	else
   		echo "There's no condition for selected id";
   		
-  		
+  		}
   		$app->render('footer.php'); 
+
 
 
 })->name("set");
@@ -856,76 +865,122 @@ $app->get('/admin/global', function () use ($app, $sdk,$instanceConf) {
 
 ////////////////////// admin restaurant: list of users, feed ////////////////////////////
 
-$app->get('/admin/restaurant', function () use ($app) {
+$app->get('/admin/restaurant', function () use ($app, $sdk, $cr, $id_r) {
 
-    if (!isset($_SESSION['token'])) 
-      {
-       $app->response->redirect($app->urlFor('e'), 303);
-      }
-
-  		$app->render('column.php');
-    	$app->render('restaurant.php'); //<- list of users (to do)
-    	$app->render('midd2.php');
-  		$app->render('restaurant2.php'); //feed (to do)
-  		
-})->name("rest");
-
-////////////////////// admin meeting_room: list of users, feed ////////////////////////////
-
-
-$app->get('/admin/meetingroom', function () use ($app) {
-
-
-if (!isset($_SESSION['token'])) 
-        {
-        $app->response->redirect($app->urlFor('e'), 303);
+if (!isset($_SESSION['token'])) {
+             $app->response->redirect($app->urlFor('e'), 303);
         }
 
-  		$app->render('column.php');
-    	$app->render('meetingroom.php'); //<- list of users (to do)
-    	$app->render('midd2.php');
-  		$app->render('meetingroom2.php'); //feed (to do)
-  		 		
 
-})->name("meet");
-
-////////////////////// admin kitchen: list of users, feed ////////////////////////////
-
-
-$app->get('/admin/kitchen', function () use ($app,$sdk,$cr, $id_k) {
-
-	   if (!isset($_SESSION['token'])) 
-        {
-        $app->response->redirect($app->urlFor('e'), 303);
-        }
-	
-		
 /***** types of notification ***********/
   		$sdk->path("admin/notifications/types");
 
-        $res9 = $sdk->api("admin/notifications/types", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	 
+$res9 = $sdk->api("admin/notifications/types", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+//print_r($res9);  
 
 
 /***** users ****************************/
    		$sdk->path("cache/users")
         	->withQuery(array("counterValues.counter" =>$cr ))
           	->withOrder (array("leaderboards.1.position"=>"ASC" ))
-		->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
+			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
 				
-        $res4 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+$res4 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
 
 /***** Room's name *********************/
   
-        $pref="cache/users/groups/"; 
-        $p=$pref.$id_k; // id for kitchen
+$pref="cache/users/groups/"; 
+$p=$pref.$id_r; // id for restaurant
 
 		$sdk->path($p)
 			->withQueryParameters(array("fields" => array("name")));
 
-        $res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+$res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
+
+
+         // nootyfication id for selected room
+         
+         foreach ($res9 as $type):
+         	if($type['name']==$res5['name']) $room=$type['id'];
+         
+         endforeach;
+         
+         ////////////////////////////////////
+ /******render *****/ 		
+  		$app->render('column.php');
+    	$app->render('restaurant.php', array('users' => $res4, 'roomid' => $res5)); //<- list of users (to do)
+    	$app->render('midd2.php');
+
+////////////////////////////
+
+if(isset($room)){		
+/****** all users *******************/   	
+  		$sdk->path("cache/users")
+             ->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName", "counterValues")));   	
+    	
+$res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
+
+/********* notifications ************/
+    	 $sdk->path("queues/notifications")
+            ->withQuery(array("typeId" =>$room))
+            ->withOrder(array("updatedAt"=>"DESC"))
+			->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
+
+$res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+
+
+
+  		$app->render('restaurant2.php', array('data' => $res, 'person' => $res1)); //feed (to do)
+  }
+else
+	echo "<center>"."There's no notification for selected room"."</center>";		
+  		
+  		
+  		
+})->name("rest");
+
+////////////////////// admin meeting_room: list of users, feed ////////////////////////////
+
+
+$app->get('/admin/meetingroom', function () use ($app, $sdk, $cr, $id_mr) {
+
+if (!isset($_SESSION['token'])) {
+             $app->response->redirect($app->urlFor('e'), 303);
+        }
+
+
+/***** types of notification ***********/
+  		$sdk->path("admin/notifications/types");
+
+$res9 = $sdk->api("admin/notifications/types", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+//print_r($res9);  
+
+
+/***** users ****************************/
+   		$sdk->path("cache/users")
+        	->withQuery(array("counterValues.counter" =>$cr ))
+          	->withOrder (array("leaderboards.1.position"=>"ASC" ))
+			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
+				
+$res4 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
+
+/***** Room's name *********************/
+  
+$pref="cache/users/groups/"; 
+$p=$pref.$id_mr; // id for kitchen
+
+		$sdk->path($p)
+			->withQueryParameters(array("fields" => array("name")));
+
+$res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 	
-         // notification id for selected room
+//echo $res5['label']; // <- room's name
+
+
+         // nootyfication id for selected room
          
          foreach ($res9 as $type):
          	if($type['name']==$res5['name']) $room=$type['id'];
@@ -934,31 +989,118 @@ $app->get('/admin/kitchen', function () use ($app,$sdk,$cr, $id_k) {
          
          ////////////////////////////////////
 		
-/****** all users *******************/   
-	
+         ////////////////////////////////////
+ /******render *****/ 		
+  		$app->render('column.php');
+    	$app->render('meetingroom.php', array('users' => $res4, 'roomid' => $res5)); //<- list of users (to do)
+    	$app->render('midd2.php');
+
+////////////////////////////
+
+if(isset($room)){		
+/****** all users *******************/   	
   		$sdk->path("cache/users")
              ->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName", "counterValues")));   	
     	
-        $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
+$res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
 
 /********* notifications ************/
-
     	 $sdk->path("queues/notifications")
             ->withQuery(array("typeId" =>$room))
             ->withOrder(array("updatedAt"=>"DESC"))
 			->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
 
-         $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+$res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
 
-/********* render *************/
 
-		$app->render('column.php');
-    	$app->render('kitchen.php', array('users' => $res4, 'roomid' => $res5) );
-    	$app->render('midd2.php');
-    	$app->render('kitchen2.php', array('data' => $res, 'person' => $res1));
+
+  		$app->render('meetingroom2.php', array('data' => $res, 'person' => $res1)); //feed (to do)
+  }
+else
+	echo "<center>"."There's no notification for selected room"."</center>";	
+  		
+
+})->name("meet");
+
+////////////////////// admin kitchen: list of users, feed ////////////////////////////
+
+
+$app->get('/admin/kitchen', function () use ($app,$sdk,$cr, $id_k) {
+
+	if (!isset($_SESSION['token'])) {
+             $app->response->redirect($app->urlFor('e'), 303);
+        }	
+		
+/***** types of notification ***********/
+  		$sdk->path("admin/notifications/types");
+
+$res9 = $sdk->api("admin/notifications/types", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+//print_r($res9);  
+
+
+/***** users ****************************/
+   		$sdk->path("cache/users")
+        	->withQuery(array("counterValues.counter" =>$cr ))
+          	->withOrder (array("leaderboards.1.position"=>"ASC" ))
+			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
+				
+$res4 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
+
+/***** Room's name *********************/
+  
+$pref="cache/users/groups/"; 
+$p=$pref.$id_k; // id for kitchen
+
+		$sdk->path($p)
+			->withQueryParameters(array("fields" => array("name")));
+
+$res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 	
+//echo $res5['label']; // <- room's name
+
+
+         // nootyfication id for selected room
+         
+         foreach ($res9 as $type):
+         	if($type['name']==$res5['name']) $room=$type['id'];
+         
+         endforeach;
+         
+         ////////////////////////////////////
+ /******render *****/ 		
+  		$app->render('column.php');
+    	$app->render('kitchen.php', array('users' => $res4, 'roomid' => $res5)); //<- list of users (to do)
+    	$app->render('midd2.php');
+
+////////////////////////////
+
+if(isset($room)){		
+/****** all users *******************/   	
+  		$sdk->path("cache/users")
+             ->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName", "counterValues")));   	
+    	
+$res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
+
+/********* notifications ************/
+    	 $sdk->path("queues/notifications")
+            ->withQuery(array("typeId" =>$room))
+            ->withOrder(array("updatedAt"=>"DESC"))
+			->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
+
+$res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+
+
+
+  		$app->render('kitchen2.php', array('data' => $res, 'person' => $res1)); //feed (to do)
+  }
+else
+	echo "<center>"."There's no notification for selected room"."</center>";	
+	
+
  
 })->name("kit");
+
 
 /**************************** user routes **********************************************/
 
@@ -1414,6 +1556,228 @@ $app->get('/global/:b', function ($b) use ($app, $sdk,$instanceConf) {
 
 })->name("glnolog");
 
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////// admin restaurant: list of users, feed ////////////////////////////
+
+$app->get('/restaurant/:b', function ($b) use ($app, $sdk, $cr, $id_r) {
+
+
+
+      $m = new MongoClient(); 
+      $db = $m->isaa;
+      $collection = $db->users;
+   
+      $cursor = $collection->findOne(array( '_id' => new MongoId($b))); 
+
+      if(!empty($cursor))                                             
+	  {
+	
+
+              	if ($cursor["base64"] != null)                                                /// user exists and owns an instance
+     	         { 
+ 	             $dane=base64_decode($cursor["base64"]);
+ 				 list ($clientid, $secret) = explode(":", $dane);
+                 }      		
+	  }
+      else
+        	{
+        	$app->response->redirect($app->urlFor('e'), 303);
+        	}			
+
+
+     //Configuration connection into IsaaCloud server
+	 $isaaConf = array(
+     "clientId" => $clientid,
+     "secret" => $secret
+	);
+
+	//create new instance of IsaaCloud SDK
+	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
+
+
+/***** types of notification ***********/
+  		$sdk->path("admin/notifications/types");
+
+$res9 = $sdk->api("admin/notifications/types", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+//print_r($res9);  
+
+
+/***** users ****************************/
+   		$sdk->path("cache/users")
+        	->withQuery(array("counterValues.counter" =>$cr ))
+          	->withOrder (array("leaderboards.1.position"=>"ASC" ))
+			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
+				
+$res4 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
+
+/***** Room's name *********************/
+  
+$pref="cache/users/groups/"; 
+$p=$pref.$id_r; // id for restaurant
+
+		$sdk->path($p)
+			->withQueryParameters(array("fields" => array("name")));
+
+$res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
+
+
+         // nootyfication id for selected room
+         
+         foreach ($res9 as $type):
+         	if($type['name']==$res5['name']) $room=$type['id'];
+         
+         endforeach;
+         
+         ////////////////////////////////////
+ /******render *****/ 		
+  		$app->render('column.php');
+    	$app->render('restaurant.php', array('users' => $res4, 'roomid' => $res5)); //<- list of users (to do)
+    	$app->render('midd2.php');
+
+////////////////////////////
+
+if(isset($room)){		
+/****** all users *******************/   	
+  		$sdk->path("cache/users")
+             ->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName", "counterValues")));   	
+    	
+$res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
+
+/********* notifications ************/
+    	 $sdk->path("queues/notifications")
+            ->withQuery(array("typeId" =>$room))
+            ->withOrder(array("updatedAt"=>"DESC"))
+			->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
+
+$res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+
+
+
+  		$app->render('restaurant2.php', array('data' => $res, 'person' => $res1)); //feed (to do)
+  }
+else
+	echo "<center>"."There's no notification for selected room"."</center>";		
+  		
+  		
+  		
+})->name("restnolog");
+
+////////////////////// admin meeting_room: list of users, feed ////////////////////////////
+
+
+$app->get('/meetingroom/:b', function ($b) use ($app, $sdk, $cr, $id_mr) {
+
+
+
+      $m = new MongoClient(); 
+      $db = $m->isaa;
+      $collection = $db->users;
+   
+      $cursor = $collection->findOne(array( '_id' => new MongoId($b))); 
+
+      if(!empty($cursor))                                             
+	  {
+	
+
+              	if ($cursor["base64"] != null)                                                /// user exists and owns an instance
+     	         { 
+ 	             $dane=base64_decode($cursor["base64"]);
+ 				 list ($clientid, $secret) = explode(":", $dane);
+                 }      		
+	  }
+      else
+        	{
+        	$app->response->redirect($app->urlFor('e'), 303);
+        	}			
+
+
+     //Configuration connection into IsaaCloud server
+	 $isaaConf = array(
+     "clientId" => $clientid,
+     "secret" => $secret
+	);
+
+	//create new instance of IsaaCloud SDK
+	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
+
+
+
+/***** types of notification ***********/
+  		$sdk->path("admin/notifications/types");
+
+$res9 = $sdk->api("admin/notifications/types", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+//print_r($res9);  
+
+
+/***** users ****************************/
+   		$sdk->path("cache/users")
+        	->withQuery(array("counterValues.counter" =>$cr ))
+          	->withOrder (array("leaderboards.1.position"=>"ASC" ))
+			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
+				
+$res4 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
+
+/***** Room's name *********************/
+  
+$pref="cache/users/groups/"; 
+$p=$pref.$id_mr; // id for kitchen
+
+		$sdk->path($p)
+			->withQueryParameters(array("fields" => array("name")));
+
+$res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+	
+//echo $res5['label']; // <- room's name
+
+
+         // nootyfication id for selected room
+         
+         foreach ($res9 as $type):
+         	if($type['name']==$res5['name']) $room=$type['id'];
+         
+         endforeach;
+         
+         ////////////////////////////////////
+		
+         ////////////////////////////////////
+ /******render *****/ 		
+  		$app->render('column.php');
+    	$app->render('meetingroom.php', array('users' => $res4, 'roomid' => $res5)); //<- list of users (to do)
+    	$app->render('midd2.php');
+
+////////////////////////////
+
+if(isset($room)){		
+/****** all users *******************/   	
+  		$sdk->path("cache/users")
+             ->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName", "counterValues")));   	
+    	
+$res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
+
+/********* notifications ************/
+    	 $sdk->path("queues/notifications")
+            ->withQuery(array("typeId" =>$room))
+            ->withOrder(array("updatedAt"=>"DESC"))
+			->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
+
+$res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+
+
+
+  		$app->render('meetingroom2.php', array('data' => $res, 'person' => $res1)); //feed (to do)
+  }
+else
+	echo "<center>"."There's no notification for selected room"."</center>";	
+  		
+
+})->name("meetnolog");
 
 
 

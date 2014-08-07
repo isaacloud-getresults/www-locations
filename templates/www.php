@@ -32,7 +32,7 @@
 									<script type="text/javascript">
 									var kod="<?=$qrurl?>";
 										var qrcode = new QRCode(document.getElementById("qrcode1"), {
-										text : "link do meeting room.................",
+										text : ("http://getresults.isaacloud.com/meetingroom/"+kod),
 										width : 180,
 										height : 180
 											});
@@ -50,7 +50,7 @@
 									<script type="text/javascript">
 									var kod="<?=$qrurl?>";
 										var qrcode = new QRCode(document.getElementById("qrcode2"), {
-										text : "link do restaurant......................",
+										text : ("http://getresults.isaacloud.com/restaurant/"+kod),
 										width : 180,
 										height : 180
 											});
@@ -92,11 +92,14 @@
 							<center><button class="btn btn-primary" style="width:120px"><a href="./user"><font color="white">Open</font></a></button>
 							<BR><BR><BR><BR>
 							
+							
+							
 							<div id="qrcode4" ></div>
 									<script type="text/javascript">
-									var kod="<?=$qrurl?>";
+									var kod="<?=$profileqr?>";
+									
 										var qrcode = new QRCode(document.getElementById("qrcode4"), {
-										text : "link do  user profile..............",
+										text : ("http://"+kod+".getresults.isaacloud.com/user/"),
 										width : 180,
 										height : 180
 											});

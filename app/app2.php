@@ -1218,11 +1218,6 @@ $app->get('/logout', function () use ($app,$sdk) {
 
 $app->get('/ulogout', function () use ($app,$sdk) {
 
-  session_destroy();
-  $app->view()->setData('token', null);
-   $app->client->revokeToken();
-   
-   
  // $app->response->redirect($app->urlFor('rootuser'), 303); 
  
  if (isset($_SESSION['domain']))
@@ -1230,6 +1225,15 @@ $app->get('/ulogout', function () use ($app,$sdk) {
   header("Location: ".$u );
   }
   else {  header('Location: http://getresults.isaacloud.com/' );}
+
+
+
+  session_destroy();
+  $app->view()->setData('token', null);
+   $app->client->revokeToken();
+   
+   
+
 
   
   

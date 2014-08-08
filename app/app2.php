@@ -1179,7 +1179,7 @@ $app->get('/dashboard', function () use ($app,$sdk, $instanceConf) {
 //// details : my profile, list of achievements //////////////////////////////////////////
 
 
-$app->get('/details', @function () use ($app,$sdk) {
+$app->get('/details', @function () use ($app,$sdk,$instanceConf) {
 
 if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
@@ -1198,7 +1198,7 @@ $p=$pref.$myid;
   
 $res = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
-     	$app->render('myprofileshort2.php', array('myprofile' => $res)); // first column
+     	$app->render('myprofileshort2.php', array('myprofile' => $res, 'instanceConf' => $instanceConf)); // first column
     	$app->render('midd.php');
      
     

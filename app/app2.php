@@ -60,10 +60,9 @@ if (isset($_GET['code']))
              {
              $domain = end(explode('user', $_GET['state']));
              $_SESSION['domain']=$domain;
-              $_SESSION['state']="user";
+             $_SESSION['state']="user";
              header('Location: http://getresults.isaacloud.com/user' );
-             }
-		    
+             }	    
 	return;
 }
 
@@ -89,33 +88,27 @@ if ($gClient->getAccessToken())
 	  $_SESSION['email']    = filter_var($user['email'], FILTER_SANITIZE_EMAIL);
       }
       
-  else 
-  
-    {
-		
-
-	if ($_SERVER['SERVER_NAME'] == "getresults.isaacloud.com")
-	{ $sub="";}
-	else
-	     {
-	       $sub = array_shift(explode(".",$_SERVER['SERVER_NAME']));  
-	     }  
+      else 
+          {
+	           if ($_SERVER['SERVER_NAME'] == "getresults.isaacloud.com")
+	             { 
+	             $sub="";
+	             }
+	             else
+	                 {
+	                  $sub = array_shift(explode(".",$_SERVER['SERVER_NAME']));  
+	                 }  
 	       
 	       $state = 'user'.$sub;  
-	       
-	        $gClient->setState($state);
-	        $authUrl1 = $gClient->createAuthUrl(); 
+	       $gClient->setState($state);
+	       $authUrl1 = $gClient->createAuthUrl(); 
 	       
 
-	        $state = 'admin'.$sub;  
-	      
-	      
-	         $gClient->setState($state);
-	          $authUrl2 = $gClient->createAuthUrl(); 
-	      
-	      
-            
-     }
+	       $state = 'admin'.$sub;  
+	       $gClient->setState($state);
+	       $authUrl2 = $gClient->createAuthUrl(); 
+	             
+         }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -308,71 +301,64 @@ $app->get('/', function () use ($app,$sdk,$authUrl,$authUrl1,$authUrl2,$jest) {
  
 
     if(isset($authUrl1) && isset($authUrl2))
-     {               // not logged in   
+     {                                         
+      // not logged in   
       $app->render('welcome.php', array( 'url1' => $authUrl1, 'url2' => $authUrl2  ));
      }
-     else
+
+                 else
                  {      
                  
-                 
-                 
-                 
-                 if (isset($_SESSION['email']) && $_SESSION['state']="admin"  )
-                 {             //checking if user exists in database   
+                              if (isset($_SESSION['email']) && $_SESSION['state']="admin"  )
+                                {             //checking if user exists in database   
 
-    $m = new MongoClient(); 
-    $db = $m->isaa;
-    $collection = $db->users;
+   								  $m = new MongoClient(); 
+  								  $db = $m->isaa;
+  								  $collection = $db->users;
     
-    $cursor = $collection->find(array( 'email' => $_SESSION['email'] ));
+  								  $cursor = $collection->find(array( 'email' => $_SESSION['email'] ));
    
 
-    if(!empty($cursor))                                             
-	{
+   								 if(!empty($cursor))                                             
+														{
 	
-	    foreach ($cursor as $user): 
+	   													 foreach ($cursor as $user): 
 
-
-
-              	if ($user["base64"] != null)                                                /// user exists and owns an instance
-     	        { 
+              											if ($user["base64"] != null)                         /// user exists and owns an instance
+     	      											     { 
  	
- 	             $dane=base64_decode($user["base64"]);
- 				list ($clientid, $secret) = explode(":", $dane);
- 	
- 				$jest=true;
+ 	         											     $dane=base64_decode($user["base64"]);
+ 															 list ($clientid, $secret) = explode(":", $dane);
+ 															
+ 															 $jest=true;
  			
- 	
- 				$_SESSION['clientid']=$clientid;
- 				$_SESSION['secret']=$secret;
+ 															 $_SESSION['clientid']=$clientid;
+ 															 $_SESSION['secret']=$secret;
 
-                $_SESSION['profileqr']=$user["domain"];    // get subdomain name for user profile link
+               												 $_SESSION['profileqr']=$user["domain"];    // get subdomain name for user profile link
 
-
- 	      		}
+ 	      		                                             }
  	      		
-		
- 	      endforeach;		
- 	      		
- 	      		
-	}
+ 	                                                       endforeach;		
+ 	      		 										}
 
-
-
-                }
+                                 }                
                  
-   
                  
-                                //logged in  
-                         if  ($jest)          // if exists in database go to admin dashboard else register
+             //logged in  
+                        if  ($jest)          // if exists in database go to admin dashboard else register
                               {     
                               $app->response->redirect($app->urlFor('ad'), 303);   
                               }
-                         else 
+                              else 
                               {  
                               $app->response->redirect($app->urlFor('ar'), 303);   
                               }
-                }
+                              
+                              
+                  }
+ 
+ 
  
 })->name("root");
 
@@ -383,12 +369,16 @@ $app->get('/user', function () use ($app,$sdk,$authUrl1,$authUrl2,$jest) {
 
 	
  	if(isset($authUrl1) && isset($authUrl2))
- 				 {        // not logged in  
+ 				 {        
+ 				 // not logged in  
     			$app->render('welcome.php', array( 'url1' => $authUrl1, 'url2' => $authUrl2  ));
     			 }
-     else
-                 {                     //logged in  
-               
+    			 
+         else
+                 
+                 
+                 {                     
+                 //logged in  
                
                               if (isset($_SESSION['email']) && isset($_SESSION['domain'] ) && $_SESSION['state']="user" )
                               {             
@@ -424,17 +414,20 @@ $app->get('/user', function () use ($app,$sdk,$authUrl1,$authUrl2,$jest) {
  	      		
 	 											  }
    
-				  }
+				                }
 
 
- if  ($ok)        
-     {     
-     $app->response->redirect($app->urlFor('d'), 303);        // jesli jest to dashboard
-     }
- else {  
-       $app->response->redirect($app->urlFor('ue'), 303);  
+
+
+ 					         if  ($ok)        
+     							{     
+   								  $app->response->redirect($app->urlFor('d'), 303);        // jesli jest to dashboard
+    						    }
+ 							else 
+ 						     	{  
+     							  $app->response->redirect($app->urlFor('ue'), 303);  
        
-     }    // jesli nie to error    
+    							 }    // jesli nie to error    
      
      
       }
@@ -1186,41 +1179,44 @@ $app->get('/dashboard', function () use ($app,$sdk, $instanceConf) {
 //// details : my profile, list of achievements //////////////////////////////////////////
 
 
-$app->get('/details', function () use ($app,$sdk, $instanceConf) {
+$app->get('/details', @function () use ($app,$sdk) {
 
-   if (!isset($_SESSION['token'])) 
-        {
-        $app->response->redirect($app->urlFor('e'), 303);
+if (!isset($_SESSION['token'])) {
+             $app->response->redirect($app->urlFor('e'), 303);
         }
 
-  	 $app->render('header.php');
+  		$app->render('header.php');
   		
-     $myid=$_SESSION["id"];
-     $pref="cache/users/";
-     $p=$pref.$myid;	
+$myid=$_SESSION["id"];
+$pref="cache/users/";
+$p=$pref.$myid;	
   
-     $sdk->path($p)
+    	$sdk->path($p)
     			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","gainedAchievements","email","leaderboards")));
+    
 
   
-     $res = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+$res = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
-     $app->render('myprofileshort2.php', array('myprofile' => $res, 'instanceConf' => $instanceConf)); // first column
-     $app->render('midd.php');
+     	$app->render('myprofileshort2.php', array('myprofile' => $res)); // first column
+    	$app->render('midd.php');
      
-     
-     $sdk->path("/cache/achievements")
-    	 	->withOrder(array("label"=>"ASC"))
-			->withQueryParameters(array("limit" =>0,"fields" => array("name","label")));
-				 
-     $res1 = $sdk->api("/cache/achievements", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+    
+
+/////////////////// notyfikacje
+
+ 	 $sdk->path("queues/notifications")
+            ->withQuery(array("subjectId" =>$myid, "typeId" => 1,))
+            ->withOrder(array("updatedAt"=>"DESC"))
+			->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
+
+$res7 = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
 
  
- 	 $app->render('history.php', array('history' => $res, 'achievements' => $res1)); // second column
-   	 $app->render('footer.php'); 
-   		
+ 	 	$app->render('history.php', array('data' => $res7)); // second column
+   		$app->render('footer.php'); 
 })->name("de");
-
 
 // leaderboards: my points, leaderboards ////////////////////////////////////////////////
 

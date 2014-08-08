@@ -1,4 +1,4 @@
-<h2><center><strong>Timeline</strong></center></h2><br><br>
+<h2><center><strong>Timeline</strong></center></h2><br>
 <?php 
 date_default_timezone_set('Europe/Warsaw');
 
@@ -56,78 +56,25 @@ foreach ($data as $d):
 	
 endforeach; 
 
-
-
-
 ?>
 
-
-
-
-<?php 
-
-
-////////////////////////// showtext function ////////////////////////////////////////////
-?>
-
-<script type="text/javascript">
-  var jArr= <?php echo json_encode($feed); ?>;
-  var jArray = jArr.slice(5);
-  var len = jArray.length;
-  var item=jArray.reverse();
-
-
-  ////////// next function
-function next(){
-	var i=1;
- 
-	for(i;i<6;i++){
-
-		var opp=item.pop();
-	
-	
-		if (item.pop()) 
-			document.getElementById("textarea"+i).innerHTML = ("<p style=\"text-align:right\">"+opp['ago']+"</p>"+"<p><span class=\"glyphicon glyphicon-user\"></span>" + " " + "You've"+ " "+opp['message']+"<br />"+opp['time']+"</p>"+"<hr/>");
-		else { 
-			alert ("No more notifications!");
-			break;
-			}
-			
-		}
-}
-
- </script>
-
-
+<div style="width: 750px; height: 400px; overflow: scroll;">
+ <table class="table table-striped">
 
 
 <?php
 ///////////////////////// text area /////////////////////////////////////////////////
 
-echo "<hr/>";
-$feed_s = sizeof($feed);
-if($feed_s<5)  $end=$feed_s; else $end=5;
+foreach($feed as $f):
 
-for ($i=0; $i<$end; $i++){
-$n=$i+1;
-$text="textarea".$n;
-
-echo "<div id=".$text.">";
-echo "<p style=\"text-align:right\">".$feed[$i]["ago"]."</p>";
-echo "<p><span class=\"glyphicon glyphicon-user\"></span>"." "."You've"." ".$feed[$i]["message"]; 
+echo "<tr><td>";
+echo "<p style=\"text-align:right\">".$f["ago"]."</p>";
+echo "<p><span class=\"glyphicon glyphicon-user\"></span>"." "."You've"." ".$f["message"]; 
 echo "<br>";
-echo $feed[$i]["time"]."</p><hr/>";
+echo $f["time"]."</p></td></tr>";
+
+endforeach;
 
 ?>
+ </table>
 </div>
-<?php
-
-	}
-	
-/************************ Show more button ******************************************/
-
-?>
-
-
-<center><h4 align="right"><a onclick="next()" href="javascript:void(0);" ><strong>Next</strong></a>
-<span class="glyphicon glyphicon-arrow-right"></span></h4></center>

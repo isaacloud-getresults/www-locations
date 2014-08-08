@@ -99,7 +99,7 @@
 									var kod="<?=$profileqr?>";
 									
 										var qrcode = new QRCode(document.getElementById("qrcode4"), {
-										text : ("http://"+kod+".getresults.isaacloud.com/user/"),
+										text : ("http://"+kod+".getresults.isaacloud.com/"),
 										width : 180,
 										height : 180
 											});

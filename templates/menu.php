@@ -8,7 +8,7 @@
   				<button class="btn btn-primary btn-lg" style="width:150px"><a href="./admin/www"><font color="white">WWW</font></a></button><br><br>
   				<button class="btn btn-primary btn-lg" style="width:150px"><a href="./admin/mobile"><font color="white">Mobile</font></a></button><br><br>
   				<button class="btn btn-primary btn-lg" style="width:150px"><a href="./admin/setup"><font color="white">Setup</font></a></button><br><br>
-  				<button class="btn btn-primary btn-lg" style="width:150px"><a href="./logout"><font color="white">Log out</font></a></button><br><br>
+  				<button class="btn btn-primary btn-lg" style="width:150px"><a href="./ulogout"><font color="white">Log out</font></a></button><br><br>
   			
   			</div>
 

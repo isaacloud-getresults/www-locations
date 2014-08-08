@@ -23,7 +23,7 @@ require_once './src/contrib/Google_Oauth2Service.php';
 
 //start session
 
-session_name('d' );
+session_name('e' );
 session_start();
 
 
@@ -46,9 +46,12 @@ if (isset($_GET['code']))
 	$_SESSION['token'] = $gClient->getAccessToken();
 
  
-     if ($_GET['state']=="admin")
+     if (strpos($_GET['state'],'admin') !== false)
  
      {  
+       $domain = end(explode('admin', $_GET['state']));
+       $_SESSION['domain']=$domain;
+       $_SESSION['state']="admin";
        header('Location: http://getresults.isaacloud.com/' );	
      }
     
@@ -57,6 +60,7 @@ if (isset($_GET['code']))
              {
              $domain = end(explode('user', $_GET['state']));
              $_SESSION['domain']=$domain;
+              $_SESSION['state']="user";
              header('Location: http://getresults.isaacloud.com/user' );
              }
 		    
@@ -89,21 +93,23 @@ if ($gClient->getAccessToken())
   
     {
 		
-	if (  $_SERVER["REDIRECT_URL"] == "/user" ) 
-	      { 
+
 	
 	       $sub = array_shift(explode(".",$_SERVER['SERVER_NAME']));  
 	       $state = 'user'.$sub;  
-	      }
-	
-	else 
-	
-	      { 
-	        $state = 'admin';  
-	      }
+	       
+	        $gClient->setState($state);
+	        $authUrl1 = $gClient->createAuthUrl(); 
+	       
+
+	        $state = 'admin'.$sub;  
 	      
-    $gClient->setState($state);
-	$authUrl = $gClient->createAuthUrl();          
+	      
+	         $gClient->setState($state);
+	          $authUrl2 = $gClient->createAuthUrl(); 
+	       
+	      
+            
      }
 
 
@@ -220,7 +226,7 @@ $app->get('/room/users/:x', function ($x) use ($app) {
 
 
 
-$app->get('/room/logout', function () use ($app) {
+$app->get('/room/ulogout', function () use ($app) {
     $app->response->redirect($app->urlFor('uo'), 303); 
 });
 
@@ -250,13 +256,13 @@ $app->get('/users/details', function () use ($app) {
 });
 
 
-$app->get('/users/logout', function () use ($app) {
+$app->get('/users/ulogout', function () use ($app) {
     $app->response->redirect($app->urlFor('uo'), 303); 
 });
 
 
-$app->get('/admin/logout', function () use ($app) {
-    $app->response->redirect($app->urlFor('o'), 303); 
+$app->get('/admin/ulogout', function () use ($app) {
+    $app->response->redirect($app->urlFor('uo'), 303); 
 });
 
 
@@ -293,12 +299,12 @@ $app->get('/admin/user', function () use ($app) {
 
 ////////////////////////////////  root   /////////////////////////////////////////////
 
-$app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
+$app->get('/', function () use ($app,$sdk,$authUrl,$authUrl1,$authUrl2,$jest) {
  
 
-    if(isset($authUrl))
+    if(isset($authUrl1) && isset($authUrl2))
      {               // not logged in   
-      $app->render('welcome.php', array( 'url' => $authUrl));
+      $app->render('welcome.php', array( 'url1' => $authUrl1, 'url2' => $authUrl2  ));
      }
      else
                  {      
@@ -306,11 +312,12 @@ $app->get('/', function () use ($app,$sdk,$authUrl,$jest) {
                  
                  
                  
-                 if (isset($_SESSION['email'])   ){             //checking if user exists in database    //lepiej przeniesc ten check do roota
+                 if (isset($_SESSION['email']) && $_SESSION['state']="admin"  )
+                 {             //checking if user exists in database   
 
     $m = new MongoClient(); 
-$db = $m->isaa;
-$collection = $db->users;
+    $db = $m->isaa;
+    $collection = $db->users;
     
     $cursor = $collection->find(array( 'email' => $_SESSION['email'] ));
    
@@ -347,7 +354,7 @@ $collection = $db->users;
 
 
 
-}
+                }
                  
    
                  
@@ -367,17 +374,18 @@ $collection = $db->users;
 
 ////////////////////////////////  root  - user route  /////////////////////////////////////////////
 
-$app->get('/user', function () use ($app,$sdk,$authUrl,$jest) {
+$app->get('/user', function () use ($app,$sdk,$authUrl1,$authUrl2,$jest) {
 
-
- 	if(isset($authUrl))
+	
+ 	if(isset($authUrl1) && isset($authUrl2))
  				 {        // not logged in  
-    			 $app->render('welcome.php', array( 'url' => $authUrl)); 
+    			$app->render('welcome.php', array( 'url1' => $authUrl1, 'url2' => $authUrl2  ));
     			 }
      else
                  {                     //logged in  
                
-                              if (isset($_SESSION['email']) && isset($_SESSION['domain']))
+               
+                              if (isset($_SESSION['email']) && isset($_SESSION['domain'] ) && $_SESSION['state']="user" )
                               {             
 
 								$m = new MongoClient(); 
@@ -419,7 +427,11 @@ $app->get('/user', function () use ($app,$sdk,$authUrl,$jest) {
      $app->response->redirect($app->urlFor('d'), 303);        // jesli jest to dashboard
      }
  else {  
-       $app->response->redirect($app->urlFor('ue'), 303);   }    // jesli nie to error    
+       $app->response->redirect($app->urlFor('ue'), 303);  
+       
+     }    // jesli nie to error    
+     
+     
       }
  
 
@@ -1233,14 +1245,15 @@ $app->get('/leaderboard', function () use ($app,$sdk,$instanceConf) {
   	  $app->render('users1.php', array('user' => $res, 'instanceConf' => $instanceConf)); //first column
    	  $app->render('midd.php');
    		
-	  $order="leaderboards".$instanceConf['leaderboard']."position";
+
    		
    	  $sdk->path("cache/users")
-                ->withOrder (array($order=>"ASC"))
+                ->withOrder (array("leaderboards.1.score"=>"DESC"))
 				->withQueryParameters(array("limit" =>0, "fields" => array("firstName","lastName","email","leaderboards")));
 
       $res = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );		
    		
+
    		
       $app->render('users2.php', array('users' => $res, 'instanceConf' => $instanceConf)); //second column
   	  $app->render('footer.php');   
@@ -1250,22 +1263,11 @@ $app->get('/leaderboard', function () use ($app,$sdk,$instanceConf) {
 })->name("l");
 
 
-///////// admin logout /////////////////////////////////////////////////////////////////////////
-
-$app->get('/logout', function () use ($app,$sdk) {
-
-  session_destroy();
-  $app->view()->setData('token', null);
-   $app->client->revokeToken();
-  $app->response->redirect($app->urlFor('root'), 303); 
- 
-  
-  
-})->name("o");
 
 
 
-/////////user  logout /////////////////////////////////////////////////////////////////////////
+
+///////// logout /////////////////////////////////////////////////////////////////////////
 
 
 
@@ -1273,11 +1275,15 @@ $app->get('/ulogout', function () use ($app,$sdk) {
  
    if (isset($_SESSION['domain']))
    { 
-     $u= "http://".$_SESSION['domain'].".getresults.isaacloud.com/user";
-  // $u = "http://".$_SESSION['domain']."/~mac/user";
    
-     $app->response->redirect($u);
-   }
+      
+   
+      	 $u= "http://".$_SESSION['domain'].".getresults.isaacloud.com/";
+  		// $u = "http://".$_SESSION['domain']."/~mac/";
+   
+    		 $app->response->redirect($u);
+    }
+
   else 
    { 
      $app->response->redirect($app->urlFor('root'), 303);

@@ -94,8 +94,13 @@ if ($gClient->getAccessToken())
     {
 		
 
-	
+	if ($_SERVER['SERVER_NAME'] == "getresults.isaacloud.com")
+	{ $sub="";}
+	else
+	     {
 	       $sub = array_shift(explode(".",$_SERVER['SERVER_NAME']));  
+	     }  
+	       
 	       $state = 'user'.$sub;  
 	       
 	        $gClient->setState($state);
@@ -107,7 +112,7 @@ if ($gClient->getAccessToken())
 	      
 	         $gClient->setState($state);
 	          $authUrl2 = $gClient->createAuthUrl(); 
-	       
+	      
 	      
             
      }

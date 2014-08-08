@@ -1307,40 +1307,43 @@ $app->get('/users', function () use ($app) {
 
 /**************************** Routes with variables *************************************/
 
- ///// Room : number of users in x room, list of users ///////////////////////////////////
+///// Room : number of users in x room, list of users ///////////////////////////////////
 
-$app->get('/room/:id', function($id) use ($app,$sdk,$instanceConf){
+$app->get('/room/:id', @function($id) use ($app,$sdk){
 
-        if (!isset($_SESSION['token'])) 
-        {
-        $app->response->redirect($app->urlFor('e'), 303);
+
+if (!isset($_SESSION['token'])) {
+             $app->response->redirect($app->urlFor('e'), 303);
         }
+
+
  
-    $app->render('header2.php');
+    	$app->render('header2.php');
 
-    $order="leaderboards".$instanceConf['leaderboard']."position";
-
-   	$sdk->path("cache/users")
-              	->withOrder (array($order=>"ASC"))
-		     	->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
+   		$sdk->path("cache/users")
+              	->withQuery(array("counterValues.counter" => 1))
+              	->withOrder (array("leaderboards.1.position"=>"ASC"))
+				->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
 				
 
-    $res = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
-    
-   //Room's name
-  
-      $pref="cache/users/groups/";  
-      $p=$pref.$id;
+$res = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
-      $sdk->path($p)
+    
+//Room's name
+  
+$pref="cache/users/groups/";  
+$p=$pref.$id;
+
+    $sdk->path($p)
 				->withQueryParameters(array("limit" =>0,"fields" => array("label")));
 
-      $res2 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+$res2 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
     
-	  $app->render('currentroom.php', array('roomid' => $res2,'res' => $res,   'instanceConf' => $instanceConf , 'id' => $id, )); // first column
-      $app->render('midd.php');
-   	  $app->render('roomusers.php', array('users' => $res, 'roomid' => $res2, 'instanceConf' => $instanceConf )); // second column
-      $app->render('footer.php');
+
+		$app->render('currentroom.php', array('roomid' => $res2,'users' => $res )); // first column
+      	$app->render('midd.php');
+   		$app->render('roomusers.php', array('users' => $res, 'roomid' => $res2)); // second column
+    	$app->render('footer.php');
     	
 })->name("ri");
 

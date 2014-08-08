@@ -1278,7 +1278,7 @@ $app->get('/leaderboard', function () use ($app,$sdk,$instanceConf) {
 
 $app->get('/ulogout', function () use ($app,$sdk) {
  
-   if (isset($_SESSION['domain']))
+   if (isset($_SESSION['domain']) && $_SESSION['domain'])!= "")
    { 
    
       

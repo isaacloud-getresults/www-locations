@@ -175,9 +175,11 @@ $app->post('/admin/activate/activate', function () use ($app) {
  	
  	//configure instance
  	
+ 	echo "<a href=./shelltest.php>start config</a>";
  	
- 	 $app->response->redirect($app->urlFor('ic'), 303);
-
+ 	
+ 	
+ 	
  	   
  	      		
 	}
@@ -197,7 +199,7 @@ $app->post('/admin/activate/activate', function () use ($app) {
 
 
 //////////////////////////
-
+/*
 $app->get('/admin/ic', function () use ($app) {
 
  	$command= "sudo config/configFile/s0-configFile2.sh ".$_SESSION['base64'];
@@ -211,7 +213,7 @@ $app->get('/admin/ic', function () use ($app) {
      pclose($a); 
 
 })->name("ic");
-
+*/
 
 
 

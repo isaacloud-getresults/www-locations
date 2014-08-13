@@ -193,21 +193,14 @@ $app->post('/admin/activate/activate', function () use ($app) {
 })->name("scct");
 
 
-//////////////////////////
+/////////////////////////
+
 
 $app->get('/admin/ic', function () use ($app) {
 
- 	echo "<a href=./x>start config</a>";
-
-})->name("ic");
-
-
-
-$app->get('/admin/x', function () use ($app) {
-
  	 $app->render('shell.php');
 
-})->name("x");
+})->name("ix");
 
 
 

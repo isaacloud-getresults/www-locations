@@ -170,20 +170,14 @@ $app->post('/admin/activate/activate', function () use ($app) {
  	                
  	//update database
  	$cursor['base64'] = $_POST['base64'];
+ 	$_SESSION['base64']= $_POST['base64'];
  	$collection->save($cursor);
  	
  	//configure instance
  	
  	
- 	$command= "sudo config/configFile/s0-configFile2.sh ".$_POST['base64'];
- 	$a = popen($command, 'r'); 
+ 	 $app->response->redirect($app->urlFor('ic'), 303);
 
-     while($b = fgets($a, 2048)) 
-         { 
-          echo $b."<br>\n"; 
-          ob_flush();flush(); 
-         } 
-     pclose($a); 
  	   
  	      		
 	}
@@ -193,12 +187,35 @@ $app->post('/admin/activate/activate', function () use ($app) {
 
 
 
-  // zamiast redirecta wyswietlic link do strony glownej
-  //   $app->response->redirect($app->urlFor('root'), 303); 
+
+    // $app->response->redirect($app->urlFor('root'), 303); 
+ 
    
     
 
 })->name("scct");
+
+
+//////////////////////////
+
+$app->get('/admin/ic', function () use ($app) {
+
+ 
+     	
+ 	$command= "sudo config/configFile/s0-configFile2.sh ".$_SESSION['base64'];
+ 	$a = popen($command, 'r'); 
+
+     while($b = fgets($a, 2048)) 
+         { 
+          echo $b."<br>\n"; 
+          ob_flush();flush(); 
+         } 
+     pclose($a); 
+        
+
+})->name("ic");
+
+
 
 
 /////////////////// admin mobile : menu, QR Codes and links to appstore for mobile app. ///

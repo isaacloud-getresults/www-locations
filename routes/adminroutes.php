@@ -173,19 +173,14 @@ $app->post('/admin/activate/activate', function () use ($app) {
  	$_SESSION['base64']= $_POST['base64'];
  	$collection->save($cursor);
  	
- 	//configure instance
- 	
+ 
 
- 	
  	
  	$app->response->redirect($app->urlFor('ic'), 303); 
  	
  	   
  	      		
 	}
-
-
-    else { echo "nieprawidlowy token";   }
 
 
 
@@ -202,10 +197,17 @@ $app->post('/admin/activate/activate', function () use ($app) {
 
 $app->get('/admin/ic', function () use ($app) {
 
- 	echo "<a href=getresults.isaacloud.com/shelltest.php>start config</a>";
+ 	echo "<a href=./x>start config</a>";
 
 })->name("ic");
 
+
+
+$app->get('/admin/x', function () use ($app) {
+
+ 	 $app->render('shelltest.php');
+
+})->name("x");
 
 
 

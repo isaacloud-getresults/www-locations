@@ -1,6 +1,5 @@
  <?php
- session_start();
-     echo 	$_SESSION['base64']; echo "</br>";
+
  	$command= "sudo config/configFile/s0-configFile2.sh ".$_SESSION['base64'];
  	$a = popen($command, 'r'); 
 

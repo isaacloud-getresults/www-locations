@@ -1,0 +1,60 @@
+#!/bin/bash
+set -e
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PATH=$PATH:$DIR
+
+. resty https://api.isaacloud.com/v1
+
+function random_string() {
+	echo `cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-f0-9' | head -c 16`
+}
+
+function format_json() {
+	jq . <<< $1
+}
+
+
+function GET_TOKEN () {
+	## Get Token
+	IC_TOKEN=`curl -s -X POST -H "Authorization: Basic $1" -k -d 'grant_type=client_credentials' https://oauth.isaacloud.com/token | jq ".access_token" | cut -d "\"" -f 2`
+
+	echo "Your token is $IC_TOKEN"
+}
+
+function IC_GET () {
+	local RESULT=`GET "$1" -H "Authorization: Bearer $IC_TOKEN" -H "Content-Type: text/json"`
+
+	local RESULT_PARSED=`echo $RESULT | jq "$2"`
+
+	echo $RESULT_PARSED
+
+}
+
+function IC_POST() {
+	local RESULT=`POST "$1" "$2" -H "Authorization: Bearer $IC_TOKEN" -H "Content-Type: text/json" -k`
+
+	if [ -z "$RESULT" ] && [ -n "$3" ]
+	then
+		echo -e "ERROR: we have problem with \nREQUEST: POST $1\nBODY:    $2\nRESPONSE: $RESULT " > /dev/tty
+		exit -1
+ 	fi
+	local RESULT_PARSED=`echo "$RESULT" | jq "$3"`
+	echo $RESULT_PARSED
+}
+
+function IC_DELETE() {
+	local RESULT=`DELETE "$1" "$2" -H "Authorization: Bearer $IC_TOKEN" -H "Content-Type: text/json" -k`
+
+	echo $RESULT
+}
+
+function IC_PUT() {
+	 local RESULT=`PUT "$1" "$2" -H "Authorization: Bearer $IC_TOKEN" -H "Content-Type: text/json" -k`
+
+	if [ -z "$RESULT" ] && [ -n "$3" ]
+	then
+		exit "we have problem with $1 $2 $3 - $RESULT - "
+ 	fi
+	local RESULT_PARSED=`echo "$RESULT" | jq "$3"`
+	echo $RESULT_PARSED
+}

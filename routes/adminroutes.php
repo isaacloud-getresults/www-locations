@@ -202,7 +202,7 @@ $app->post('/admin/activate/activate', function () use ($app) {
 
 $app->get('/admin/ic', function () use ($app) {
 
- 	echo "<a href=./shelltest.php>start config</a>";
+ 	echo "<a href=getresults.isaacloud.com/shelltest.php>start config</a>";
 
 })->name("ic");
 

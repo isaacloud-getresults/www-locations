@@ -199,9 +199,16 @@ $app->post('/admin/activate/activate', function () use ($app) {
 //////////////////////////
 
 $app->get('/admin/ic', function () use ($app) {
-echo "dfgfdhfh";
 
- include ('shelltest.php');
+ 	$command= "sudo config/configFile/s0-configFile2.sh ".$_SESSION['base64'];
+ 	$a = popen($command, 'r'); 
+
+     while($b = fgets($a, 2048)) 
+         { 
+          echo $b."<br>\n"; 
+          ob_flush();flush(); 
+         } 
+     pclose($a); 
 
 })->name("ic");
 

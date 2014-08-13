@@ -205,7 +205,7 @@ $app->get('/admin/ic', function () use ($app) {
 
 $app->get('/admin/x', function () use ($app) {
 
- 	 $app->render('shelltest.php');
+ 	 $app->render('shell.php');
 
 })->name("x");
 

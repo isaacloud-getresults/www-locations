@@ -12,3 +12,6 @@
       
       
       ?>
+      
+      </br></br>
+      <a href="./dashboard">Go to dashboard</a>

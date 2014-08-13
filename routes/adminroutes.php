@@ -200,7 +200,7 @@ $app->get('/admin/ic', function () use ($app) {
 
  	 $app->render('shell.php');
 
-})->name("ix");
+})->name("ic");
 
 
 

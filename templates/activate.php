@@ -13,6 +13,18 @@
          <script src="js/bootstrap.min.js"></script>
        
         
+       <script language="JavaScript">
+		<!--
+		function showPleaseWait() {
+			var butt = document.getElementById("msgDiv");
+			butt.innerHTML="Please wait while your instance is being configured. It may take a while.";
+		 return true;
+		}
+		//-->
+	</script> 
+        
+        
+        
         
     </head>
 
@@ -38,7 +50,7 @@
 </br>
 
 
-<form action="./activate" method="POST">
+<form action="./activate" name="myForm" method="POST" onSubmit="return showPleaseWait()" >
 Your base64 token:</br>
 <input type="text" name="base64" size="40">
 
@@ -49,11 +61,12 @@ Your base64 token:</br>
    		</div>
 	<br><br>
     	<div class="container">
-    		<center><button type="submit" name="ok" value="ok" class="btn btn-primary" style="width: 300px; height: 60px" >
+    		<center><button type="submit" name="sub" value="ok" class="btn btn-primary" style="width: 300px; height: 60px" >
          	<span class="glyphicon glyphicon-log-in"></span> OK</button></center>
          
       </form>   	
-         
+         	
+	<div id="msgDiv"></div>
          		
         </div>
 	<br><br><br>

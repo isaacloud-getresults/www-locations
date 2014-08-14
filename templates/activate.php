@@ -19,8 +19,6 @@
 			var butt = document.getElementById("msgDiv");
 			butt.innerHTML="Please wait while your instance is being configured. It may take a while.";
 			 document.getElementById('spinnerImg').style.display = "";
-			 document.getElementById('act1').style.display = "none";
-			 document.getElementById('act2').style.display = "none";
 		 return true;
 		}
 		//-->

@@ -17,7 +17,7 @@
 		<!--
 		function showPleaseWait() {
 			var butt = document.getElementById("msgDiv");
-			butt.innerHTML="Please wait while your instance is being configured. It may take a while. <img src="../../images/wait.gif"> ";
+			butt.innerHTML="Please wait while your instance is being configured. It may take a while. <img src=\'../../images/wait.gif\'>";
 		 return true;
 		}
 		//-->

@@ -17,7 +17,10 @@
 		<!--
 		function showPleaseWait() {
 			var butt = document.getElementById("msgDiv");
-			butt.innerHTML="Please wait while your instance is being configured. It may take a while. </br></br> <img src="../../images/wait.gif">";
+			butt.innerHTML="Please wait while your instance is being configured. It may take a while.";
+			 document.getElementById('spinnerImg').style.display = "";
+			 document.getElementById('act1').style.display = "none";
+			 document.getElementById('act2').style.display = "none";
 		 return true;
 		}
 		//-->
@@ -39,7 +42,7 @@
    			</div>
    		</div>
    		
-   		<div class="container">
+   		<div class="container" id="act1">
    			<center>
    			<h4>Domain: <?php echo $_SERVER['SERVER_NAME']; ?> </h4></br>
    			
@@ -62,14 +65,17 @@ Your base64 token:</br>
    			</center>
    		</div>
 	<br><br>
-    	<div class="container">
+    	<div class="container" id="act2">
     		<center><button type="submit" name="sub" value="ok" class="btn btn-primary" style="width: 300px; height: 60px" >
          	<span class="glyphicon glyphicon-log-in"></span> OK</button></center>
          
       </form> 
       </br></br>  	
       <center>   	
-	<div id="msgDiv"></div>
+	<div id="msgDiv"></div></br></br>
+	
+	<div> <img src="../../images/wait.gif" id="spinnerImg" style="display: none;" /></div>
+	
 	</center>
          		
         </div>

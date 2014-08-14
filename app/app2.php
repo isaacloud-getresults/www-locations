@@ -159,38 +159,10 @@ $collection = $db->users;
 
 
 
-
-
-//default values for accessing arrays
-$leaderboard=1;   /// default values: leaderboard[0] = null, leaderboard [1] = array -> score, position
-$counter=0;  /// default: counterValues[0] = array ->counter (id), value
-
-//values set by user for each instance
-$kitid=4;    /// kitchen id
-$meetid=5;   /// meeting room id
-$offset=3;   /// ignore first 3 rooms
-$counterid=1;   /// checking counter with id 1
-
-///////// ZMIENIC TO ZGODNIE Z CONFIGIEM
-
-//offset jest niepotrzebny
-
 $cr=1; // room's counter
 $id_k = 4; // kitchen's id
 $id_mr = 5; // meeting romm's id
 $id_r = 6; //restaurant's id
-
-
-$instanceConf = array(
-        "kitid" => $kitid,
-        "meetid" => $meetid,
-        "offset" => $offset,
-        "counterid" => $counterid,
-        "leaderboard" => $leaderboard
-		);
-
-
-
 
 
 

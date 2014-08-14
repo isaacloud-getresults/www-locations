@@ -18,15 +18,15 @@ $app->get('/dashboard', function () use ($app,$sdk) {
         
 /******************* logged-in user's data (session variables) **************************/
 
-$a=$_SESSION["email"];
-$sdk->path("cache/users")
+	$a=$_SESSION["email"];
+	$sdk->path("cache/users")
  				->withQuery(array("email" => $a))
 				->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email")));
 
   
-$res = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+	$res = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
-foreach ($res as $r): 
+	foreach ($res as $r): 
     
 
 			$_SESSION["lastName"]=$r["lastName"];
@@ -34,7 +34,7 @@ foreach ($res as $r):
 			$_SESSION["id"]=$r["id"];
 
 	
-endforeach; 
+	endforeach; 
 
 
 /***************************************************************************************/  
@@ -46,16 +46,16 @@ endforeach;
              } 
         
         
-$myid=$_SESSION["id"];
-$pref="cache/users/";
-$p=$pref.$myid;	
+	$myid=$_SESSION["id"];
+	$pref="cache/users/";
+	$p=$pref.$myid;	
   
 
     	$sdk->path($p)
 				->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","leaderboards","email")));
 
   
-$res = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+	$res = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
 		$app->render('header.php'); //header
 		$app->render('myprofileshort.php', array('myprofile' => $res)); //first column
@@ -66,7 +66,7 @@ $res = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() )
 				->withQueryParameters(array("limit" =>0, "fields" => array("counterValues","label")));
     
 
-$res = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+	$res = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
 		$app->render('midd.php'); // part between column
 		$app->render('roomlist.php', array('rooms' => $res)); //second column
@@ -93,16 +93,16 @@ $app->get('/details', @function () use ($app,$sdk) {
 
   		$app->render('header.php');
   		
-$myid=$_SESSION["id"];
-$pref="cache/users/";
-$p=$pref.$myid;	
+	$myid=$_SESSION["id"];
+	$pref="cache/users/";
+	$p=$pref.$myid;	
   
     	$sdk->path($p)
     			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","gainedAchievements","email","leaderboards")));
     
 
   
-$res = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+	$res = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
      	$app->render('myprofileshort2.php', array('myprofile' => $res)); // first column
     	$app->render('midd.php');
@@ -116,7 +116,7 @@ $res = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() )
             ->withOrder(array("updatedAt"=>"DESC"))
 			->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
 
-$res7 = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+	$res7 = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
 
  
@@ -142,9 +142,9 @@ if (!isset($_SESSION['token'])) {
   		$app->render('header.php');
   		
   		
-$myid=$_SESSION["id"];
-$pref="cache/users/";
-$p=$pref.$myid; 
+	$myid=$_SESSION["id"];
+	$pref="cache/users/";
+	$p=$pref.$myid; 
   	
   
     	$sdk->path($p)
@@ -152,7 +152,7 @@ $p=$pref.$myid;
     
 
   
-$res = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+	$res = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 	
 		    
   		$app->render('users1.php', array('user' => $res)); //first column
@@ -164,7 +164,7 @@ $res = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() )
     
 
   
-$res = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );		
+	$res = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );		
    		
    		
     	$app->render('users2.php', array('users' => $res)); //second column
@@ -201,18 +201,18 @@ $app->get('/room/:id', @function($id) use ($app,$sdk){
 				->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
 				
 
-$res = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+	$res = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
     
 //Room's name
   
-$pref="cache/users/groups/";  
-$p=$pref.$id;
+	$pref="cache/users/groups/";  
+	$p=$pref.$id;
 
     $sdk->path($p)
 				->withQueryParameters(array("limit" =>0,"fields" => array("label")));
 
-$res2 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+	$res2 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
     
 
 		$app->render('currentroom.php', array('roomid' => $res2,'users' => $res )); // first column
@@ -235,14 +235,14 @@ if (!isset($_SESSION['token'])) {
  
     	$app->render('header2.php');
     
-$pref="cache/users/";
-$p=$pref.$id;
+	$pref="cache/users/";
+	$p=$pref.$id;
 
     
     $sdk->path($p)
 				 ->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email","leaderboards")));
     
-$res2 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+	$res2 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
     
   
    		$app->render('user.php', array('users' => $res2)); // first column

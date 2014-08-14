@@ -17,7 +17,7 @@
 		<!--
 		function showPleaseWait() {
 			var butt = document.getElementById("msgDiv");
-			butt.innerHTML="Please wait while your instance is being configured. It may take a while. </br></br> <img src=\'../../images/wait.gif\'>";
+			butt.innerHTML="Please wait while your instance is being configured. It may take a while. </br></br> <img src="../../images/wait.gif">";
 		 return true;
 		}
 		//-->
@@ -48,6 +48,8 @@
 2. Create Instance</br>
 3. Create Application</br>
 </br>
+
+
 
 
 <form action="./activate" name="myForm" method="POST" onSubmit="return showPleaseWait()" >

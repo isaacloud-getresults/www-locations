@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="SoInteractive">	
-        <title>PRZYKLADOWA APLIKACJA </title>
+       <title> Get Results </title>
 
          <link href="../../css/bootstrap.min.css" rel="stylesheet">
          <script src="js/jquery-1.9.1.min.js"></script>
@@ -17,7 +17,7 @@
 		<!--
 		function showPleaseWait() {
 			var butt = document.getElementById("msgDiv");
-			butt.innerHTML="Please wait while your instance is being configured. It may take a while. <img src=\'../../images/wait.gif\'>";
+			butt.innerHTML="Please wait while your instance is being configured. It may take a while. <img src=\'../images/wait.gif\'>";
 		 return true;
 		}
 		//-->
@@ -64,9 +64,11 @@ Your base64 token:</br>
     		<center><button type="submit" name="sub" value="ok" class="btn btn-primary" style="width: 300px; height: 60px" >
          	<span class="glyphicon glyphicon-log-in"></span> OK</button></center>
          
-      </form>   	
-         	
+      </form> 
+      </br></br>  	
+      <center>   	
 	<div id="msgDiv"></div>
+	</center>
          		
         </div>
 	<br><br><br>

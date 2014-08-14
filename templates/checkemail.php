@@ -48,3 +48,26 @@
 
 
 
+
+<?php
+
+
+$token= $_SESSION['activation']; 
+
+
+$domain = $_POST['domain'];
+$_SESSION['domain'] = $domain;
+$base_url="http://".$domain.".getresults.isaacloud.com/" ;
+
+
+$to      = $_SESSION['email'];
+$subject = 'Isaacloud Activation';
+$message = 'Click to activate '.$base_url.'admin/activate/'.$token;
+
+$headers = 'From: getresults@isaacloud.com';
+
+mail($to, $subject, $message, $headers);
+
+
+
+?>

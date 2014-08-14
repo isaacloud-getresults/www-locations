@@ -29,12 +29,12 @@
    		<div class="container">
    			<center>
   
-				<h3>Please check your email.	</h3>
-				
-			</center>
-        </div><br><br>
-	
- 		<div class="container">   	
+<h3>Please check your email.	</h3>
+         
+         		
+        </div>
+	<br><br>
+ 	<div class="container">   	
 		<hr />
 		<h5><center>Contact: xyz@sointeractive.pl</center></h5>
 	</div>
@@ -42,10 +42,6 @@
     </body>
 
 </html>
-
-
-
-
 
 
 
@@ -71,3 +67,5 @@ mail($to, $subject, $message, $headers);
 
 
 ?>
+
+

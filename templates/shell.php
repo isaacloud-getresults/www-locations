@@ -1,3 +1,8 @@
+
+
+
+
+
  <?php
 
  	$command= "sudo config/configFile/s0-configFile2.sh ".$_SESSION['base64'];

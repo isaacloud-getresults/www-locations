@@ -195,21 +195,13 @@ $app->post('/admin/activate/activate', function () use ($app) {
  	$collection->save($cursor);
  	
  
-
- 	
- 	header('Location: http://getresults.isaacloud.com/admin/ic' ); 
-  //  header('Location: http://localhost/~mac/admin/ic' );
+ 	   
+ 	   $app->response->redirect($app->urlFor('ic'), 303); 
  	   
  	      		
 	}
 
-
-
-
-    // $app->response->redirect($app->urlFor('root'), 303); 
  
-   
-    
 
 })->name("scct");
 

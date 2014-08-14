@@ -1,8 +1,12 @@
+<?php 
+/**************************** Display a list of all rooms ******************************/
 
-<center><h2><strong>Rooms</strong></h2></center><br><br>
+echo "<center><h2><strong>Rooms</strong></h2></center><br><br>";
 
-<?php if(sizeof($rooms)==0) echo "<center>"."Empty"."</center>"; 
-		else { ?>
+if(sizeof($rooms)==0)
+	echo "<center>"."Empty"."</center>"; 
+else{ 
+?>
 
             <table class="table table-hover">
                 <thead>
@@ -22,4 +26,4 @@
                 </tbody>
             </table>
     
-	<?php } ?>
+<?php } ?>

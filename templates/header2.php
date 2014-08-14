@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pl">
     <head>
@@ -6,33 +5,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="SoInteractive">	
-        <title>PRZYKLADOWA APLIKACJA </title>
+        <title> Get results </title>
 
-         <link href="../css/bootstrap.min.css" rel="stylesheet">
-         <script src="js/jquery-1.9.1.min.js"></script>
-         <script src="js/bootstrap.min.js"></script>
-       
-         <script>
-       	function logoutask(){
-  		if (confirm('Are you sure you want to logout?')){
-    		return true;
- 		 }else{
-    		return false;
- 			}
-		}
-       
-       </script>  
-        
-        
-        
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <script src="js/jquery-1.9.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+       	<script  src="./js_functions/logoutask.js"></script> <!-- include logoutask function -->
+    
     </head>
 
     <body>
     
     	<br>
 		<div class="container" >
-			<p align="right"> Logged in as <?php echo $_SESSION["email"]; ?>  <button type="button" class="btn btn-default">
-			<span class="glyphicon glyphicon-log-out"></span>  <a href="./ulogout" onclick="return logoutask();"> Log out</a> </button> <p>
+			<p align="right"> Logged in as <?php echo $_SESSION["email"]; ?> <a href="./ulogout" onclick="return logoutask();"> <button type="button" class="btn btn-default">
+			<span class="glyphicon glyphicon-log-out"></span>   Log out </button> </a><p>
 		</div><br>    	
 
     	<div class="container">
@@ -45,13 +32,13 @@
     	
     	<div class="container">
 			<div class="page-header" >
-   				<h1><center><strong>Page Header </strong></center></h1><br>
+   				<h1><center><img src="../images/logo.jpeg" height="50px" width="50px"><strong> Get Results </strong></center></h1><br>
    			</div>
   
     		<div class="navbar-inner">
-        		<button class="btn btn-default" ">
+        		<a href="javascript:history.go(-1)"><button class="btn btn-default" ">
         		<span class="glyphicon glyphicon-arrow-left"></span>
-         		<a href="javascript:history.go(-1)">Previous Page</a></button>
+         		Previous Page</button></a>
 			</div>
 		</div>
     	<br><br>

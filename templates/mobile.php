@@ -5,7 +5,7 @@
     				
 				 <div class="col-md-6" >
 						<p class="bg-info" style="text-align:center"><font size="6pt">iOS</font></p><br>
-						<center><a href="http://www.appstore.com/myweb" target="_blank"><img src="../App_Store_Badge_EN.gif" height="70px" width="220px"></a>
+						<center><a href="http://www.appstore.com/myweb" target="_blank"><img src="../images/App_Store_Badge_EN.gif" height="70px" width="220px"></a>
 
     					<footer>
 							<script type='text/javascript'>
@@ -14,7 +14,7 @@
 								var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(autolink, s);})();
 							</script>
 						</footer><BR><BR>
-								
+						
 						<div id="qrcode" ></div>
 							<script type="text/javascript">
 								var qrcode = new QRCode(document.getElementById("qrcode"), {
@@ -31,7 +31,7 @@
 				
 				<div class="col-md-6">	
 						<p class="bg-info" style="text-align:center"><font size="6pt">Android</font></p><br>
-						<center><a href="http://www.appstore.com/myweb" target="_blank"><img src="../google-play.png" height="70px" width="220px"></a>
+						<center><a href="http://www.appstore.com/myweb" target="_blank"><img src="../images/google-play.png" height="70px" width="220px"></a>
 
     					<footer>
 							<script type='text/javascript'>

@@ -1,22 +1,18 @@
 <?php 
+/********************* display all users in the kitchen *****************************/
+include ("./funkcje/amount_users.php"); //include class Amount users
+include ("./funkcje/leaderboard.php"); //include class Leaderboard
 
-$s= sizeof($users);
-$tab = 0;
-foreach ($users as $user):
-	$sz=sizeof($user["counterValues"]);
-	if($sz!=0){
-			foreach ($user["counterValues"] as $count):
-				if(($count['value']==$roomid["id"]) && ($count['counter']==1)) $tab+=1;
-			endforeach;
-		}
-endforeach; 
-if($tab==0) echo "<center>Empty</center>";
-else {
+// check amount of users
+$obiekt = new Amount_users;
+$tab= $obiekt->amount($users, $roomid);
 
+if($tab==0) 
+	echo "<center>Empty</center>";
+else{
+	$obiekt2 = new Leaderboard;
+	$data = $obiekt2-> create_array($users, $roomid);
 ?>
-
-
-
 
 
   <table class="table table-striped table-hover">
@@ -32,36 +28,35 @@ else {
                 <tbody>
 
 
-					<?php 
-					foreach ($users as $user):
-						$size=sizeof($user["counterValues"]);
-						for($i=0;$i<$size;$i++){
- 							if(($user["counterValues"][$i]["counter"]==1) and ($user["counterValues"][$i]["value"]== $roomid["id"]) ){
- 							
- 					 ?>
- 					<tr>
-
- 				
-            			<td><?php if((empty($user["firstName"]))||(empty($user["lastName"]))) echo "<em>"."(".$user["email"].")"."</em>"; 
-            				else echo $user["firstName"]." ".$user["lastName"]; ?></td>
-            			<td align="right">
-            			<span class="badge ">
-            			<?php if(empty($user["leaderboards"][1]["score"])) echo "0"; else echo $user["leaderboards"][1]["score"];?></span>
-            			</td>	
-            			
-               		</tr>
- 				<?php 
- 	
- 			
- 						}
-					}
-					endforeach; 
-
-				?>
+					<?php foreach ($data as $d): ?>
+ 						<tr>
+							<td><?php if(empty($d["name"])) echo "<em>"."(".$d["email"].")"."</em>"; else echo $d["name"]; ?></td>
+            				<td align="right"><span class="badge "><?php echo $d["score"];?></span></td>	
+            			</tr>
+               		
+ 					<?php endforeach; ?>
 
 
                 </tbody>
 		</table>
-		<?php 
-			} 
-		?>
+		
+<?php } ?>
+			 
+		
+	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		

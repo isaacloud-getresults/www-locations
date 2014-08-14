@@ -1,8 +1,16 @@
+<?php 
+/****************************** display user's score ***********************************/
+include ("./funkcje/profile.php"); //include class Profile
 
-<center><h2><strong>My points :</strong></h2></center><br><br>
+$obiekt  = new Profile;
+$data = $obiekt->profile_data($user);
+
+echo "<center><h2><strong>My points :</strong></h2></center><br><br>";
   		
-  <p class="text-center"> You currently have 
-  	 <?php if(empty($user["leaderboards"][1]["score"])) echo "0"; else echo $user["leaderboards"][1]["score"]; ?> points. </p>
+echo "<p class=\"text-center\"> You currently have ".$data["score"]." points. </p>";
+
+
+?>
 
 
 

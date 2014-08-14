@@ -14,4 +14,4 @@
       ?>
       
       </br></br>
-      <a href="./dashboard">Go to dashboard</a>
+      <a href="./root">Go to main page</a>

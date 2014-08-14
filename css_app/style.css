@@ -1,0 +1,50 @@
+#newusers {
+			background: #3366FF;
+			text-align: center;
+			width:350px; 
+			border-style:groove;
+			border-radius: 10px;
+			color:white;
+			text-shadow: 3px 3px 5px black;
+			
+	}
+	
+#points {
+			background: #FFD700;
+			text-align: center;
+			width:350px; 
+			border-style:groove;
+			border-radius: 10px;
+			color:white;
+			text-shadow: 3px 3px 5px black;
+	}
+	
+#achievements {
+			background: #FF0066;
+			text-align: center;
+			width:350px; 
+			border-style:groove;
+			border-radius: 10px;
+			color:white;
+			text-shadow: 3px 3px 5px black;
+	}
+	
+#room {
+			background: #33FF66;
+			text-align: center;
+			width:350px; 
+			border-style:groove;
+			border-radius: 10px;
+			color:white;
+			text-shadow: 3px 3px 5px black
+	}
+	
+#events {
+			background: #CC00FF;
+			text-align: center;
+			width:350px; 
+			border-style:groove;
+			border-radius: 10px;
+			color:white;
+			text-shadow: 3px 3px 5px black;
+	}

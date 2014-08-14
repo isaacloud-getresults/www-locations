@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pl">
     <head>
@@ -21,14 +22,14 @@
     <div class="container" >
     <br><br> <div class="container">
          	<center>
-         	<img src="./gettingstarted2.jpg" width="700px">
+         	<img src="./images/gettingstarted2.jpg" width="700px">
          	</center>
          </div><br><br>
     
     	<div class="container">
 			
    			<center>	<p style="font-size: 60pt ;text-shadow: 1px 1px 2px lgray"><strong> 
-   			<img src="./logo.jpeg" height="70px" width="70px"> Get Results </strong></p></center>
+   			<img src="./images/logo.jpeg" height="70px" width="70px"> Get Results </strong></p></center>
    			
    		</div>
    		
@@ -41,18 +42,18 @@
    
 
     		
-    				<center><button class="btn btn-primary" id="login" style="width: 350px; height: 80px" >
-         			<h4><span class="glyphicon glyphicon-log-in"></span> <a href="<?php echo $url2; ?>" ><font color="white">Log in as admin </font></a> </h4> </button></center>
+    				<a href="<?php echo $url2; ?>"> <center><button class="btn btn-primary" id="login" style="width: 350px; height: 80px" >
+         			<h4><span class="glyphicon glyphicon-log-in"></span> <font color="white">Log in as admin </font> </h4> </button></a></center>
        		
         
       		</div>
       	<div class="col-md-4 " >
         	
-    				<center><button class="btn btn-primary" id="login" style="width: 350px; height: 80px" >
-         			<h4><span class="glyphicon glyphicon-log-in"></span> <a href="<?php echo $url1; ?>"><font color="white">Log in as user </font></a> </h4> </button></center>
+    				 <a href="<?php echo $url1; ?>"><center><button class="btn btn-primary" id="login" style="width: 350px; height: 80px" >
+         			<h4><span class="glyphicon glyphicon-log-in"></span><font color="white">Log in as user </font></h4> </button></a> </center>
        			
         	</div>
-        	</div></div>
+        	</div>
         	
 	<br><br><br>
  	<div class="container">   	

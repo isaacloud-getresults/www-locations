@@ -1,8 +1,17 @@
+<?php 
+/*************************** display leaderboard ***************************************/
 
-<center><h2><strong>Leaderboard</strong></h2></center><br><br>
+include ("./funkcje/leaderboard.php"); //include class Leaderboard
 
-<?php if(sizeof($users)==0) echo "<center>"."Empty"."</center>"; 
-		else { ?>
+echo "<center><h2><strong>Leaderboard</strong></h2></center><br><br>";
+
+// amount of users in leaderboard
+if(sizeof($users)==0) echo "<center>"."Empty"."</center>"; //no users
+
+else { 
+	$obiekt2 = new Leaderboard;
+	$data= $obiekt2-> create_array2($users); ?>
+		
      <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -17,19 +26,18 @@
                 </thead>
                 <tbody>
                 
-                    <?php foreach ($users as $user): ?>
-                    <?php if(!empty($user["leaderboards"]["1"]["position"])){ ?>
+                    <?php foreach ($data as $d): ?>
+                  
                         <tr >
-                            <td><?php echo $user["leaderboards"][1]["position"]; ?></td>
-                            	<td><a href="./users/<?php echo $user["id"];?>"><?php echo $user["email"]; ?></a></td>
-                        		 <td><?php 
-                            			if((empty($user["firstName"]))||(empty($user["lastName"]))) echo "-------------";
-                            			else echo $user["firstName"]." ".$user["lastName"]; ?></td>
+                            <td><?php echo $d["position"]; ?></td>
+                            <td><a href="./users/<?php echo $d["id"];?>"><?php echo $d["email"]; ?></a></td>
+                        	<td><?php 
+                            		if(empty($d["name"])) echo "-------------";
+                            		else echo $d["name"]; ?></td>
                            
-                            <td><?php echo $user["leaderboards"][1]["score"]; ?></td>
-            
-                           
-                        </tr> <?php } ?>
+                            <td><?php echo $d["score"]; ?></td>
+                        </tr>
+                        
                     <?php endforeach; ?>
                 </tbody>
 		</table>

@@ -1,60 +1,32 @@
 <h2><center><strong>Timeline</strong></center></h2><br>
+
 <?php 
-date_default_timezone_set('Europe/Warsaw');
-
-/************************* time ago function *******************************************/
-function ago($ptime)
-{
-    $etime = time() - ($ptime - 950);
-
-    if ($etime < 1)
-    {
-        return '0 seconds';
-    }
-
-    $a = array( 12 * 30 * 24 * 60 * 60  =>  'year',
-                30 * 24 * 60 * 60       =>  'month',
-                24 * 60 * 60            =>  'day',
-                60 * 60                 =>  'hour',
-                60                      =>  'minute',
-                1                       =>  'second'
-                );
-
-    foreach ($a as $secs => $str)
-    {
-        $d = $etime / $secs;
-        if ($d >= 1)
-        {
-            $r = round($d);
-            return $r . ' ' . $str . ($r > 1 ? 's' : '') . ' ago';
-        }
-    }
-}
+	date_default_timezone_set('Europe/Warsaw'); //set the timezone
+	include ("./funkcje/time_ago.php"); //include class Time_ago
 
 
-
-
-
-////////////////// build  array   /////////////////////////////////////////////////
-$ss=sizeof($data);
-$k=0;
-$feed= array();
-foreach ($data as $d):
+/******************************* build  array ******************************************/
+	$ss=sizeof($data);
+	$k=0;
+	$feed= array();
 	
+	// create array with data
+	foreach ($data as $d):
 	
-			
 				$mil = $d["updatedAt"];
-				$seconds = ($mil / 1000)-950;
+				$seconds = ($mil / 1000)-950;   // diff between 
 				$prevtime = date("d-m-Y H:i:s", $seconds);
 				$time=$d["updatedAt"]/1000;
-				$feed[$k]["ago"]=ago($time);
+				$obiekt= new Time_ago;
+				
+				$feed[$k]["ago"]=$obiekt->ago($time);
 				$feed[$k]["message"]=$d["data"]["body"]["message"];
 				$feed[$k]["time"]=$prevtime;
 					
 				$k++;
 		
 	
-endforeach; 
+	endforeach; 
 
 ?>
 
@@ -63,7 +35,7 @@ endforeach;
 
 
 <?php
-///////////////////////// text area /////////////////////////////////////////////////
+///////////////////////// display data /////////////////////////////////////////////////
 
 foreach($feed as $f):
 
@@ -78,3 +50,6 @@ endforeach;
 ?>
  </table>
 </div>
+
+ 
+            

@@ -1,92 +1,51 @@
-<div class="container" style="	background: radial-gradient(#FF3399,#FF99CC);
-								text-align: center;
-								width:350px; 
-								border-style:groove;
-								border-radius: 10px;
-								color:white;
-								text-shadow: 3px 3px 5px black">
-	<?php
+<?php
+/************************** display global statistics **********************************/
 
-	echo "<h1><strong>".sizeof($res1)."</strong> <img src=\"../Users-icon.png\" height=\"60px\" width=\"90px\" align=\"right\"></h1>"."<h4>"."New users"."</h4>"; ?>
-</div><br>
+include ("./funkcje/statistics.php"); //include class Statistics
 
-	<?php
-$points=0;
- $achievements = 0;
-  $kitchen = 0;
-for ($i=0;$i<sizeof($res1);$i++)
-{
-if (!empty($res1[$i]['leaderboards'][1]['score']))
-{$points=$points+ $res1[$i]['leaderboards'][1]['score'];}
-if (!empty($res1[$i]['gainedAchievements']))
-{$achievements=$achievements+ sizeof($res1[$i]['gainedAchievements']);}
-//if (!empty($res1[$i]['counterValues'][0]['value']))
-//{$kitchen=$kitchen+ $res1[$i]['counterValues'][0]['value'];}   //na razie nie dziala
+$obiekt= new Statistics;
+$data= $obiekt->create_statistic($res1);
 
-}
+$obiekt2= new Statistics;
+$rooms= $obiekt2->rooms_array($resA);
 
+$obiekt3= new Statistics;
+$games= $obiekt3->games_array($resG);
+
+$obiekt4= new Statistics;
+$users= $obiekt4->users_array($res1);
+
+$obiekt5= new Statistics;
+$visits= $obiekt5->visits_amount($rooms, $games, $users);
+
+/*************************************************************************/
+
+echo "<div id=\"newusers\" class=\"container\">";
+echo "<h1><strong>".sizeof($res1)."</strong> <img src=\"../images/Users-icon.png\" height=\"60px\" width=\"90px\" align=\"right\"></h1>"."<h4>"."New users"."</h4>"; 
+echo "</div><br>";
+
+echo "<div class=\"container\" id=\"points\">";
+echo "<h1><strong>".$data['points']."</strong> <img src=\"../images/points.png\" height=\"60px\" width=\"90px\" align=\"right\"></h1>"."<h4>"."Points"."</h4>"; 
+echo "</div><br>";
+
+echo "<div class=\"container\" id=\"achievements\">";
+echo "<h1><strong>".$data['achievements']."</strong> <img src=\"../images/achievement.png\" height=\"60px\" width=\"90px\" align=\"right\"></h1>"."<h4>"."Achievements"."</h4>"; 
+echo "</div><br>";
+
+
+	if(!empty($visits)){
+		foreach($visits as $visit): 
+		
+			echo "<div class=\"container\" id=\"room\">";
+			echo "<h1><strong>".$visit['amount']."</strong> <img src=\"../images/visits.png\" height=\"60px\" width=\"90px\" align=\"right\"></h1>"."<h4>".$visit['room']." visits"."</h4>"; 
+			echo "</div><br>";
+	 	endforeach;
+		} 
+
+echo "<div class=\"container\" id=\"events\">";
+echo "<h1><strong>".sizeof($res4)."</strong> <img src=\"../images/event.png\" height=\"60px\" width=\"90px\" align=\"right\"></h1>"."<h4>"."Events"."</h4>"; 
+echo "</div><br>";
 
 ?>
-<div class="container" style="	background: radial-gradient(#66CC66,#99FF99);
-								text-align: center;
-								width:350px; 
-								border-style:groove;
-								border-radius: 10px;
-								color:white;
-								text-shadow: 3px 3px 5px black">
-	<?php
-
-	echo "<h1><strong>".$points."</strong> <img src=\"../points.png\" height=\"60px\" width=\"90px\" align=\"right\"></h1>"."<h4>"."Points"."</h4>"; ?>
-</div><br>
-
-<div class="container" style="	background: radial-gradient(#FF6600,#FFCC33);
-								text-align: center;
-								width:350px; 
-								border-style:groove;
-								border-radius: 10px;
-								color:white;
-								text-shadow: 3px 3px 5px black">
-	<?php
-
-	echo "<h1><strong>".$achievements."</strong> <img src=\"../achievement.png\" height=\"60px\" width=\"90px\" align=\"right\"></h1>"."<h4>"."Achievements"."</h4>"; ?>
-</div><br>
-
-
-<div class="container" style="	background: radial-gradient(#9966FF ,#9999FF);
-								text-align: center;
-								width:350px; 
-								border-style:groove;
-								border-radius: 10px;
-								color:white;
-								text-shadow: 3px 3px 5px black">
-	<?php
-
-	echo "<h1><strong>".$kitchen."</strong> <img src=\"../visits.png\" height=\"60px\" width=\"90px\" align=\"right\"></h1>"."<h4>"."Kitchen visits"."</h4>"; ?>
-</div><br>
-
-
-<div class="container" style="	background: radial-gradient(#0066FF,#66CCFF);
-								text-align: center;
-								width:350px; 
-								border-style:groove;
-								border-radius: 10px;
-								color:white;
-								text-shadow: 3px 3px 5px black">
-	<?php
-
-	echo "<h1><strong>".sizeof($res3)."</strong> <img src=\"../notification.png\" height=\"60px\" width=\"90px\" align=\"right\"></h1>"."<h4>"."Notifications"."</h4>"; ?>
-</div><br>
-
-<div class="container" style="	background: radial-gradient(#FF0099,#FF6699);
-								text-align: center;
-								width:350px; 
-								border-style:groove;
-								border-radius: 10px;
-								color:white;
-								text-shadow: 3px 3px 5px black">
-	<?php
-
-	echo "<h1><strong>".sizeof($res4)."</strong> <img src=\"../event.png\" height=\"60px\" width=\"90px\" align=\"right\"></h1>"."<h4>"."Events"."</h4>"; ?>
-</div><br>
 
 

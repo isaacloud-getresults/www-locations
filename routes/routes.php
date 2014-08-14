@@ -187,7 +187,7 @@ $app->get('/ulogout', function () use ($app,$sdk) {
    if (($_SESSION['domain']) != "" )
    {  
       	 $u= "http://".$_SESSION['domain'].".getresults.isaacloud.com/";
-  		// $u = "http://".$_SESSION['domain']."/~mac/";
+  		//$u = "http://".$_SESSION['domain']."/~mac/";
    
     		 $app->response->redirect($u);
     }

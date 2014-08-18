@@ -59,27 +59,27 @@ echo $cmd;
    */ 
       
    $result = array();
-exec($command, $result);
-echo implode("<br />", $result,$exit);   
+exec($command, $result,$exit);
+echo implode("<br />", $result);   
   
   
   
 
+  
       
  if ($exit != 0)
  {
 echo  "Error";
- echo " </br></br>";
+ echo "</br>";
      
-        	echo	"<a href="javascript:history.go(-1)">Go back</a>";
+     	echo	"<a href=javascript:history.go(-1)>Go back</a>";
         	
  }
  else    
  {
- echo  
- "Configuration successful";
-  echo" </br></br>";
- echo    " <a href="./root">Go to main page</a>";
+ echo  "Configuration successful";
+  echo " </br>";
+ echo    " <a href=./root>Go to main page</a>";
  } 
       
       

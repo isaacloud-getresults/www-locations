@@ -23,7 +23,7 @@ require_once './src/contrib/Google_Oauth2Service.php';
 
 //start session
 
-session_name('e' );
+session_name('g' );
 session_start();
 
 
@@ -52,7 +52,7 @@ if (isset($_GET['code']))
        $domain = end(explode('admin', $_GET['state']));
        $_SESSION['domain']=$domain;
        $_SESSION['state']="admin";
-     //  header('Location: http://localhost/~mac/' );
+    //   header('Location: http://localhost/~mac/' );
        header('Location: http://getresults.isaacloud.com/' );	
      }
     
@@ -62,7 +62,7 @@ if (isset($_GET['code']))
              $domain = end(explode('user', $_GET['state']));
              $_SESSION['domain']=$domain;
              $_SESSION['state']="user";
-          //   header('Location: http://localhost/~mac/user' );
+          //  header('Location: http://localhost/~mac/user' );
             header('Location: http://getresults.isaacloud.com/user' );
              }	    
 	return;
@@ -161,7 +161,7 @@ $collection = $db->users;
 
 $cr=1; // room's counter
 $id_k = 4; // kitchen's id
-$id_mr = 5; // meeting romm's id
+$id_mr = 5; // meeting room's id
 $id_r = 6; //restaurant's id
 
 

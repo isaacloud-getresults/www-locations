@@ -33,7 +33,7 @@
    			
    		</div>
    		
-   <h3><center>Log in using google:</center></h3>
+   <h3><center>Log in using Google:</center></h3>
    <div class="container">
  
     	<div class="modal-body row">

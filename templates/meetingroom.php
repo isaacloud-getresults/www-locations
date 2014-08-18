@@ -15,6 +15,7 @@ else{
 	$data = $obiekt2-> create_array3($users);
 	
 	
+	
 //get data from webpage
 
 $url_m= 'http://188.226.248.208:8080/meetingBoard';
@@ -24,6 +25,8 @@ $inf = $obiekt3-> create_data($url_m);
 //create leaderboard
 $obiekt4 = new Meeting;
 $members = $obiekt4-> create_leaderboard($inf, $data);
+
+
 
 ?>
 

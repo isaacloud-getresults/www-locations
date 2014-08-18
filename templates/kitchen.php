@@ -12,6 +12,8 @@ if($tab==0)
 else{
 	$obiekt2 = new Leaderboard;
 	$data = $obiekt2-> create_array($users, $roomid);
+	
+
 ?>
 
 

@@ -32,6 +32,7 @@
    			
  <?php
 
+/*
  	$command= "sudo config/configFile/s0-configFile2.sh ".$_SESSION['base64'];
  	$a = popen($command, 'r'); 
 
@@ -41,9 +42,26 @@
           ob_flush();flush(); 
          } 
      pclose($a); 
+    */  
+      
+      
+      
+      
+ $shell = 'sudo config/configFile/s0-configFile2.sh ".$_SESSION['base64']';
+
+$cmd = shell_exec($shell);
+
+echo $cmd;
+      
+      
+      
+      
+      
       
       
       ?>
+      
+      
    			
    
       </br></br>

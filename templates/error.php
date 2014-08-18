@@ -28,6 +28,27 @@
    		<div class="container">
    			<center>
    			<img src="http://upload.wikimedia.org/wikipedia/commons/0/02/Przyk%C5%82ad.jpg" class="img-responsive" alt="Responsive image">
+   			
+   			
+   				<?php
+   			if (($_SESSION['domain']) != "" )
+   {  
+   //	 $u= "http://".$_SESSION['domain'].".getresults.isaacloud.com/";
+  		$u = "http://".$_SESSION['domain']."/~mac/";
+    echo  "<a href=$u>Go to main page</a>";
+    }
+    else
+    {
+        echo  "<a href=./root>Go to main page</a>";
+  }
+    
+?>
+
+
+
+</br></br>
+   			
+   			
    			</center>
    		</div>
 

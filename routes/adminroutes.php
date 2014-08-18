@@ -22,8 +22,11 @@ $app->get('/admin/dashboard', function () use ($app,$sdk) {
 	$sdk->path("cache/users")
 				->withQueryParameters(array("limit" => 0,"fields" => array("firstName","lastName","leaderboards","email", "gainedAchievements", "counterValues", "wonGames")));
   
+ 
+    
     $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
-
+    
+    
 	$sdk->path("queues/notifications");
 
     $res3 = $sdk->api("queues/notifications", "get",$sdk->getParameters(),  $sdk->getQueryParameters()  );
@@ -535,6 +538,8 @@ $app->get('/admin/meetingroom', function () use ($app, $sdk, $cr, $id_mr) {
 			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
 				
 $res4 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
+ //   var_dump($res4);
 
 
 /***** Room's name *********************/

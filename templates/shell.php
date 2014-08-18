@@ -42,19 +42,21 @@
           ob_flush();flush(); 
          } 
      pclose($a); 
-    */  
+     
+   */   
+       
       
-      
-      
-      
- $shell = "sudo config/configFile/s0-configFile2.sh ".$_SESSION['base64']";
 
-$cmd = shell_exec($shell);
+ 
+ 
+	$command= "sudo config/configFile/s0-configFile2.sh ".$_SESSION['base64'];
+	
+$cmd = shell_exec($command);
 
 echo $cmd;
       
       
-      
+    
       
       
       

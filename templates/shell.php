@@ -60,9 +60,27 @@ echo $cmd;
       
    $result = array();
 exec($command, $result);
-echo implode("<br />", $result);   
+echo implode("<br />", $result,$exit);   
+  
+  
+  
+
       
-      
+ if ($exit != 0)
+ {
+echo  "Error";
+ echo " </br></br>";
+     
+        	echo	"<a href="javascript:history.go(-1)">Go back</a>";
+        	
+ }
+ else    
+ {
+ echo  
+ "Configuration successful";
+  echo" </br></br>";
+ echo    " <a href="./root">Go to main page</a>";
+ } 
       
       
       ?>
@@ -70,8 +88,7 @@ echo implode("<br />", $result);
       
    			
    
-      </br></br>
-      <a href="./root">Go to main page</a>
+    
          		
         </div>
 	<br><br><br>

@@ -47,7 +47,7 @@
       
       
       
- $shell = 'sudo config/configFile/s0-configFile2.sh ".$_SESSION['base64']';
+ $shell = "sudo config/configFile/s0-configFile2.sh ".$_SESSION['base64']";
 
 $cmd = shell_exec($shell);
 

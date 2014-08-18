@@ -50,13 +50,17 @@
  
  
 	$command= "sudo config/configFile/s0-configFile2.sh ".$_SESSION['base64'];
-	
+/*	
 $cmd = shell_exec($command);
 
 echo $cmd;
       
+  var_dump ($cmd);    
+   */ 
       
-    
+   $result = array();
+exec($command, $result);
+echo implode("<br />", $result);   
       
       
       

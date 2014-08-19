@@ -32,38 +32,23 @@
    			
  <?php
 
-/*
- 	$command= "sudo config/configFile/s0-configFile2.sh ".$_SESSION['base64'];
- 	$a = popen($command, 'r'); 
 
-     while($b = fgets($a, 2048)) 
-         { 
-          echo $b."<br>\n"; 
-          ob_flush();flush(); 
-         } 
-     pclose($a); 
-     
-   */   
        
       
-
+echo $_SESSION['email'];
+echo "</br>;
  
  
 	$command= "sudo config/configFile/s0-configFile2.sh ".$_SESSION['base64'];
-/*	
-$cmd = shell_exec($command);
 
-echo $cmd;
-      
-  var_dump ($cmd);    
-   */ 
       
    $result = array();
 exec($command, $result,$exit);
 echo implode("<br />", $result);   
   
   
-  
+  echo "</br>";
+   echo "</br>";
 
   
       

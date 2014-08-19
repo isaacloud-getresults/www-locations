@@ -17,7 +17,7 @@
 		<!--
 		function showPleaseWait() {
 			var butt = document.getElementById("msgDiv");
-			butt.innerHTML="Please wait while your instance is being configured. It may take a while.";
+			butt.innerHTML="Please wait while your instance is being configured. It may take a few minutes.";
 			 document.getElementById('spinnerImg').style.display = "";
 		 return true;
 		}

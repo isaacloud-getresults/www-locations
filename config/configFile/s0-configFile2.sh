@@ -1,4 +1,4 @@
- #!/bin/bash
+#!/bin/bash
 ## Init
 set -e
 cd "$(dirname "$0")"

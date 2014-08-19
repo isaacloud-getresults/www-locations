@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="SoInteractive">	
-        <title>PRZYKLADOWA APLIKACJA </title>
+        <title>Get Results</title>
 
          <link href="../css/bootstrap.min.css" rel="stylesheet">
          <script src="js/jquery-1.9.1.min.js"></script>
@@ -40,10 +40,6 @@
     $command2=" ";
     $command=$command1.$_SESSION['base64'].$command2.$_SESSION['email'];
       
-      
-      
-      echo $command;
-      echo "</br>";
       
    $result = array();
 exec($command, $result,$exit);

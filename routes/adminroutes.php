@@ -275,14 +275,14 @@ $app->get('/admin/www', function () use ($app) {
     $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
       
     $qrurl = $cursor["_id"];         //get Object id of IsaaCloud instance, generate url for QR code
-
+    $profileqr= $cursor["domain"];
 
 
 
 
  	$app->render('header3.php');
 	$app->render('menu.php');
-	$app->render('www.php'  ,  array('qrurl' => $qrurl, 'profileqr' => $_SESSION['profileqr']) );
+	$app->render('www.php'  ,  array('qrurl' => $qrurl, 'profileqr' => $profileqr ));
     $app->render('footer.php'); 
 
 

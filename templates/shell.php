@@ -32,14 +32,9 @@
    			
  <?php
 
-
-       
-      
-var_dump($_SESSION);
-echo "</br>";
  
  
-	$command= "sudo config/configFile/s0-configFile2.sh ".$_SESSION['base64'];
+	$command= "sudo config/configFile/s0-configFile2.sh ".$_SESSION['base64']." ".$_SESSION['email'];
 
       
    $result = array();

@@ -1,4 +1,4 @@
-#!/bin/bash
+ #!/bin/bash
 ## Init
 set -e
 cd "$(dirname "$0")"
@@ -1893,6 +1893,17 @@ _BODY='{ "active": "true",
 GAME_ID=`IC_POST /admin/leaderboards "$_BODY" ".id"`
 
 echo "Your leaderboards are ready!"
+
+echo 
+echo '### Step 12: Create Users'
+
+_BODY='{ "email": "'$2'",
+ "status": "ACTIVE", 
+		 "level": '"1"' }' 
+GAME_ID=`IC_POST /admin/users "$_BODY" ".id"`
+
+echo "Your users are ready!"
+
 echo
 echo "End"
 

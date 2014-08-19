@@ -214,6 +214,25 @@ $app->post('/admin/activate/activate', function () use ($app) {
 
 $app->get('/admin/ic', function () use ($app) {
 
+
+   $m = new MongoClient(); 
+    $db = $m->isaa;
+    $collection = $db->users;
+
+
+    $cursor = $collection->findOne(array( 'token' => $_SESSION['activation'] ));
+   
+
+    if(!empty($cursor))   // token exists
+	{     	
+ 	                
+ 	$_SESSION['email']= $cursor['email'];
+ 
+    }
+
+    else echo "nieprawidlowy token";
+
+
  	 $app->render('shell.php');
 
 })->name("ic");

@@ -117,7 +117,8 @@ $app->post('/admin/register', function () use ($app) {
                 "token" =>  $_SESSION['activation'],
 			    "base64" =>  null,
 			    "domain" =>  $_POST['domain'],
-			    "activation" =>  "false"
+			    "activation" =>  "false",
+			    "UUID" =>  null
    
               );
                   

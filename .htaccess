@@ -1,5 +1,9 @@
 RewriteEngine On
 
-RewriteBase /
+RewriteBase /~mac/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ index.php/$1 [NC,QSA,L]
+
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ config.php/$1 [NC,QSA,L]

@@ -33,9 +33,13 @@
  <?php
 
  
+ echo $_SESSION['email'];
  
-	$command= "sudo config/configFile/s0-configFile2.sh ".$_SESSION['base64']." ".$_SESSION['email'];
-
+ 
+ 
+	$command1= "sudo config/configFile/s0-configFile2.sh ";
+    $command2=" ";
+    $command=$command1.$_SESSION['base64'].$command2.$_SESSION['email'];
       
    $result = array();
 exec($command, $result,$exit);

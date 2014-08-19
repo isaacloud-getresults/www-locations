@@ -19,9 +19,13 @@ else{
 //get data from webpage
 
 $url_m= 'http://188.226.248.208:8080/meetingBoard';
+
 $obiekt3 = new Meeting;
 $inf = $obiekt3-> create_data($url_m);
 
+if (empty($inf)) 
+	echo "<center>Data not available! </center>";
+else {
 //create leaderboard
 $obiekt4 = new Meeting;
 $members = $obiekt4-> create_leaderboard($inf, $data);
@@ -58,6 +62,6 @@ $members = $obiekt4-> create_leaderboard($inf, $data);
 
 
 
-
+}
 
 ?>

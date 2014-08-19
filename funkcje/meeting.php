@@ -5,8 +5,13 @@
 		var $url;
 		var $data= array();
 		
+	
+	
 		public function create_data($url){
-
+			$inf= array();
+			$headers = @get_headers($url);
+			if(strpos($headers[0], '200') !== false){
+		
 				$homepage = file_get_contents($url);
 				$tablica= explode(";", $homepage);
 				$t=array();
@@ -24,6 +29,7 @@
 	    							}
 
 								}
+					}
 					return $inf;
 					
 					}

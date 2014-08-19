@@ -1,11 +1,11 @@
- 		    <h1> WWW Apps </h1><br>
+ <h1> WWW Apps </h1><br>
 	
 			
  
     				<div class="modal-body row">
 				 		<div class="col-md-4" >
 							<p class="bg-info" style="text-align:center"><font size="6pt">Kitchen</font></p><br>
-							<center><button class="btn btn-primary" style="width:120px"><a href="./kitchen"><font color="white">Open</font></a></button>
+							<center><a href="./kitchen"><button class="btn btn-primary" style="width:120px"><font color="white">Open</font></button></a>
 							<BR><BR><BR><BR>
 							
 							<div id="qrcode" ></div>
@@ -25,7 +25,7 @@
 				
 						<div class="col-md-4">	
 							<p class="bg-info" style="text-align:center"><font size="6pt">Meeting Room</font></p><br>
-							<center><button class="btn btn-primary" style="width:120px"><a href="./meetingroom"><font color="white">Open</font></a></button>
+							<center><a href="./meetingroom"><button class="btn btn-primary" style="width:120px"><font color="white">Open</font></button></a>
 							<BR><BR><BR><BR>
 							
 							<div id="qrcode1" ></div>
@@ -43,7 +43,7 @@
 					
 						<div class="col-md-4">
 							<p class="bg-info" style="text-align:center"><font size="6pt">Restaurant</font></p><br>
-						 	<center><button class="btn btn-primary" style="width:120px"><a href="./restaurant"><font color="white">Open</font></a></button>
+						 	<center><a href="./restaurant"><button class="btn btn-primary" style="width:120px"><font color="white">Open</font></button></a>
 							<BR><BR><BR><BR>
 							
 							<div id="qrcode2" ></div>
@@ -69,7 +69,7 @@
     					
 				 		<div class="col-md-4 col-md-offset-2" >
 							<p class="bg-info" style="text-align:center"><font size="6pt">General</font></p><br>
-							<center><button class="btn btn-primary" style="width:120px"><a href="./global"><font color="white">Open</font></a></button>
+							<center><a href="./global"><button class="btn btn-primary" style="width:120px"><font color="white">Open</font></button></a>
 							<BR><BR><BR><BR>
 							
 							<div id="qrcode3" ></div>
@@ -89,7 +89,7 @@
 				
 						<div class="col-md-4">	
 							<p class="bg-info" style="text-align:center"><font size="6pt">User Profile</font></p><br>
-							<center><button class="btn btn-primary" style="width:120px"><a href="./user"><font color="white">Open</font></a></button>
+							<center><a href="./user"><button class="btn btn-primary" style="width:120px"><font color="white">Open</font></button></a>
 							<BR><BR><BR><BR>
 							
 							
@@ -108,4 +108,4 @@
 						</div>
 						
 
-				</div></div>   	
+				</div></div>  

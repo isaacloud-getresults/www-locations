@@ -36,7 +36,7 @@
        
       
 echo $_SESSION['email'];
-echo "</br>;
+echo "</br>";
  
  
 	$command= "sudo config/configFile/s0-configFile2.sh ".$_SESSION['base64'];

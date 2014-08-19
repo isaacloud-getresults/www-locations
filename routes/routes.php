@@ -213,6 +213,17 @@ $app->get('/users', function () use ($app) {
 
 
 
+$app->get('/config', function () use ($app) {
+
+
+
+  $app->render('config.php');
+ $app->response->redirect('/config.json', 303);
+
+
+
+
+})->name("conf");
 
 
 

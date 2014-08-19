@@ -35,7 +35,7 @@
 
        
       
-echo $_SESSION['email'];
+var_dump($_SESSION);
 echo "</br>";
  
  

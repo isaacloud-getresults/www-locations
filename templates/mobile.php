@@ -15,17 +15,7 @@
 							</script>
 						</footer><BR><BR>
 						
-						<div id="qrcode" ></div>
-							<script type="text/javascript">
-								var qrcode = new QRCode(document.getElementById("qrcode"), {
-								text : "www.facebook.pl",
-								width : 180,
-								height : 180
-									});
-								makeCode(); 
-							</script></center>
-					
-						
+		
 				</div>
 						
 				
@@ -41,16 +31,47 @@
 							</script>
 						</footer><BR><BR>
 									
-						<div id="qrcode1"  ></div>
-							<script type="text/javascript">
-								var qrcode = new QRCode(document.getElementById("qrcode1"), {
-								text : "www.onet.pl",
-								width : 180,
-								height : 180,
-									});
- 								makeCode(); </script></center>				
-							
-							
-				</div>
+
 				
 		</div><br>
+		
+		
+		
+			</div>
+		
+			<center>
+		<h1> Config </h1><br>
+	
+    	<div class="modal-body row">
+    				
+    		
+				 
+						
+
+					
+						
+				
+				<div id="qrcode" >
+									<script type="text/javascript">
+									var kod="<?=$profileqr?>";
+									
+										var qrcode = new QRCode(document.getElementById("qrcode"), {
+										text : ("http://"+kod+".getresults.isaacloud.com/"),
+										width : 180,
+										height : 180
+											});
+										makeCode(); 
+									</script></center></div>
+				
+				
+				
+				
+						
+				
+		</center>		
+				
+	
+		
+		
+		
+		

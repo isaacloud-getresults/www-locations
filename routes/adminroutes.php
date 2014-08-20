@@ -249,9 +249,22 @@ $app->get('/admin/mobile', function () use ($app) {
     $app->response->redirect($app->urlFor('e'), 303);
     }
         
+        
+    $m = new MongoClient(); 
+    $db = $m->isaa;
+    $collection = $db->users;
+    
+      
+    $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
+      
+           //get Object id of IsaaCloud instance, generate url for QR code
+    $profileqr= $cursor["domain"];
+   
+        
+        
     $app->render('header3.php');
 	$app->render('menu.php');
- 	$app->render('mobile.php');
+ 	$app->render('mobile.php', array('profileqr' => $profileqr ));
     $app->render('footer.php');    
         
 
@@ -356,23 +369,51 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
       $sdk->path("admin/conditions")
       		->withOrder(array("id"=>"ASC"));
 					
-      $res2 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
+      $res2 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );  
+       
   
      /*********************** check ***************************/
-     
-    if((empty($_POST["beacon1"])) || (empty($_POST["location"]))) echo "Nie podano wszystkich danych!";
+    
+  	
+
+    if((empty($_POST["uuid"])) || (empty($_POST["location"])) || (empty($_POST["major1"])) || (empty($_POST["minor1"]))) 
+    	echo "Nie podano wszystkich danych!";
     else {
-    $uid = $_POST["beacon1"];
+    //mongo
+    $m = new MongoClient(); 
+    $db = $m->isaa;
+    $collection = $db->users;
+
+
+    $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
+   
+
+    if(!empty($cursor))   
+	{     	
+ 	                
+ 	$cursor['UUID'] = $_POST['uuid'];
+ 	$collection->save($cursor);
+ 	
+    }
+    
+    ///
+    
+    $beacon_id = $_POST["major1"].".".$_POST["minor1"];
 	$location= $_POST["location"];
 	$loc= explode(" ", $location);
 	$data = $_SESSION["dane"];
+	
+
+	
 
 	include ("./funkcje/setup_check.php"); //include class Time_ago
 
  	$obiekt= new Setup_check;
   	$c_id= $obiekt->check($data, $loc, $res2); //check if condition for selected id exists
   	
-	if($c_id){
+	if($c_id==0)
+		echo "There's no condition for selected id";
+	else{
 		echo "Success!";
 		
 	$pre="admin/conditions/";
@@ -380,10 +421,10 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
   	
   	$sdk->path($p);  	
 			  	
- 	$res2 = $sdk->api($p, "put", $sdk->getParameters(),  $sdk->getQueryParameters() ,  array('rightSide' =>  $uid)  ); 
+ 	$res2 = $sdk->api($p, "put", $sdk->getParameters(),  $sdk->getQueryParameters() ,  array('rightSide' =>  $beacon_id)  ); 
   		}
-  	else
-  		echo "There's no condition for selected id";
+ 
+  		
   		
 }
   		$app->render('footer.php'); 
@@ -392,8 +433,6 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
 
 
 })->name("set");
-
-
 
 
 ////////////////////   admin global : statistics, global feed  ///////////////////////////

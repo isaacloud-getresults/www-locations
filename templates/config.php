@@ -3,7 +3,7 @@
 
 $sub = array_shift(explode(".",$_SERVER['SERVER_NAME']));  
 
-
+//$sub="xd";
 
 $jsonString = file_get_contents('config.json');
 $data = json_decode($jsonString,true);
@@ -22,6 +22,9 @@ $data = json_decode($jsonString,true);
 	{     	
 
  	
+ 	//to zrobic w jednym przypisaniu
+ 	//jesli ktorekolwiek jest nullem wyswietlic warning
+ 	
  	$base64 = $cursor['base64'];
     $uuid= $cursor['uuid'];
  		      		
@@ -30,6 +33,8 @@ $data = json_decode($jsonString,true);
 
    $data['base64'][0] = $base64;
    $data['UUID'][0] = $uuid;
+
+
 
 
 
@@ -44,7 +49,7 @@ file_put_contents('config.json', $newJsonString);
 
 else
 
-echo "Error. Intance doesn't exist";
+echo "Error. Instance doesn't exist";
 
 
 ?>

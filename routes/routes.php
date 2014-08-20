@@ -213,7 +213,7 @@ $app->get('/users', function () use ($app) {
 
 
 
-$app->get('/config', function () use ($app) {
+$app->get('/mconfig', function () use ($app) {
 
 
 
@@ -223,7 +223,7 @@ $app->get('/config', function () use ($app) {
 
 
 
-})->name("conf");
+})->name("mconfig");
 
 
 

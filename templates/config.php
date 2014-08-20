@@ -3,6 +3,9 @@
 
   $sub = array_shift(explode(".",$_SERVER['SERVER_NAME']));  
 
+
+
+
   $jsonString = file_get_contents('config.json');
   $data = json_decode($jsonString,true);
 
@@ -21,12 +24,26 @@
  			$base64 = $cursor['base64'];
    			$uuid= $cursor['uuid'];
  		      		
+ 		      
+ 		      if ($cursor['base64']!= null)
+ 		      	{
+           		 $dane=base64_decode($cursor["base64"]);
+           		 list ($clientid, $secret) = explode(":", $dane);		
+ 		      		
 
-		    $data['base64'][0] = $base64;
-   			$data['UUID'][0] = $uuid;
+		   		 $data['clientid']= $clientid;
+		    
+   				 $data['secret'] = $secret;
+   				 
+   				 $data['uuid'] = $uuid;
+                }
+
 
 
 			$newJsonString = json_encode($data, JSON_UNESCAPED_SLASHES);
+			
+			
+			
 			file_put_contents('config.json', $newJsonString);
 
          }

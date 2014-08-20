@@ -35,19 +35,36 @@
 		    
    				 $data['secret'] = $secret;
    				 
+   				} 
+   				 
+   				 
+   				 else 
+   				 
+   				 {
+   				 $data['clientid']= null;
+		    
+   				 $data['secret'] = null;
+   				 
+   				 }
+   				 
+   				 
    				 $data['uuid'] = $uuid;
-                }
+                
+         }
+    else   
+    {
+                 $data['clientid']= null;
+   				 $data['secret'] = null;
+   				 $data['uuid'] = null;
+    }
+
+
+
 
 
 
 			$newJsonString = json_encode($data, JSON_UNESCAPED_SLASHES);
-			
-			
-			
 			file_put_contents('config.json', $newJsonString);
-
-         }
-
 
 
 ?>

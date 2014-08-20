@@ -52,8 +52,8 @@ if (isset($_GET['code']))
        $domain = end(explode('admin', $_GET['state']));
        $_SESSION['domain']=$domain;
        $_SESSION['state']="admin";
-   //    header('Location: http://localhost/~mac/' );
-       header('Location: http://getresults.isaacloud.com/' );	
+ //      header('Location: http://localhost/~mac/' );
+      header('Location: http://getresults.isaacloud.com/' );	
      }
     
       else if (strpos($_GET['state'],'user') !== false) 

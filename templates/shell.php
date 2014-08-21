@@ -39,14 +39,13 @@
 	$command1= "sudo config/configFile/s0-configFile2.sh ";
     $command2=" ";
     $command=$command1.$_SESSION['base64'].$command2.$_SESSION['email'];
+  
+  echo $command;
       
       
    $result = array();
 exec($command, $result,$exit);
-echo implode("<br />", $result);   
-  
-  
-  echo "</br>";
+
    echo "</br>";
 
   
@@ -55,6 +54,12 @@ echo implode("<br />", $result);
  {
 echo  "Error";
  echo "</br>";
+ 
+ echo implode("<br />", $result);   
+  
+  
+  echo "</br>";
+ 
      
      	echo	"<a href=javascript:history.go(-1)>Go back</a>";
         	
@@ -63,6 +68,23 @@ echo  "Error";
  {
  echo  "Configuration successful";
   echo " </br>";
+  
+  
+echo  "Created:</br>";
+ echo  "- Transaction source</br>";
+ echo  "- Segments</br>";
+ echo  "- Conditions</br>";
+ echo  "- Counters</br>";
+ echo  "- Achievements</br>";
+ echo  "- Notifications & notification types</br>";
+ echo  "- Games</br>";
+ echo  "- User groups</br>";
+ echo  "- Client scripts</br>";
+ echo  "- Leaderboards</br>";
+ echo  "- Users</br>";
+   echo  "</br>";
+  
+  
  echo    " <a href=./root>Go to main page</a>";
  } 
       

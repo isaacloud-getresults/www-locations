@@ -12,17 +12,59 @@
          <script src="js/jquery-1.9.1.min.js"></script>
          <script src="js/bootstrap.min.js"></script>
        
-        
-       <script language="JavaScript">
-		<!--
+       
+       <link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">  
+       
+       
+ <script>
+  
+  	
 		function showPleaseWait() {
 			var butt = document.getElementById("msgDiv");
 			butt.innerHTML="Please wait while your instance is being configured. It may take a few minutes.";
-			 document.getElementById('spinnerImg').style.display = "";
+			 document.getElementById('progressbar').style.display = "";
 		 return true;
 		}
-		//-->
-	</script> 
+  
+  
+  $(function() {
+$("#progressbar").progressbar({ value: 0 });
+setTimeout(updateProgress, 2000);
+});
+
+function updateProgress() {
+  var progress;
+  progress = $("#progressbar")
+    .progressbar("option","value");
+  if (progress < 100) {
+      $("#progressbar")
+        .progressbar("option", "value", progress + 1);
+      setTimeout(updateProgress, 2000);
+  }
+}
+
+
+
+
+
+  </script>
+  <style>
+  #progressbar {
+    margin-top: 20px;
+  }
+ 
+  .progress-label {
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #fff;
+  }
+ 
+  .ui-dialog-titlebar-close {
+    display: none;
+  }
+  </style>
         
         
         
@@ -72,7 +114,7 @@ Your base64 token:</br>
       <center>   	
 	<div id="msgDiv"></div></br></br>
 	
-	<div> <img src="../../images/wait.gif" id="spinnerImg" style="display: none;" /></div>
+	<div id="progressbar" style="display: none;"></div> 
 	
 	</center>
          		

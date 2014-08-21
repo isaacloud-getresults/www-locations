@@ -271,6 +271,51 @@ $app->get('/admin/mobile', function () use ($app) {
 })->name("mo");
 
 
+
+
+/////////////////// admin mobile : menu, QR Codes and links to appstore for mobile app. ///
+
+$app->post('/admin/mobile', function () use ($app) {
+
+	if (!isset($_SESSION['token'])) 
+	{
+    $app->response->redirect($app->urlFor('e'), 303);
+    }
+        
+        
+    $m = new MongoClient(); 
+    $db = $m->isaa;
+    $collection = $db->users;
+    
+      
+        $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
+   
+
+    if(!empty($cursor))   
+	{     	
+ 	$profileqr= $cursor["domain"];               
+ 	$cursor['mobilebase64'] = $_POST['mobilebase64'];
+ 	$collection->save($cursor);
+ 	
+    }
+   
+        
+        
+    $app->render('header3.php');
+	$app->render('menu.php');
+ 	$app->render('mobile.php', array('profileqr' => $profileqr ));
+    $app->render('footer.php');    
+        
+
+})->name("mop");
+
+
+
+
+
+
+
+
 ///// admin www : menu, QR Codes and links to: kitchen, meeting room, restaurant, general and user profile //
 
 $app->get('/admin/www', function () use ($app) {
@@ -391,7 +436,7 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
     if(!empty($cursor))   
 	{     	
  	                
- 	$cursor['UUID'] = $_POST['uuid'];
+ 	$cursor['uuid'] = $_POST['uuid'];
  	$collection->save($cursor);
  	
     }

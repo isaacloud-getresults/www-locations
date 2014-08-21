@@ -18,18 +18,24 @@
     $cursor = $collection->findOne(array( 'domain' => $sub ));
    
 
+
+
+
+
     if(!empty($cursor))      //check if instance exists
 	     {     	
  
- 			$base64 = $cursor['base64'];
+ 			$base64 = $cursor['mobilebase64'];
    			$uuid= $cursor['uuid'];
  		      		
  		      
- 		      if ($cursor['base64']!= null)
+ 		      if ($cursor['mobilebase64']!= null)
  		      	{
-           		 $dane=base64_decode($cursor["base64"]);
+           		 $dane=base64_decode($cursor["mobilebase64"]);
            		 list ($clientid, $secret) = explode(":", $dane);		
  		      		
+ 		      		
+ 		      	 $data['base64'] = $base64;
 
 		   		 $data['clientid']= $clientid;
 		    
@@ -41,6 +47,7 @@
    				 else 
    				 
    				 {
+   				 $data['base64']= null;
    				 $data['clientid']= null;
 		    
    				 $data['secret'] = null;
@@ -48,11 +55,23 @@
    				 }
    				 
    				 
+   				 if ($cursor['uuid']!= null)
+ 		      	{
+   				 
    				 $data['uuid'] = $uuid;
+                }
+                else {$data['uuid'] = null;}
+                
                 
          }
+         
+         
+         
+         
+         
     else   
-    {
+    { 
+                 $data['base64']= null;
                  $data['clientid']= null;
    				 $data['secret'] = null;
    				 $data['uuid'] = null;

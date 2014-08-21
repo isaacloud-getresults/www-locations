@@ -13,7 +13,27 @@
 								(function(){var     autolink=document.createElement('script');autolink.type='text/javascript';autolink.async=true; autolink.src='https://autolinkmaker.itunes.apple.com/js/itunes_autolinkmaker.js';
 								var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(autolink, s);})();
 							</script>
-						</footer><BR><BR>
+							
+							</br></br>
+							
+							<h1> Config </h1>
+							
+								<div id="qrcode" >
+									<script type="text/javascript">
+									var kod="<?=$profileqr?>";
+									
+										var qrcode = new QRCode(document.getElementById("qrcode"), {
+										text : ("http://"+kod+".getresults.isaacloud.com/"),
+										width : 180,
+										height : 180
+											});
+										makeCode(); 
+									</script>
+									
+							
+							
+							
+						</footer>
 						
 		
 				</div>
@@ -29,49 +49,65 @@
 								(function(){var     autolink=document.createElement('script');autolink.type='text/javascript';autolink.async=true; autolink.src='https://autolinkmaker.itunes.apple.com/js/itunes_autolinkmaker.js';
 								var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(autolink, s);})();
 							</script>
-						</footer><BR><BR>
+							
+							
+						</br></br>		
+						
+		<form action="./mobile"  method="POST" >	
+<h1>Activate mobile access:</h1></br>
+<input type="text" name="mobilebase64" size="40" value="your mobile application base64">
+
+
+
+ 
+    	<button type="submit" name="sub" value="ok" class="btn btn-primary" style="width: 100px; " >
+         	<span class="glyphicon glyphicon-log-in"></span> OK</button>
+         	
+         	
+    <?php     	if (isset($_POST['mobilebase64']))
+         {echo	"<h3> Done!</h3>";}
+         	
+         ?>	
+         	
+         
+      </form> 		
+							
+							
+							
+							
+							
+							
+						</footer>
 									
 
 				
-		</div><br>
+		</div>
 		
 		
 		
 			</div>
 		
-			<center>
-		<h1> Config </h1><br>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	
-    	<div class="modal-body row">
-    				
-    		
-				 
-						
+	
+	
 
-					
-						
-				
-				<div id="qrcode" >
-									<script type="text/javascript">
-									var kod="<?=$profileqr?>";
-									
-										var qrcode = new QRCode(document.getElementById("qrcode"), {
-										text : ("http://"+kod+".getresults.isaacloud.com/"),
-										width : 180,
-										height : 180
-											});
-										makeCode(); 
-									</script></center></div>
-				
-				
-				
-				
-						
-				
-		</center>		
-				
-	
-		
-		
-		
 		

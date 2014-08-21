@@ -110,7 +110,7 @@ $app->get('/admin/user', function () use ($app) {
 
 
 $app->get('/admin/root', function () use ($app) {
-    $app->response->redirect($app->urlFor('root'), 303); 
+    $app->response->redirect($app->urlFor('ad'), 303); 
 });
 
 

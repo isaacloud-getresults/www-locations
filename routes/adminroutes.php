@@ -226,6 +226,60 @@ $app->get('/admin/ic', function () use ($app) {
 
 
 
+
+$app->get('/admin/init', function () use ($app) {
+
+
+     if (isset($_SESSION['email']) )
+                                {             //checking if user exists in database   
+
+   								  $m = new MongoClient(); 
+  								  $db = $m->isaa;
+  								  $collection = $db->users;
+    
+  								  $cursor = $collection->find(array( 'email' => $_SESSION['email'] ));
+   
+
+   								 if(!empty($cursor))                                             
+														{
+	
+	   													 foreach ($cursor as $user): 
+
+              											if ($user["base64"] != null)                         /// user exists and owns an instance
+     	      											     { 
+ 	
+ 	         											     $dane=base64_decode($user["base64"]);
+ 															 list ($clientid, $secret) = explode(":", $dane);
+ 															
+ 															 $jest=true;
+ 															 
+ 															 $_SESSION['base64']=$user["base64"];
+ 			
+ 															 $_SESSION['clientid']=$clientid;
+ 															 $_SESSION['secret']=$secret;
+
+               												 $_SESSION['profileqr']=$user["domain"];    // get subdomain name for user profile link
+
+ 	      		                                             }
+ 	      		
+ 	                                                       endforeach;		
+ 	      		 										}
+
+                                 }                
+
+
+	   
+ 	   $app->response->redirect($app->urlFor('ad'), 303); 
+
+ 	 
+
+})->name("init");
+
+
+
+
+
+
 /////////////////// admin mobile : menu, QR Codes and links to appstore for mobile app. ///
 
 $app->get('/admin/mobile', function () use ($app) {

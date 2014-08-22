@@ -41,7 +41,7 @@
     $command=$command1.$_SESSION['base64'].$command2.$_SESSION['email'];
   
 
-  echo $command;    
+   
       
    $result = array();
 exec($command, $result,$exit);
@@ -122,7 +122,7 @@ echo  "Created:</br>";
   
   
 $but="Go to main page";
-$url="./root";
+$url="./init";
   
  
  } 

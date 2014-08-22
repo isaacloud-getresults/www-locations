@@ -114,9 +114,7 @@ $app->get('/admin/root', function () use ($app) {
 });
 
 
-$app->get('/admin/init', function () use ($app) {
-    $app->response->redirect($app->urlFor('init'), 303); 
-});
+
 
 $app->get('/root', function () use ($app) {
     $app->response->redirect($app->urlFor('root'), 303); 

@@ -274,7 +274,7 @@ $app->get('/admin/init', function () use ($app) {
 
 
 	   
- 	  // $app->response->redirect($app->urlFor('ad'), 303); 
+ 	   $app->response->redirect($app->urlFor('ad'), 303); 
 
  	 
 

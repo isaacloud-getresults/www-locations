@@ -26,7 +26,7 @@ require_once './src/contrib/Google_Oauth2Service.php';
 session_name('l' );
 session_start();
 
-if (isset($_SESSION)) {var_dump ($_SESSION);}
+//if (isset($_SESSION)) {var_dump ($_SESSION);}
 
 
 

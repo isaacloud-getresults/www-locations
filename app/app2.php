@@ -26,8 +26,8 @@ require_once './src/contrib/Google_Oauth2Service.php';
 session_name('l' );
 session_start();
 
-if (isset($_SESSION['email'])) {echo $_SESSION['email'];}
-if (isset($_SESSION['token'])) {echo $_SESSION['token'];}
+if (isset($_SESSION)) {var_dump ($_SESSION);}
+
 
 
 // Google Client

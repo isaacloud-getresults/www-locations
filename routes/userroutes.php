@@ -12,7 +12,7 @@
 $app->get('/dashboard', function () use ($app,$sdk) {
 
 
-  	if (!isset($_SESSION['token'])) {
+  	if (!isset($_SESSION['email'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
         
@@ -87,7 +87,7 @@ $app->get('/dashboard', function () use ($app,$sdk) {
 $app->get('/details', @function () use ($app,$sdk) {
 
 
-	    if (!isset($_SESSION['token'])) {
+	    if (!isset($_SESSION['email'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
@@ -135,7 +135,7 @@ $app->get('/details', @function () use ($app,$sdk) {
 
 $app->get('/leaderboard', function () use ($app,$sdk) {
 
-if (!isset($_SESSION['token'])) {
+if (!isset($_SESSION['email'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
@@ -187,7 +187,7 @@ if (!isset($_SESSION['token'])) {
 $app->get('/room/:id', @function($id) use ($app,$sdk){
 
 
-      if (!isset($_SESSION['token'])) {
+      if (!isset($_SESSION['email'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
@@ -227,7 +227,7 @@ $app->get('/room/:id', @function($id) use ($app,$sdk){
 
 $app->get('/users/:id', function($id) use ($app,$sdk){
 
-if (!isset($_SESSION['token'])) {
+if (!isset($_SESSION['email'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 

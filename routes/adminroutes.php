@@ -68,7 +68,7 @@ $app->get('/admin/dashboard', function () use ($app,$sdk) {
 
 $app->get('/admin/register', function () use ($app) {
     
-    if (!isset($_SESSION['token'])) 
+    if (!isset($_SESSION['email'])) 
     {
     $app->response->redirect($app->urlFor('e'), 303);
     }
@@ -89,7 +89,7 @@ $app->get('/admin/register', function () use ($app) {
 
 $app->post('/admin/register', function () use ($app) {
 
-     if (!isset($_SESSION['token'])) 
+     if (!isset($_SESSION['email'])) 
      {
      $app->response->redirect($app->urlFor('e'), 303);
      }
@@ -141,6 +141,9 @@ $app->post('/admin/register', function () use ($app) {
 $app->get('/admin/activate/:code', function ($code) use ($app) {
 
 	/// check in database if the user and token are active (if not->activate)
+	
+	session_start();
+	
 
     $_SESSION['activation']= $code;
 
@@ -289,7 +292,7 @@ $app->get('/admin/init', function () use ($app) {
 
 $app->get('/admin/mobile', function () use ($app) {
 
-	if (!isset($_SESSION['token'])) 
+	if (!isset($_SESSION['email'])) 
 	{
     $app->response->redirect($app->urlFor('e'), 303);
     }
@@ -322,7 +325,7 @@ $app->get('/admin/mobile', function () use ($app) {
 
 $app->post('/admin/mobile', function () use ($app) {
 
-	if (!isset($_SESSION['token'])) 
+	if (!isset($_SESSION['email'])) 
 	{
     $app->response->redirect($app->urlFor('e'), 303);
     }
@@ -366,7 +369,7 @@ $app->post('/admin/mobile', function () use ($app) {
 $app->get('/admin/www', function () use ($app) {
 
 
-     if (!isset($_SESSION['token'])) {
+     if (!isset($_SESSION['email'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
@@ -398,7 +401,7 @@ $app->get('/admin/www', function () use ($app) {
 
 $app->get('/admin/setup', function () use ($app, $sdk) {
 
-    if (!isset($_SESSION['token'])) 
+    if (!isset($_SESSION['email'])) 
        {
         $app->response->redirect($app->urlFor('e'), 303);
        }
@@ -437,7 +440,7 @@ $app->get('/admin/setup', function () use ($app, $sdk) {
 
 $app->post('/admin/setup', function () use ($app, $sdk) {
  
-		if (!isset($_SESSION['token'])) {
+		if (!isset($_SESSION['email'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
        
@@ -531,7 +534,7 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
 
 $app->get('/admin/global', function () use ($app, $sdk) {
 
-         if (!isset($_SESSION['token'])) {
+         if (!isset($_SESSION['email'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
@@ -594,7 +597,7 @@ $app->get('/admin/global', function () use ($app, $sdk) {
 
 $app->get('/admin/restaurant', function () use ($app, $sdk, $cr, $id_r) {
 
-		if (!isset($_SESSION['token'])) {
+		if (!isset($_SESSION['email'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
@@ -669,7 +672,7 @@ $app->get('/admin/restaurant', function () use ($app, $sdk, $cr, $id_r) {
 
 $app->get('/admin/meetingroom', function () use ($app, $sdk, $cr, $id_mr) {
 
-	if (!isset($_SESSION['token'])) {
+	if (!isset($_SESSION['email'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
@@ -750,7 +753,7 @@ $res4 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryPa
 
 $app->get('/admin/kitchen', function () use ($app,$sdk,$cr, $id_k) {
 
-	if (!isset($_SESSION['token'])) {
+	if (!isset($_SESSION['email'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }	
 		

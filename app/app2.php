@@ -27,6 +27,7 @@ session_name('l' );
 session_start();
 
 if (isset($_SESSION['email'])) {echo $_SESSION['email'];}
+if (isset($_SESSION['token'])) {echo $_SESSION['token'];}
 
 
 // Google Client

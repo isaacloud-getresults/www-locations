@@ -118,7 +118,8 @@ $app->post('/admin/register', function () use ($app) {
 			    "base64" =>  null,
 			    "domain" =>  $_POST['domain'],
 			    "activation" =>  "false",
-			    "uuid" =>  null
+			    "uuid" =>  null,
+			    "mobilebase64" =>  null
    
               );
                   

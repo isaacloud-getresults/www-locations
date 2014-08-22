@@ -18,42 +18,22 @@
 
     <body>
     
-    <br><br><br>
+    <br>
     <div class="container" >
-    <br><br> <div class="container">
-         	<center>
-         	<img src="./images/gettingstarted2.jpg" width="700px">
-         	</center>
-         </div><br><br>
+    <br>
+         <center>
+         <img src="./images/gr2.png" width="700px">
+         </center><br>
     
-    	<div class="container">
-			
-   			<center>	<p style="font-size: 60pt ;text-shadow: 1px 1px 2px lgray"><strong> 
-   			<img src="./images/logo.jpeg" height="70px" width="70px"> Get Results </strong></p></center>
-   			
-   		</div>
-   		
    <h3><center>Log in using Google:</center></h3>
-   <div class="container">
- 
-    	<div class="modal-body row">
-    	 
-  			<div class="col-md-4 col-md-offset-2" >
-   
-
-    		
-    				<a href="<?php echo $url2; ?>"> <center><button class="btn btn-primary" id="login" style="width: 350px; height: 80px" >
-         			<h4><span class="glyphicon glyphicon-log-in"></span> <font color="white">Log in as admin </font> </h4> </button></a></center>
-       		
-        
-      		</div>
-      	<div class="col-md-4 " >
+					<a href="<?php echo $url2; ?>"> <center><button class="btn btn-primary" id="login" style="width: 250px; height: 50px; background-color:#006699" >
+         			<h4><span class="glyphicon glyphicon-log-in"></span> <font color="white" style="text-shadow: 1px 1px 2px black"> Log in as admin </font> </h4> </button></a></center>
+       		<br>
+       
         	
-    				 <a href="<?php echo $url1; ?>"><center><button class="btn btn-primary" id="login" style="width: 350px; height: 80px" >
-         			<h4><span class="glyphicon glyphicon-log-in"></span><font color="white">Log in as user </font></h4> </button></a> </center>
-       			
-        	</div>
-        	</div>
+    				 <a href="<?php echo $url1; ?>"><center><button class="btn btn-primary" id="login" style="width: 250px; height: 50px; background-color:#006699" >
+         			<h4><span class="glyphicon glyphicon-log-in"></span><font color="white"style="text-shadow: 1px 1px 2px black" > Log in as user </font></h4> </button></a> </center>
+       	
         	
 	<br><br><br>
  	<div class="container">   	

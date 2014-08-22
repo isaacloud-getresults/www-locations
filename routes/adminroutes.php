@@ -17,6 +17,9 @@ $app->get('/admin/dashboard', function () use ($app,$sdk) {
 	$app->render('header3.php');
 	$app->render('menu.php');
 	
+	
+	
+	
 	//get statistics 
 	
 	$sdk->path("cache/users")
@@ -26,39 +29,17 @@ $app->get('/admin/dashboard', function () use ($app,$sdk) {
     
     $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
     
-    
-	$sdk->path("queues/notifications");
-
-    $res3 = $sdk->api("queues/notifications", "get",$sdk->getParameters(),  $sdk->getQueryParameters()  );
-
-	$sdk->path("queues/events/done");
-
-    $res4 = $sdk->api("queues/events/done", "get",$sdk->getParameters(),  $sdk->getQueryParameters()  );
-
-//////////////////// visits ////////////////
- 
-// get all room with segments; build array of ids, labels and segments
 
 	$sdk->path("cache/users/groups")
 		->withOrder(array("segments"=>"ASC"))
-		->withQueryParameters(array("limit" => 0,"fields" => array("segments", "label")));
+		->withQueryParameters(array("limit" => 0, "offset" =>1, "fields" => array("label", "counterValues")));
 
 	$resA = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
-	//get all games with segments; build array of ids and segments
-	$sdk->path("cache/games")
-		->withOrder(array("segments"=>"ASC"))
-		->withQueryParameters(array("limit" => 0,"fields" => array("segments")));
-
-	$resG = $sdk->api("cache/games", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
 
-/////////////////////////////////////////////////////////
-
-
-    $app->render('admindashboard.php', array('res1' => $res1,  'res4' => $res4, 'resA' => $resA, 'resG' => $resG) );
+    $app->render('admindashboard.php', array('res1' => $res1, 'resA' => $resA) );
 	$app->render('footer.php');
-    
 
 })->name("ad");
 
@@ -367,7 +348,7 @@ $app->post('/admin/mobile', function () use ($app) {
 
 ///// admin www : menu, QR Codes and links to: kitchen, meeting room, restaurant, general and user profile //
 
-$app->get('/admin/www', function () use ($app) {
+$app->get('/admin/www', function () use ($app,$sdk) {
 
 
      if (!isset($_SESSION['email'])) {
@@ -387,14 +368,115 @@ $app->get('/admin/www', function () use ($app) {
 
 
 
+  	$sdk->path("cache/users/groups")
+    			->withOrder(array("id"=>"ASC"))
+				->withQueryParameters(array("limit" =>0, "offset"=>1, "fields" => array("counterValues","label")));
+    
+
+	$res = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
+
+
 
  	$app->render('header3.php');
 	$app->render('menu.php');
-	$app->render('www.php'  ,  array('qrurl' => $qrurl, 'profileqr' => $profileqr ));
+	$app->render('www.php'  ,  array('rooms' => $res,'qrurl' => $qrurl, 'profileqr' => $profileqr ));
     $app->render('footer.php'); 
 
 
 })->name("ww");
+
+
+
+
+
+
+///// Room : list of users in x room, feed ///////////////////////////////////
+
+$app->get('/admin/room:id', @function($id) use ($app,$sdk, $cr){
+
+
+      if (!isset($_SESSION['email'])) {
+             $app->response->redirect($app->urlFor('e'), 303);
+        }
+
+/***** types of notification ***********/
+  		$sdk->path("admin/notifications/types");
+
+        $res9 = $sdk->api("admin/notifications/types", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+
+
+/***** users ****************************/
+   		$sdk->path("cache/users")
+        	->withQuery(array("counterValues.counter" =>$cr ))
+          	->withOrder (array("leaderboards.1.position"=>"ASC" ))
+			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
+				
+        $res4 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
+
+/***** Room's name *********************/
+  
+         $pref="cache/users/groups/"; 
+         $p=$pref.$id; // id for restaurant
+
+		 $sdk->path($p)
+			->withQueryParameters(array("fields" => array("name")));
+
+         $res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
+
+
+         // nootyfication id for selected room
+         
+         foreach ($res9 as $type):
+         	if($type['name']==$res5['name']) $room=$type['id'];
+         
+         endforeach;
+         
+         ////////////////////////////////////
+ /******render *****/
+
+
+		$app->render('column.php');
+		
+	if(strpos($res5['name'], 'eeting') == true)
+		$app->render('meetingroom.php', array('users' => $res4, 'roomid' => $res5)); //<- list of users (to do)
+	else
+    	$app->render('admin_room.php', array('users' => $res4, 'roomid' => $res5)); //<- list of users (to do)
+    	$app->render('midd2.php');
+ ////////////////////////////
+
+         if(isset($room)){		
+/****** all users *******************/   	
+  		$sdk->path("cache/users")
+             ->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName", "counterValues")));   	
+    	
+         $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
+
+/********* notifications ************/
+    	 $sdk->path("queues/notifications")
+            ->withQuery(array("typeId" =>$room))
+            ->withOrder(array("updatedAt"=>"DESC"))
+			->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
+
+         $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+
+  		$app->render('admin_room2.php', array('data' => $res, 'person' => $res1)); //feed (to do)
+            }
+            else
+	       echo "<center>"."There's no notification for selected room"."</center>";		
+    	
+})->name("aroom");
+
+
+
+
+
+
+
+
+
 
 
 //////////////////// admin setup :  beacon's location (get)  /////////////////////////
@@ -425,16 +507,106 @@ $app->get('/admin/setup', function () use ($app, $sdk) {
       		->withOrder(array("id"=>"ASC"));
 						
     $res2 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
-      
-     
+    
+   
   	$app->render('setup.php', array('games' => $res, 'groups' => $res1, 'conditions' => $res2 )); 
+  	
   	$app->render('footer.php'); 
  
 
 })->name("se");
 
 
+//////////////////// admin setup :  beacon's location add  (get) /////////////////////////
 
+
+$app->get('/admin/add', function () use ($app, $sdk) {
+
+    if (!isset($_SESSION['email'])) 
+       {
+        $app->response->redirect($app->urlFor('e'), 303);
+       }
+        
+    $app->render('header3.php');
+    $app->render('menu.php');
+        
+ 	$app->render('add.php') ;
+  	
+  	$app->render('footer.php'); 
+ 
+
+})->name("add");
+
+//////////////////// admin setup :  beacon's location add (post)  /////////////////////////
+
+
+$app->post('/admin/add', function () use ($app, $sdk) {
+
+    if (!isset($_SESSION['email'])) 
+       {
+        $app->response->redirect($app->urlFor('e'), 303);
+       }
+        
+    $app->render('header3.php');
+    $app->render('menu.php');
+       
+     /***********************************/   
+    if(!empty($_POST['option'])){
+		$option=$_POST['option'];
+		
+		if($option=='add'){
+			$new_room=$_POST['newroom']; 
+		
+			foreach ($_SESSION['dane'] as $d):
+				if($new_room==$d['name']){
+					echo "Location's already exists!<br>";
+					echo "<h4>List of all locations:</h4>";
+					foreach ($_SESSION['dane'] as $d):
+						if($new_room==$d['name'])
+							echo "<strong><font color=\"red\">- ".$d['name']."</font></strong><br>";
+						else
+							echo "- ".$d['name']."<br>";
+					endforeach;
+					}
+				else{
+				$new= strtolower($new_room);
+				$new=str_replace(" ","_","$new");
+				$command1= "sudo config/configFile/s1-createGroup.sh";
+   				$command2=" ";
+   				$command=$command1.$command2.$_SESSION['base64'].$command2.$new_room.$command2.$new;
+   				//echo $command;
+   				exec($command);
+					echo "Success!";
+					break;
+				}
+			endforeach;
+			}
+		else{
+			$selected_room=$_POST['room'];
+			
+			
+		 foreach ($_SESSION['dane'] as $d):
+		 	if($d['name']==$selected_room)
+		 		$del=$d['id_r'];
+		 endforeach;
+		 
+		$pre="admin/users/groups/";
+  		$p=$pre.$del;  
+  	
+  		$sdk->path($p);  	
+		$res2 = $sdk->api($p, "delete", $sdk->getParameters(),  $sdk->getQueryParameters()  ); 
+		
+			}
+		}
+		else
+			echo "Nie podano danych";
+	
+	
+	/************************************/
+  	$app->render('footer.php'); 
+ 
+
+})->name("addd");
 //////////////////// admin setup (post)  /////////////////////////
 
 
@@ -461,7 +633,8 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
         
          //conditions
       $sdk->path("admin/conditions")
-      		->withOrder(array("id"=>"ASC"));
+      		->withOrder(array("id"=>"ASC"))
+      		->withQueryParameters(array("limit" =>0,"fields" => array("name")));
 					
       $res2 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );  
        
@@ -471,7 +644,7 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
   	
 
     if((empty($_POST["uuid"])) || (empty($_POST["location"])) || (empty($_POST["major1"])) || (empty($_POST["minor1"]))) 
-    	echo "Nie podano wszystkich danych!";
+    	echo "You didn't fill all fields.";
     else {
     //mongo
     $m = new MongoClient(); 
@@ -494,32 +667,39 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
     
     $beacon_id = $_POST["major1"].".".$_POST["minor1"];
 	$location= $_POST["location"];
-	$loc= explode(" ", $location);
 	$data = $_SESSION["dane"];
 	
 
-	
-
-	include ("./funkcje/setup_check.php"); //include class Time_ago
+	include ("./funkcje/setup_check.php"); //include class Setup check
+	include ("./funkcje/setup_data.php"); //include class Setup data
 
  	$obiekt= new Setup_check;
-  	$c_id= $obiekt->check($data, $loc, $res2); //check if condition for selected id exists
+  	$c_id= $obiekt->check($data, $location, $res2); //check if condition for selected id exists
   	
-	if($c_id==0)
+ 
+
+
+ 	if(empty($c_id))
+
 		echo "There's no condition for selected id";
-	else{
-		echo "Success!";
 		
+	else{
+	
+
+		  	
+	$obiekt2= new Setup_data;
+  	$con= $obiekt2->data_to_save($beacon_id, $c_id); //check if condition for selected id exists
+  
+  foreach ($con as $c):
 	$pre="admin/conditions/";
-  	$p=$pre.$c_id;  
+  	$p=$pre.$c['id'];  
   	
   	$sdk->path($p);  	
 			  	
- 	$res2 = $sdk->api($p, "put", $sdk->getParameters(),  $sdk->getQueryParameters() ,  array('rightSide' =>  $beacon_id)  ); 
-  		}
- 
-  		
-  		
+ 	$res2 = $sdk->api($p, "put", $sdk->getParameters(),  $sdk->getQueryParameters() ,  array('rightSide' =>  $c['beacon'])  ); 
+  	
+  endforeach;		echo "Success!";
+  	}	
 }
   		$app->render('footer.php'); 
 
@@ -527,6 +707,9 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
 
 
 })->name("set");
+
+
+
 
 
 ////////////////////   admin global : statistics, global feed  ///////////////////////////
@@ -541,7 +724,10 @@ $app->get('/admin/global', function () use ($app, $sdk) {
 
   		    $app->render('column.php');
   		
-  	        //get statistics
+  		
+  		
+  		
+  		 //get statistics
   	
   			$sdk->path("cache/users")
 				->withQueryParameters(array("limit" => 0,"fields" => array("firstName","lastName","leaderboards","email", "gainedAchievements", "counterValues", "wonGames")));
@@ -550,28 +736,15 @@ $app->get('/admin/global', function () use ($app, $sdk) {
             $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
 
-			$sdk->path("queues/events/done");
-	
-
-           $res4 = $sdk->api("queues/events/done", "get",$sdk->getParameters(),  $sdk->getQueryParameters()  );
-           //// visits
-
-           // get all room with segments; build array of ids, labels and segments
-
+		
 	      $sdk->path("cache/users/groups")
 	    	->withOrder(array("segments"=>"ASC"))
-	    	->withQueryParameters(array("limit" => 0,"fields" => array("segments", "label")));
+	    	->withQueryParameters(array("limit" => 0, "offset" => 1, "fields" => array("counterValues", "label")));
 
           $resA = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
-          //get all games with segments; build array of ids and segments
-          $sdk->path("cache/games")
-		    ->withOrder(array("segments"=>"ASC"))
-		    ->withQueryParameters(array("limit" => 0,"fields" => array("segments")));
 
-          $resG = $sdk->api("cache/games", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
-
-          $app->render('global.php', array('res1' => $res1, 'res4' => $res4,'resA' => $resA, 'resG' => $resG ) );
+          $app->render('global.php', array('res1' => $res1, 'resA' => $resA ) );
   		  $app->render('midd2.php');
         
         //select from isaacloud 

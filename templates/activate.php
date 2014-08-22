@@ -32,7 +32,7 @@
   
   $(function() {
 $("#progressbar").progressbar({ value: 0 });
-setTimeout(updateProgress, 4000);
+setTimeout(updateProgress, 3200);
 });
 
 function updateProgress() {
@@ -42,7 +42,7 @@ function updateProgress() {
   if (progress < 100) {
       $("#progressbar")
         .progressbar("option", "value", progress + 1);
-      setTimeout(updateProgress, 4000);
+      setTimeout(updateProgress, 3200);
   }
 }
 

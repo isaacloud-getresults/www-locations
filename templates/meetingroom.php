@@ -8,13 +8,11 @@ include ("./funkcje/meeting.php"); //include class Meeting
 $obiekt = new Amount_users;
 $tab= $obiekt->amount($users, $roomid);
 
-if($tab==0) 
-	echo "<center>Empty</center>";
-else{
+
 	$obiekt2 = new Leaderboard;
 	$data = $obiekt2-> create_array3($users);
 	
-	
+echo "<center><h3>Meeting list:</h3></center>";	
 	
 //get data from webpage
 
@@ -22,7 +20,7 @@ $url_m= 'http://188.226.248.208:8080/meetingBoard';
 
 $obiekt3 = new Meeting;
 $inf = $obiekt3-> create_data($url_m);
-
+$members=array();
 if (empty($inf)) 
 	echo "<center>Data not available! </center>";
 else {
@@ -30,6 +28,7 @@ else {
 $obiekt4 = new Meeting;
 $members = $obiekt4-> create_leaderboard($inf, $data);
 
+if (!empty($members)){
 
 
 ?>
@@ -58,10 +57,58 @@ $members = $obiekt4-> create_leaderboard($inf, $data);
                 </tbody>
 		</table>
 		
-<?php } 
-
-
-
+		
+		
+		
+<?php 
+}
 }
 
+if($tab==0) 
+	echo "<br><br><br><center>Empty</center>";
+else{
+
+	$obiekt2 = new Leaderboard;
+	$data2 = $obiekt2-> create_array($users, $roomid);
+if (empty($members))
+$data3=$data2;
+
+else{
+
+//print_r($members);
+//print_r($data2);
+	$obiekt3 = new Leaderboard;
+	$data3 = $obiekt3-> guests_array($members, $data2);
+	
+	}
+?>
+
+<br><br><br><center><h4>Guests:</h4>
+  <table class="table " style="width:50%">
+                <thead>
+                    <tr>
+                        
+ 			
+                        <th>Name</th>
+                      
+                   
+                    </tr>
+                </thead>
+                <tbody>
+
+
+					<?php foreach ($data3 as $d): ?>
+ 						<tr>
+							<td><?php if(empty($d["name"])) echo "<em>"."(".$d["email"].")"."</em>"; else echo $d["name"]; ?></td>
+            				
+            			</tr>
+               		
+ 					<?php endforeach; ?>
+
+
+                </tbody>
+		</table></center>
+
+<?php
+}
 ?>

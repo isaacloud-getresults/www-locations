@@ -4,6 +4,8 @@
 	
 		var $users;
 		var $roomid;
+		var $members;
+		var $data2;
 		
 		public function create_array($users, $roomid){
 		
@@ -89,6 +91,26 @@
 			return $tab3;
 	
 			}
+			
+		
+		
+			public function guests_array($members, $data2){
+			$guests=array();
+			$i=0;
+	echo sizeof($data2);
+
+		
+		foreach($data2 as $d):
+				foreach ($members as $m):
+				if($d['id']==$m['id']) echo "tak";
+				else echo "nie";
+			endforeach;
+		endforeach;
+	
+			
+			}
+			
+			
 	
 	}
 

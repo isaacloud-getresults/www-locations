@@ -6,10 +6,11 @@
 
 
 /******************************* build  array ******************************************/
-	$ss=sizeof($data);
+	if(empty($data))
+		echo "<p><center>Empty</center></p>";
+	else{
 	$k=0;
 	$feed= array();
-	
 	// create array with data
 	foreach ($data as $d):
 	
@@ -50,6 +51,6 @@ endforeach;
 ?>
  </table>
 </div>
-
+<?php } ?>
  
             

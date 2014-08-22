@@ -93,14 +93,24 @@ $app->get('/admin/admin/www', function () use ($app) {
 $app->get('/admin/admin/mobile', function () use ($app) {
     $app->response->redirect($app->urlFor('mo'), 303); 
 });
+$app->get('/admin/admin/add', function () use ($app) {
+    $app->response->redirect($app->urlFor('add'), 303); 
+});
 
-$app->get('/admin/admin/setup', function () use ($app) {
-    $app->response->redirect($app->urlFor('se'), 303); 
+$app->post('/admin/admin/add', function () use ($app) {
+    $app->response->redirect($app->urlFor('addd'), 303); 
 });
 
 $app->post('/admin/admin/setup', function () use ($app) {
     $app->response->redirect($app->urlFor('set'), 303); 
 });
+
+
+$app->get('/admin/admin/setup', function () use ($app) {
+    $app->response->redirect($app->urlFor('se'), 303); 
+});
+
+
 
 
 

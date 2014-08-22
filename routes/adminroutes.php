@@ -182,28 +182,14 @@ $app->get('/admin/activate/:code', function ($code) use ($app) {
 $app->post('/admin/activate/activate', function () use ($app) {
 
 
-    $m = new MongoClient(); 
-    $db = $m->isaa;
-    $collection = $db->users;
+	$_SESSION['base64']= $_POST['base64'];
 
 
-    $cursor = $collection->findOne(array( 'token' => $_SESSION['activation'] ));
-   
-
-    if(!empty($cursor))   // token exists
-	{     	
- 	                
- 	//update database
- 	$cursor['base64'] = $_POST['base64'];
- 	$_SESSION['base64']= $_POST['base64'];
- 	$collection->save($cursor);
- 	
- 
  	   
  	   $app->response->redirect($app->urlFor('ic'), 303); 
  	   
  	      		
-	}
+	
 
  
 
@@ -227,7 +213,7 @@ $app->get('/admin/ic', function () use ($app) {
     if(!empty($cursor))   // token exists
 	{     	
  	                
- 	$_SESSION['email']= $cursor['email'];
+ 	$_SESSION['email']= $cursor['email'];    ///// hmmmmmmmm
  
     }
 

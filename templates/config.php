@@ -32,6 +32,9 @@
  		      if ($cursor['mobilebase64']!= null)
  		      	{
            		 $dane=base64_decode($cursor["mobilebase64"]);
+           		 
+           		 echo $dane
+           		 
            		 list ($clientid, $secret) = explode(":", $dane);		
  		      		
  		      		

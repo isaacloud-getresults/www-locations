@@ -40,7 +40,7 @@
     $command2=" ";
     $command=$command1.$_SESSION['base64'].$command2.$_SESSION['email'];
   
-  echo $command;
+
       
       
    $result = array();
@@ -49,10 +49,16 @@ exec($command, $result,$exit);
    echo "</br>";
 
   
+  
+ 
+  
+  
+  
+  
       
  if ($exit != 0)
  {
-echo  "Error";
+echo  "Error. Please check if your base64 token is correct and make sure your instance hasn't already been configured.";
  echo "</br>";
  
  echo implode("<br />", $result);   
@@ -60,12 +66,41 @@ echo  "Error";
   
   echo "</br>";
  
-     
-     	echo	"<a href=javascript:history.go(-1)>Go back</a>";
+$but="Go back";
+$url="javascript:history.go(-1)";
+
+    
         	
  }
  else    
  {
+ 
+ 
+  
+  $m = new MongoClient(); 
+    $db = $m->isaa;
+    $collection = $db->users;
+
+
+    $cursor = $collection->findOne(array( 'token' => $_SESSION['activation'] ));
+   
+
+    if(!empty($cursor))   // token exists
+	{     	
+ 	                
+ 	//update database
+ 	$cursor['base64'] = $_SESSION['base64'];
+ 	$collection->save($cursor);
+  
+  
+    }  
+  
+ 
+ 
+ 
+ 
+ 
+ 
  echo  "Configuration successful";
   echo " </br>";
   
@@ -85,12 +120,20 @@ echo  "Created:</br>";
    echo  "</br>";
   
   
- echo    " <a href=./root>Go to main page</a>";
+  
+$but="Go to main page";
+$url="./root";
+  
+ 
  } 
       
       
       ?>
       
+    
+      
+      
+      <a href="<?php echo $url; ?>"><button class="btn btn-primary btn-lg"  style="width:200px"><font color="white"><?php echo $but; ?></font></button></a><br><br>	
       
    			
    

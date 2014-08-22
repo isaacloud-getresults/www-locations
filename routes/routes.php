@@ -38,6 +38,8 @@ $app->get('/', function () use ($app,$sdk,$authUrl,$authUrl1,$authUrl2,$jest) {
  															 list ($clientid, $secret) = explode(":", $dane);
  															
  															 $jest=true;
+ 															 
+ 															 $_SESSION['base64']=$user["base64"];
  			
  															 $_SESSION['clientid']=$clientid;
  															 $_SESSION['secret']=$secret;

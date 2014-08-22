@@ -9,7 +9,7 @@
 
 $app->get('/admin/dashboard', function () use ($app,$sdk) {
 
-	if (!isset($_SESSION['token'])) 
+	if (!isset($_SESSION['email'])) 
 	 {
       $app->response->redirect($app->urlFor('e'), 303);
      }

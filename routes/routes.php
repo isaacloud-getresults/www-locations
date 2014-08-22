@@ -185,6 +185,11 @@ $app->get('/uerror', function () use ($app) {
 
 
 $app->get('/ulogout', function () use ($app,$sdk) {
+
+   session_destroy();
+   $app->view()->setData('token', null);
+   $app->client->revokeToken();  
+
  
    if (isset($_SESSION['domain']) && $_SESSION['domain']!= "" )
    {  
@@ -199,9 +204,7 @@ $app->get('/ulogout', function () use ($app,$sdk) {
      $app->response->redirect($app->urlFor('root'), 303);
    }
 
-   session_destroy();
-   $app->view()->setData('token', null);
-   $app->client->revokeToken();     
+   
   
 })->name("uo");
 

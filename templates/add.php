@@ -11,6 +11,8 @@
 		</script>
 
 
+
+
 <div class= "continer" style="width:600px" >
 
     	<h3><center>Add/delete location:</center></h3>	<br>

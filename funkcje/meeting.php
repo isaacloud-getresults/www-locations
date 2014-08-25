@@ -17,15 +17,16 @@
 				$t=array();
 					for ($i=0; $i<sizeof($tablica); $i++){
 						if($t[$i]=explode(",",$tablica[$i])) { 
-								if(isset($t[$i][0]))
+								if(isset($t[$i][0]) && $t[$i][0] != null){
 									$inf[$i]['id']=$t[$i][0];
+								 
 
 								if(isset($t[$i][1]))
 									$inf[$i]['status']=$t[$i][1];
 	
 								if(isset($t[$i][2]))
 									$inf[$i]['confirm']=$t[$i][2];
-	
+										}
 	    							}
 
 								}
@@ -41,7 +42,7 @@
 					
 							foreach ($inf as $in):
 							 
-									if ($d['id']==$in['id']){
+									if ($d['id']==$in['id'] ){
 							
 										if(empty($d["name"])) 
 											$arr[$i]['name']= "<em>"."(".$d["email"].")"."</em>"; 

@@ -21,11 +21,16 @@
  						$tab[$i]['email']=$user['email'];
  						if ((!empty($user["firstName"])) || (!empty($user["lastName"])) )
  						$tab[$i]['name']=$user["firstName"]." ".$user["lastName"];
- 						if(!empty($user["leaderboards"][1]["position"])) 
- 							$tab[$i]['position']=$user["leaderboards"][1]["position"];
- 						if(empty($user["leaderboards"][1]["score"])) 	$tab[$i]['score']="0";
- 						else $tab[$i]['score']=$user["leaderboards"][1]["score"];
-
+ 						
+ 						
+ 						foreach($user["leaderboards"] as $leaderboard):
+ 							if (!empty($leaderboard)){		
+ 						if(!empty($leaderboard["position"])) 
+ 							$tab[$i]['position']=$leaderboard["position"];
+ 						if(empty($leaderboard["score"])) 	$tab[$i]['score']="0";
+ 						else $tab[$i]['score']=$leaderboard["score"];
+							}
+						endforeach;
  						$i++;	
  							}
 				endforeach;
@@ -70,6 +75,7 @@
 			}
 			
 			
+			
 			public function create_array3($users){
 		
 			$tab3 = array();
@@ -81,12 +87,19 @@
  						$tab3[$i]['email']=$user['email'];
  						if ((!empty($user["firstName"])) || (!empty($user["lastName"])) )
  						$tab3[$i]['name']=$user["firstName"]." ".$user["lastName"];
- 						if(empty($user["leaderboards"][1]["position"])) 	$tab3[$i]['position']="-";
- 						else $tab3[$i]['position']=$user["leaderboards"][1]["position"];
+ 						
+ 						foreach($user["leaderboards"] as $leaderboard):
+ 							if (!empty($leaderboard)){		
+ 						if(!empty($leaderboard["position"])) 
+ 							$tab3[$i]['position']=$leaderboard["position"];
+ 						else 
+ 							$tab3[$i]['position']="-";
+ 						if(empty($leaderboard["score"])) 	$tab3[$i]['score']="0";
+ 						else $tab3[$i]['score']=$leaderboard["score"];
+							}
+						endforeach;
+ 						
  					
- 						if(empty($user["leaderboards"][1]["score"])) 	$tab3[$i]['score']="0";
- 						else $tab3[$i]['score']=$user["leaderboards"][1]["score"];
-
  						$i++;	
  							
 				endforeach;
@@ -100,16 +113,22 @@
 			public function guests_array($members, $data2){
 			$guests=array();
 			$i=0;
-	echo sizeof($data2);
 
-		
 		foreach($data2 as $d):
 				foreach ($members as $m):
-				if($d['id']==$m['id']) echo "tak";
-				else echo "nie";
+				
+				if($d['id'] == $m['id'])  break;
+				else {
+				
+					$guests[$i]['name']=$d['name'];
+					$guests[$i]['email']=$d['email'];
+					$guests[$i]['score']=$d['score'];
+					break;
+				}	
 			endforeach;
 		endforeach;
 	
+	return $guests;
 			
 			}
 			

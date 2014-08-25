@@ -5,7 +5,7 @@ include ("./funkcje/setup_data.php"); //include class Setup_data
   	if(isset($_SESSION["dane"]))
   		$_SESSION["dane"]= array();
   		
-echo "<h2>SetUp beacons</h2></br></br>";
+echo "<h2>SetUp </h2></br></br>";
 
 
 
@@ -19,7 +19,7 @@ echo "<h2>SetUp beacons</h2></br></br>";
 	$cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
    
    	if(!empty($cursor))                   
- 		$uuid=$cursor['uuid'];
+ 		$uuid=$cursor['UUID'];
  
   
     	/***************************/ 
@@ -69,6 +69,9 @@ echo "</form>";
     	echo "<h4><strong><center>Add new or delete existing location: </center></strong></h4><br>";
 		echo "<center><a href=\"./admin/add\"><button class=\"btn btn-primary btn-lg\"><font color=\"white\">
 		<span class=\"glyphicon glyphicon-plus-sign\"></span> Add / <span class=\"glyphicon glyphicon-minus-sign\"></span> delete location</font></button></a></center><br><br>";
+ 			
+ 		echo "<h4><strong><center>Add google calendar: </center></strong></h4>";
+		echo "<center><a href=\"./admin/calendar\"><img src=\"../images/google-calendar_logo.jpg\" height=\"70px\" width=\"220px\"></a>	";
  				
 	echo "</div></div>";
 

@@ -18,7 +18,7 @@ echo "<h4>".$data['points']." Points"."</h4>";
 echo "<h4>".$data['achievements']." Achievements"."</h4>";
 if (!empty($data2)){
 foreach ($data2 as $d):
-		echo "<h4>".$d['amount']." ".$d['label']."</h4>";
+		echo "<h4>".$d['amount']." ".$d['label']." visits</h4>";
 endforeach;
 }
 

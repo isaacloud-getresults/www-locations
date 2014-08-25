@@ -38,6 +38,7 @@
 						$array[$i]['label']=$r['label'];
 						$array[$i]['amount']=$counter['value'];
 						$i++;
+						break;
 						}
 					endforeach;
 					}

@@ -112,6 +112,14 @@ $app->get('/admin/admin/setup', function () use ($app) {
 
 
 
+$app->get('/admin/admin/calendar', function () use ($app) {
+    $app->response->redirect($app->urlFor('cal'), 303); 
+});
+
+$app->post('/admin/admin/calendar', function () use ($app) {
+    $app->response->redirect($app->urlFor('cl'), 303); 
+});
+
 
 
 $app->get('/admin/user', function () use ($app) {

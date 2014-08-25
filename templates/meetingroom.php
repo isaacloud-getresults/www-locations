@@ -4,6 +4,29 @@ include ("./funkcje/amount_users.php"); //include class Amount users
 include ("./funkcje/leaderboard.php"); //include class Leaderboard
 include ("./funkcje/meeting.php"); //include class Meeting
 
+/************* get data base64 and google calendar's base64 from mongo **/
+
+ $m = new MongoClient(); 
+    $db = $m->isaa;
+    $collection = $db->users;
+
+
+    $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
+   
+
+    if(!empty($cursor))   
+	{     	
+ 	
+              
+ 	$base_cal=$cursor['calendar'] ;
+ 	$base=$cursor['base64'] ;
+ 	
+}
+
+
+
+//////////////////////////////////////////////////////////////////////////
+
 // check amount of users
 $obiekt = new Amount_users;
 $tab= $obiekt->amount($users, $roomid);
@@ -15,8 +38,11 @@ $tab= $obiekt->amount($users, $roomid);
 echo "<center><h3>Meeting list:</h3></center>";	
 	
 //get data from webpage
+if(isset($base_cal) and isset($base)){
 
-$url_m= 'http://188.226.248.208:8080/meetingBoard';
+
+
+$url_m="http://188.226.248.208:8080/meetingBoard?iB64=".$base."&cB64=".$base_cal."&id=".$roomid['id'];
 
 $obiekt3 = new Meeting;
 $inf = $obiekt3-> create_data($url_m);
@@ -63,6 +89,9 @@ if (!empty($members)){
 <?php 
 }
 }
+}
+else 
+	echo "Check if you add base64 of google calendar";
 
 if($tab==0) 
 	echo "<br><br><br><center>Empty</center>";
@@ -70,11 +99,11 @@ else{
 
 	$obiekt2 = new Leaderboard;
 	$data2 = $obiekt2-> create_array($users, $roomid);
+//print_r($data2);	
 if (empty($members))
 $data3=$data2;
 
 else{
-
 //print_r($members);
 //print_r($data2);
 	$obiekt3 = new Leaderboard;

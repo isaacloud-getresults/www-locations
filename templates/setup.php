@@ -19,7 +19,7 @@ echo "<h2>SetUp </h2></br></br>";
 	$cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
    
    	if(!empty($cursor))                   
- 		$uuid=$cursor['UUID'];
+ 		$uuid=$cursor['uuid'];
  
   
     	/***************************/ 

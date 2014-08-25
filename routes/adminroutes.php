@@ -125,7 +125,8 @@ $app->post('/admin/register', function () use ($app) {
 			    "domain" =>  $_POST['domain'],
 			    "activation" =>  "false",
 			    "uuid" =>  null,
-			    "mobilebase64" =>  null,
+			    "iosbase64" =>  null,
+			     "androidbase64" =>  null,
 			    "calendar" =>  null
    
               );
@@ -356,7 +357,8 @@ $app->post('/admin/mobile', function () use ($app) {
     if(!empty($cursor))   
 	{     	
  	$profileqr= $cursor["domain"];               
- 	$cursor['mobilebase64'] = $_POST['mobilebase64'];
+ 	$cursor['iosbase64'] = $_POST['iosbase64'];
+ 	$cursor['androidbase64'] = $_POST['androidbase64'];
  	$collection->save($cursor);
  	
     }

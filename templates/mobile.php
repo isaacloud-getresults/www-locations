@@ -55,16 +55,28 @@
 						
 		<form action="./mobile"  method="POST" >	
 <h1>Activate mobile access:</h1></br>
-<input type="text" name="mobilebase64" size="40" value="your mobile application base64">
 
 
 
- 
+<input type="text" name="iodsbase64" size="40" value="your ios application base64">
     	<button type="submit" name="sub" value="ok" class="btn btn-primary" style="width: 100px; " >
          	<span class="glyphicon glyphicon-log-in"></span> OK</button>
          	
          	
-    <?php     	if (isset($_POST['mobilebase64']))
+         </br></br>	
+         	
+         	
+         	
+       <input type="text" name="androidbase64" size="40" value="your android application base64">
+    	<button type="submit" name="sub" value="ok" class="btn btn-primary" style="width: 100px; " >
+         	<span class="glyphicon glyphicon-log-in"></span> OK</button>
+         	  	
+         	
+         	
+         	
+         	
+         	
+    <?php     	if (isset($_POST['iosbase64']) || isset($_POST['androidbase64']))
          {echo	"<h3> Done!</h3>";}
          	
          ?>	

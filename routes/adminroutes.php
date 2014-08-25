@@ -60,8 +60,35 @@ $app->get('/admin/register', function () use ($app) {
 
 	$token= md5($_SESSION['email'].time());        // generate registration token            
 	$_SESSION['activation']= $token;
+	
+	
+	
+	  $m = new MongoClient(); 
+    $db = $m->isaa;
+    $collection = $db->users;
+	
+	
+	      $cursor2 = $collection->findOne(array( 'email' => $_SESSION['email']));       
+         if (empty($cursor2))
+       
+       
+       {
+    
+      
+            $set=false;
+         }
+         
+         else
+         
+         { 
+          $set=true;
+         }         
+        
+	
+	
+	
 
-	$app->render('register.php', array('sub' => $sub));  
+	$app->render('register.php', array('sub' => $sub,'set' => $set));  
  
 })->name("ar");
 
@@ -90,27 +117,22 @@ $app->post('/admin/register', function () use ($app) {
     {
         $sub=false;
        
-        $app->render('checkemail.php');      
        
-   
-        $user=array(
+         $user=array(
                 "email" =>  $_SESSION['email'],
                 "token" =>  $_SESSION['activation'],
 			    "base64" =>  null,
 			    "domain" =>  $_POST['domain'],
 			    "activation" =>  "false",
 			    "uuid" =>  null,
-			    "mobilebase64" =>  null
+			    "mobilebase64" =>  null,
+			    "calendar" =>  null
    
               );
-                  
-           $cursor2 = $collection->findOne(array( 'email' => $_SESSION['email']));       
-         if (empty($cursor2)) {           
-                  
-        $collection->insert($user);
-        
-        }
-        
+              
+            $collection->insert($user);  
+       
+        $app->render('checkemail.php');          
         
 
      }
@@ -118,8 +140,11 @@ $app->post('/admin/register', function () use ($app) {
     
        {   
          $sub=true;
-         $app->render('register.php', array('sub' => $sub));   
+         $set=false;
+         $app->render('register.php', array('sub' => $sub, 'set' => $set));   
        }
+
+
 
 
 })->name("sar");
@@ -205,7 +230,7 @@ $app->get('/admin/ic', function () use ($app) {
     if(!empty($cursor))   // token exists
 	{     	
  	                
- 	$_SESSION['email']= $cursor['email'];    ///// hmmmmmmmm
+ //	$_SESSION['email']= $cursor['email'];    ///// hmmmmmmmm
  
     }
 

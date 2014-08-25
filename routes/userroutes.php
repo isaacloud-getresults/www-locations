@@ -159,7 +159,7 @@ if (!isset($_SESSION['email'])) {
    		$app->render('midd.php');
    		
    		$sdk->path("cache/users")
-                ->withOrder (array("leaderboards.1.position"=>"ASC"))
+                ->withOrder (array("leaderboards.position"=>"ASC"))
 				->withQueryParameters(array("limit" =>0, "fields" => array("firstName","lastName","email","leaderboards")));
     
 

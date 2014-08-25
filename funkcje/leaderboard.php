@@ -46,25 +46,28 @@
 			foreach ($users as $user):
 		
 				
- 					if(!empty($user["leaderboards"]["1"]["position"])){
+ 					if(!empty($user["leaderboards"])){
 	
- 											
- 						$tab2[$i]['id']=$user['id'];
- 						$tab2[$i]['email']=$user['email'];
- 						if ((!empty($user["firstName"])) || (!empty($user["lastName"])) )
- 						$tab2[$i]['name']=$user["firstName"]." ".$user["lastName"];
- 						$tab2[$i]['position']=$user["leaderboards"][1]["position"];
- 						if(empty($user["leaderboards"][1]["score"])) 	$tab2[$i]['score']="0";
- 						else $tab2[$i]['score']=$user["leaderboards"][1]["score"];
+ 						foreach($user["leaderboards"] as $leaderboard):
+ 							if (!empty($leaderboard)){		
+ 								$tab2[$i]['id']=$user['id'];
+ 								$tab2[$i]['email']=$user['email'];
+ 								if ((!empty($user["firstName"])) || (!empty($user["lastName"])) )
+ 									$tab2[$i]['name']=$user["firstName"]." ".$user["lastName"];
+ 								$tab2[$i]['position']=$leaderboard["position"];
+ 								if(empty($leaderboard["score"])) 	$tab2[$i]['score']="0";
+ 								else $tab2[$i]['score']=$leaderboard["score"];
 
- 						$i++;	
+ 								$i++;	
+ 								break;
+ 								}
+ 						endforeach;
  							}
 				endforeach;
 		
 			return $tab2;
 	
 			}
-			
 			
 			
 			public function create_array3($users){

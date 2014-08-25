@@ -30,7 +30,13 @@
    			<center>
    			
   <font color="red"> 	<?php	if ($sub)	{  echo "Subdomain already exists, please pick a different name.";
-        echo "</br>";  echo "</br>"; }   ?>   </font>
+        echo "</br>";  echo "</br>"; }   ?>  
+        
+        <?php	if ($set)	{  echo "You've already registered your domain. Please activate your account.";
+        echo "</br>";  echo "</br>"; }   ?>
+        
+        
+         </font>
    			
    			
    			<form action="./register" method="POST">

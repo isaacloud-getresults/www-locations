@@ -66,7 +66,7 @@ $app->get('/', function () use ($app,$sdk,$authUrl,$authUrl1,$authUrl2,$jest) {
                               
                               
                   }
- 
+
  
  
 })->name("root");
@@ -193,7 +193,7 @@ $app->get('/ulogout', function () use ($app,$sdk) {
  
    if (isset($_SESSION['domain']) && $_SESSION['domain']!= "" )
    {  
-      	 $u= "http://".$_SESSION['domain'].".getresults.isaacloud.com/";
+     	 $u= "http://".$_SESSION['domain'].".getresults.isaacloud.com/";
   	//	$u = "http://".$_SESSION['domain']."/~mac/";
    
     		 $app->response->redirect($u);

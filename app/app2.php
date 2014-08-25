@@ -12,7 +12,7 @@ require VENDOR_PATH . '/autoload.php';
 $google_client_id 		= '549829565881-cidmn7k1pgph6joliv96soubbes1d4vb.apps.googleusercontent.com';
 $google_client_secret 	= '5PH89Qrq-gDiV5pKoqW9WRsX';
 $google_redirect_url 	= 'http://getresults.isaacloud.com/'; 
-//$google_redirect_url 	= 'http://localhost/~mac/' ;
+$google_redirect_url 	= 'http://localhost/~mac/' ;
 
 
 
@@ -26,7 +26,7 @@ require_once './src/contrib/Google_Oauth2Service.php';
 session_name('m' );
 session_start();
 
-//if (isset($_SESSION)) {var_dump ($_SESSION);}
+if (isset($_SESSION['email'])) {echo $_SESSION['email'];}
 
 
 
@@ -55,7 +55,7 @@ if (isset($_GET['code']))
        $domain = end(explode('admin', $_GET['state']));
        $_SESSION['domain']=$domain;
        $_SESSION['state']="admin";
-   //   header('Location: http://localhost/~mac/' );
+//      header('Location: http://localhost/~mac/' );
    header('Location: http://getresults.isaacloud.com/' );	
      }
     
@@ -65,7 +65,7 @@ if (isset($_GET['code']))
              $domain = end(explode('user', $_GET['state']));
              $_SESSION['domain']=$domain;
              $_SESSION['state']="user";
-     //    header('Location: http://localhost/~mac/user' );
+  //       header('Location: http://localhost/~mac/user' );
          header('Location: http://getresults.isaacloud.com/user' );
              }	    
 	return;

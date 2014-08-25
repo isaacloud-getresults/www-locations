@@ -127,7 +127,9 @@ $app->post('/admin/register', function () use ($app) {
 			    "uuid" =>  null,
 			    "iosbase64" =>  null,
 			     "androidbase64" =>  null,
+			     "iosid" =>  null,
 			    "calendar" =>  null
+			    
    
               );
               
@@ -356,10 +358,26 @@ $app->post('/admin/mobile', function () use ($app) {
 
     if(!empty($cursor))   
 	{     	
- 	$profileqr= $cursor["domain"];               
- 	$cursor['iosbase64'] = $_POST['iosbase64'];
- 	$cursor['androidbase64'] = $_POST['androidbase64'];
+ 	$profileqr= $cursor["domain"];      
+ 	
+ 	
+ 		   if (!empty($_POST['iosid']) )     
+ 	{$cursor["iosid"] = $_POST["iosid"];
  	$collection->save($cursor);
+ 	}
+ 	
+ 	   if (!empty($_POST['iosbase64']) )     
+ 	{$cursor["iosbase64"] = $_POST["iosbase64"];
+ 	$collection->save($cursor);
+ 	}
+ 	
+     if (!empty($_POST['androidbase64'] )) 
+ 	{$cursor["androidbase64"] = $_POST["androidbase64"];
+ 	$collection->save($cursor);
+ 	}
+ 	
+ 	
+ 	
  	
     }
    
@@ -609,7 +627,7 @@ $app->post('/admin/add', function () use ($app, $sdk) {
    				$command2=" ";
    				$command=$command1.$command2.$_SESSION['base64'].$command2."\"".$new_room."\"".$command2.$new;
    				//echo $command;
-   				exec($command,$exit);
+   				exec($command,$result,$exit);
    				if ($exit ==0)
 					echo "Success!";
 					

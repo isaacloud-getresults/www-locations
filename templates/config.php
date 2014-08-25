@@ -6,6 +6,7 @@
 
 
 
+
   $jsonString = file_get_contents('config.json');
   $data = json_decode($jsonString,true);
 
@@ -25,37 +26,83 @@
     if(!empty($cursor))      //check if instance exists
 	     {     	
  
- 			$base64 = $cursor['mobilebase64'];
+ 			$iosbase64 = $cursor['iosbase64'];
+ 			$androidbase64 = $cursor['androidbase64'];
    			$uuid= $cursor['uuid'];
+   			$iosid = $cursor['iosid'];
  		      		
  		      
- 		      if ($cursor['mobilebase64']!= null)
+ 		      if ($cursor['iosbase64']!= null)
  		      	{
-           		 $dane=base64_decode($cursor["mobilebase64"]);
+ 		      	
+ 		      	$data['iosbase64']= $iosbase64;
+ 		      	
+           		 $dane=base64_decode($cursor["iosbase64"]);
            		 
 
            		 
-           		 list ($clientid, $secret) = explode(":", $dane);		
- 		      		
- 		      		
- 		      	 $data['base64'] = $base64;
-
-		   		 $data['clientid']= $clientid;
-		    
-   				 $data['secret'] = $secret;
-   				 
+           		 list ($clientid, $secret) = explode(":", $dane);	
+           		 
+           	
+           		  $data['iossecret']= $secret;
+           		  	 $data ["clientid"] = $clientid;
+			   
    				} 
    				 
    				 
    				 else 
    				 
    				 {
-   				 $data['base64']= null;
-   				 $data['clientid']= null;
+
+   				 
+   				 $data['iosbase64']= null;
 		    
-   				 $data['secret'] = null;
+   				 $data['iossecret'] = null;
+   				 
+   				 $data ["clientid"] = null;
    				 
    				 }
+   				 
+   				 
+   			  if ($cursor['androidbase64']!= null)
+ 		      	{
+ 		      	
+ 		      	$data['androidbase64']= $androidbase64;
+ 		      	
+           		 $dane=base64_decode($cursor["androidbase64"]);
+           		 
+
+           		 
+           		 list ($clientid, $secret) = explode(":", $dane);
+           		
+           		 $data['androidsecret']= $secret;
+           
+			 
+			 
+			 
+   				 if ($data['clientid']  == null){$data['clientid']=$clientid;}
+			 
+			 
+   				} 
+   				 
+   				 
+   				 else 
+   				 
+   				 {
+
+   				 
+   				 $data['androidbase64']= null;
+		    
+   				 $data['androidsecret'] = null;
+   				 
+   				 }
+   				 
+   				 
+   				 
+   				 
+   				 
+   				 
+   				 
    				 
    				 
    				 if ($cursor['uuid']!= null)
@@ -66,6 +113,16 @@
                 else {$data['uuid'] = null;}
                 
                 
+                 if ($cursor['iosid']!= null)
+ 		      	{
+   				 
+   				 $data['iosid'] = $iosid;
+                }
+                else {$data['iosid'] = null;}
+                
+                
+                
+                
          }
          
          
@@ -74,9 +131,12 @@
          
     else   
     { 
-                 $data['base64']= null;
+                 $data['iosbase64']= null;
+                 $data['iossecret']= null;
+                 $data['androidbase64']= null;
+                 $data['androidsecret']= null;
                  $data['clientid']= null;
-   				 $data['secret'] = null;
+   				 $data['iosid'] = null;
    				 $data['uuid'] = null;
     }
 

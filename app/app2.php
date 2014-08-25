@@ -23,7 +23,7 @@ require_once './src/contrib/Google_Oauth2Service.php';
 
 //start session
 
-session_name('m' );
+session_name('o' );
 session_start();
 
 //if (isset($_SESSION['email'])) {echo $_SESSION['email'];}
@@ -163,9 +163,7 @@ $collection = $db->users;
 
 
 $cr=1; // room's counter
-$id_k = 4; // kitchen's id
-$id_mr = 5; // meeting room's id
-$id_r = 6; //restaurant's id
+
 
 
 

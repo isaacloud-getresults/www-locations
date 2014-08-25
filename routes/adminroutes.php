@@ -104,7 +104,14 @@ $app->post('/admin/register', function () use ($app) {
    
               );
                   
+           $cursor2 = $collection->findOne(array( 'email' => $_SESSION['email']));       
+         if (empty($cursor2)) {           
+                  
         $collection->insert($user);
+        
+        }
+        
+        
 
      }
     else

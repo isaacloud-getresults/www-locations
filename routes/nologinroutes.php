@@ -292,7 +292,7 @@ $app->get('/global/:b', function ($b) use ($app, $sdk) {
       $resA = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
      
-    	$app->render('global.php', array('res1' => $res1, 'res4' => $res4,'resA' => $resA, 'resG' => $resG ) );
+    	$app->render('global.php', array('res1' => $res1, 'resA' => $resA ) );
   		$app->render('midd2.php');
         
         //select from isaacloud    

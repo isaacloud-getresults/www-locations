@@ -230,7 +230,7 @@ $app->get('/admin/ic', function () use ($app) {
     if(!empty($cursor))   // token exists
 	{     	
  	                
- //	$_SESSION['email']= $cursor['email'];    ///// hmmmmmmmm
+ 	$_SESSION['email']= $cursor['email'];    ///// hmmmmmmmm
  
     }
 

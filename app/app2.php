@@ -12,7 +12,7 @@ require VENDOR_PATH . '/autoload.php';
 $google_client_id 		= '549829565881-cidmn7k1pgph6joliv96soubbes1d4vb.apps.googleusercontent.com';
 $google_client_secret 	= '5PH89Qrq-gDiV5pKoqW9WRsX';
 $google_redirect_url 	= 'http://getresults.isaacloud.com/'; 
-$google_redirect_url 	= 'http://localhost/~mac/' ;
+//$google_redirect_url 	= 'http://localhost/~mac/' ;
 
 
 

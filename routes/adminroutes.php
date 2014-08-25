@@ -574,18 +574,19 @@ $app->post('/admin/add', function () use ($app, $sdk) {
 						else
 							echo "- ".$d['name']."<br>";
 					endforeach;
-					}
+					break;}
 				else{
 				$new= strtolower($new_room);
 				$new=str_replace(" ","_","$new");
 				$command1= "sudo config/configFile/s1-createGroup.sh";
    				$command2=" ";
-   				$command=$command1.$command2.$_SESSION['base64'].$command2.$new_room.$command2.$new;
+   				$command=$command1.$command2.$_SESSION['base64'].$command2."\"".$new_room."\"".$command2.$new;
    				//echo $command;
-   				exec($command);
+   				exec($command,$exit);
+   				if ($exit ==0)
 					echo "Success!";
-					break;
-				}
+					
+				break;}
 			endforeach;
 			}
 		else{

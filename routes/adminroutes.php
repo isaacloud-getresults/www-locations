@@ -764,6 +764,66 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
 
 
 
+////////////////////   google calendar  get///////////////////////////
+$app->get('/admin/calendar', function () use ($app, $sdk) {
+
+    if (!isset($_SESSION['token'])) 
+       {
+        $app->response->redirect($app->urlFor('e'), 303);
+       }
+        
+    $app->render('header3.php');
+    $app->render('menu.php');
+        
+ 	$app->render('calendar.php') ;
+  	
+  	$app->render('footer.php'); 
+ 
+
+})->name("cal");
+////////////////////   google calendar  post///////////////////////////
+$app->post('/admin/calendar', function () use ($app, $sdk) {
+
+    if (!isset($_SESSION['token'])) 
+       {
+        $app->response->redirect($app->urlFor('e'), 303);
+       }
+        
+    $app->render('header3.php');
+    $app->render('menu.php');
+
+// ad base64
+ if(empty($_POST['calendar']))
+ 	echo "Enter base64 to your google calendar";
+else{
+	$m = new MongoClient(); 
+    $db = $m->isaa;
+    $collection = $db->users;
+
+
+    $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
+   
+
+    if(!empty($cursor))   
+	{     	
+ 	                
+ 	$cursor['calendar'] = $_POST['calendar'];
+ 	$collection->save($cursor);
+ 	echo "Success";
+    }
+
+
+}
+//////
+  	
+  	$app->render('footer.php'); 
+ 
+
+})->name("cl");
+
+
+
+
 
 ////////////////////   admin global : statistics, global feed  ///////////////////////////
 

@@ -17,6 +17,7 @@
 												});
 											makeCode(); 
 										</script>
+								
 								</div>
 							
 				 				<div class="col-md-7" >
@@ -41,6 +42,7 @@
 												});
 											makeCode(); 
 										</script>
+										
 								</div>
 							
 				 				<div class="col-md-7" >
@@ -80,7 +82,8 @@
 										makeCode(); 
 									</script></center>
 					
-                    <?php $i++; 
+                    <?php 
+                     $i++; 
                     if(!($i % 4))
                     	echo "</div></div><br>";
                     else 
@@ -89,4 +92,4 @@
                     	
                     	
 			
-		</div></div><br>	
+		</div></div><br>

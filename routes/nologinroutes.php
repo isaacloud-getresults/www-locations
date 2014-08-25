@@ -9,7 +9,7 @@
 ////////////////////// kitchen: no login required ////////////////////////////      use objectid    53d63daa776946f76a8b4567
 
 
-$app->get('/admin/room:id', @function($id) use ($app,$sdk, $cr){
+$app->get('/admin/room:id/:b', @function($id,$b) use ($app,$sdk, $cr){
 
 
       $m = new MongoClient(); 

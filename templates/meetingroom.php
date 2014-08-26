@@ -113,6 +113,8 @@ else{
 ?>
 
 <br><br><br><center><h4>Guests:</h4>
+<?php if(empty($data3)) echo "<center>Empty</center>";
+		else{ ?>
   <table class="table " style="width:50%">
                 <thead>
                     <tr>
@@ -139,5 +141,8 @@ else{
 		</table></center>
 
 <?php
+}
+
+
 }
 ?>

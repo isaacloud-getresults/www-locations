@@ -7,7 +7,7 @@
 
 //////////////////////////// admin dashboard : menu, statistics ////////////////////////
 
-$app->get('/admin/dashboard', function () use ($app,$sdk) {
+$app->get('/admin/dashboard', function () use ($app,$sdk,$isaaConf) {
 
 	if (!isset($_SESSION['email'])) 
 	 {
@@ -22,6 +22,8 @@ $app->get('/admin/dashboard', function () use ($app,$sdk) {
 	
 	//get statistics 
 	
+	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
+	
 	$sdk->path("cache/users")
 				->withQueryParameters(array("limit" => 0,"fields" => array("firstName","lastName","leaderboards","email", "gainedAchievements", "counterValues", "wonGames")));
   
@@ -29,6 +31,7 @@ $app->get('/admin/dashboard', function () use ($app,$sdk) {
     
     $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
     
+$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
 
 	$sdk->path("cache/users/groups")
 		->withOrder(array("segments"=>"ASC"))
@@ -401,7 +404,7 @@ $app->post('/admin/mobile', function () use ($app) {
 
 ///// admin www : menu, QR Codes and links to global view, user profile and rooms //
 
-$app->get('/admin/www', function () use ($app,$sdk) {
+$app->get('/admin/www', function () use ($app,$sdk,$isaaConf) {
 
 
      if (!isset($_SESSION['email'])) {
@@ -419,7 +422,7 @@ $app->get('/admin/www', function () use ($app,$sdk) {
     $qrurl = $cursor["_id"];        
     $profileqr= $cursor["domain"];
 
-
+$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
 
   	$sdk->path("cache/users/groups")
     			->withOrder(array("id"=>"ASC"))
@@ -535,7 +538,7 @@ $app->get('/admin/room:id', @function($id) use ($app,$sdk, $cr){
 //////////////////// admin setup :   (get)  /////////////////////////
 
 
-$app->get('/admin/setup', function () use ($app, $sdk) {
+$app->get('/admin/setup', function () use ($app, $sdk,$isaaConf) {
 
     if (!isset($_SESSION['email'])) 
        {
@@ -545,17 +548,22 @@ $app->get('/admin/setup', function () use ($app, $sdk) {
     $app->render('header3.php');
     $app->render('menu.php');
         
+   $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
         
     $sdk->path("cache/games")
 				->withQueryParameters(array("limit" =>0,"fields" => array("conditions","segments", "name")));
 				
     $res = $sdk->api("cache/games", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );      
  
+ 
+ $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
     $sdk->path("cache/users/groups")
 				->withQueryParameters(array("limit" =>0,"fields" => array("label","segments")));
 				
     $res1 = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
      
+     
+     $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
     $sdk->path("admin/conditions")
       		->withOrder(array("id"=>"ASC"));
 						

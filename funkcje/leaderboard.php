@@ -112,20 +112,42 @@
 		
 			public function guests_array($members, $data2){
 			$guests=array();
+			$ids=array();
 			$i=0;
 
 		foreach($data2 as $d):
 				foreach ($members as $m):
 				
-				if($d['id'] == $m['id'])  break;
-				else {
+				if($d['id'] == $m['id'])
+					$ids[$i]= $m['id'];
+					
+			endforeach;
+		endforeach;
+		
+		
+		foreach($data2 as $d):
+			if(!empty($ids)){
+				foreach ($ids as $id):
 				
+				if(!($id == $d['id'])){
+			
 					$guests[$i]['name']=$d['name'];
 					$guests[$i]['email']=$d['email'];
 					$guests[$i]['score']=$d['score'];
-					break;
-				}	
+				
+				}
+					
+					
 			endforeach;
+				}
+			else{
+			
+				$guests[$i]['name']=$d['name'];
+					$guests[$i]['email']=$d['email'];
+					$guests[$i]['score']=$d['score'];
+			
+			
+			}
 		endforeach;
 	
 	return $guests;

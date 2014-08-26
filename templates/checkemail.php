@@ -53,7 +53,7 @@ $token= $_SESSION['activation'];
 
 $domain = $_POST['domain'];
 $_SESSION['domain'] = $domain;
-$base_url="http://".$domain.".getresults.isaacloud.com/" ;
+$base_url="http://getresults.isaacloud.com/" ;
 
 
 $to      = $_SESSION['email'];

@@ -54,7 +54,7 @@ function validateForm() {
 
 
 
-<h2>Add google calendar</h2>
+<h2>Add Google calendar</h2>
 <br><br>
 
 <form name="myForm" method="POST" action="./calendar" onsubmit="return validateForm()">

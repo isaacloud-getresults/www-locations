@@ -811,6 +811,10 @@ else{
 
     if(!empty($cursor))   
 	{     	
+ 	      
+ 	 $c_base=$_POST['calendar1'].":".$_POST['calendar2'];        
+ 	$cursor['calendar'] =  base64_encode($c_base);
+     
  	                
  	$cursor['calendar'] = $_POST['calendar'];
  	$collection->save($cursor);

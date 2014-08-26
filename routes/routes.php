@@ -220,13 +220,8 @@ $app->get('/users', function () use ($app) {
 
 $app->get('/mconfig', function () use ($app) {
 
-
-
   $app->render('config.php');
- $app->response->redirect('/config.json', 303);
-
-
-
+  $app->response->redirect('/config.json', 303);
 
 })->name("mconfig");
 

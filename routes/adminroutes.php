@@ -216,7 +216,7 @@ $app->post('/admin/activate/activate', function () use ($app) {
 })->name("scct");
 
 
-/////////////////////////
+/////////////////////////////// starting configuration script execution ////////////////////////////////////////
 
 
 $app->get('/admin/ic', function () use ($app) {
@@ -246,6 +246,7 @@ $app->get('/admin/ic', function () use ($app) {
 
 
 
+/////////////////////////////// redirecting to admin dashboard, fetching variables ////////////////////////////////////////
 
 $app->get('/admin/init', function () use ($app) {
 
@@ -305,7 +306,7 @@ $app->get('/admin/init', function () use ($app) {
 
 
 
-/////////////////// admin mobile : menu, QR Codes and links to appstore for mobile app. ///
+/////////////////// admin mobile (get) : menu, links to appstore, qr code for config, mobile access activation ///
 
 $app->get('/admin/mobile', function () use ($app) {
 
@@ -338,7 +339,7 @@ $app->get('/admin/mobile', function () use ($app) {
 
 
 
-/////////////////// admin mobile : menu, QR Codes and links to appstore for mobile app. ///
+/////////////////// admin mobile (post) ///
 
 $app->post('/admin/mobile', function () use ($app) {
 
@@ -398,7 +399,7 @@ $app->post('/admin/mobile', function () use ($app) {
 
 
 
-///// admin www : menu, QR Codes and links to: kitchen, meeting room, restaurant, general and user profile //
+///// admin www : menu, QR Codes and links to global view, user profile and rooms //
 
 $app->get('/admin/www', function () use ($app,$sdk) {
 
@@ -479,7 +480,7 @@ $app->get('/admin/room:id', @function($id) use ($app,$sdk, $cr){
 
 
 
-         // nootyfication id for selected room
+         // notification id for selected room
          
          foreach ($res9 as $type):
          	if($type['name']==$res5['name']) $room=$type['id'];
@@ -531,7 +532,7 @@ $app->get('/admin/room:id', @function($id) use ($app,$sdk, $cr){
 
 
 
-//////////////////// admin setup :  beacon's location (get)  /////////////////////////
+//////////////////// admin setup :   (get)  /////////////////////////
 
 
 $app->get('/admin/setup', function () use ($app, $sdk) {
@@ -569,7 +570,7 @@ $app->get('/admin/setup', function () use ($app, $sdk) {
 })->name("se");
 
 
-//////////////////// admin setup :  beacon's location add  (get) /////////////////////////
+//////////////////// admin add :  (get) /////////////////////////
 
 
 $app->get('/admin/add', function () use ($app, $sdk) {
@@ -589,7 +590,7 @@ $app->get('/admin/add', function () use ($app, $sdk) {
 
 })->name("add");
 
-//////////////////// admin setup :  beacon's location add (post)  /////////////////////////
+//////////////////// admin add :  (post) /////////////////////////
 
 
 $app->post('/admin/add', function () use ($app, $sdk) {
@@ -660,6 +661,8 @@ $app->post('/admin/add', function () use ($app, $sdk) {
  
 
 })->name("addd");
+
+
 //////////////////// admin setup (post)  /////////////////////////
 
 
@@ -764,7 +767,8 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
 
 
 
-////////////////////   google calendar  get///////////////////////////
+////////////////////   google calendar  (get)   ///////////////////////////
+
 $app->get('/admin/calendar', function () use ($app, $sdk) {
 
     if (!isset($_SESSION['token'])) 
@@ -781,7 +785,8 @@ $app->get('/admin/calendar', function () use ($app, $sdk) {
  
 
 })->name("cal");
-////////////////////   google calendar  post///////////////////////////
+////////////////////   google calendar  (post)    ///////////////////////////
+
 $app->post('/admin/calendar', function () use ($app, $sdk) {
 
     if (!isset($_SESSION['token'])) 

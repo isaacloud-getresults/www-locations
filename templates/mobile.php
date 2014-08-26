@@ -80,28 +80,13 @@ base64: <input type="text" name="androidbase64" size="40" ></br></br>
     	<button type="submit" name="sub" value="ok" class="btn btn-primary" style="width: 100px; " >
          	<span class="glyphicon glyphicon-log-in"></span> OK</button>
          	  	
-         	
-         	
-         	
-         	
-  
-         	
-         
+       
       </form> 		
-							
-							
-							
-							
-							
-							
+			
 						</footer>
-									
-
-				
+		
 		</div>
-		
-		
-		
+
 			</div>
 		
 		

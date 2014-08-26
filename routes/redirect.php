@@ -1,10 +1,7 @@
 <?php 
 
 
-
-
 /***************************** redirect  *****************************************/
-
 
 
 $app->get('/room/dashboard', function () use ($app) {
@@ -31,14 +28,15 @@ $app->get('/room/details', function () use ($app) {
     $app->response->redirect($app->urlFor('de'), 303); 
 });
 
+
 $app->get('/room/users/:x', function ($x) use ($app) {
 
-   $a= $app->urlFor('u');
-    $b="/";
+     $a= $app->urlFor('u');
+     $b="/";
      $y=$a.$b.$x;   
-    $app->response->redirect($y, 303); 
+     $app->response->redirect($y, 303); 
+    
 });
-
 
 
 $app->get('/room/ulogout', function () use ($app) {
@@ -90,16 +88,21 @@ $app->get('/admin/admin/www', function () use ($app) {
     $app->response->redirect($app->urlFor('ww'), 303); 
 });
 
+
 $app->get('/admin/admin/mobile', function () use ($app) {
     $app->response->redirect($app->urlFor('mo'), 303); 
 });
+
+
 $app->get('/admin/admin/add', function () use ($app) {
     $app->response->redirect($app->urlFor('add'), 303); 
 });
 
+
 $app->post('/admin/admin/add', function () use ($app) {
     $app->response->redirect($app->urlFor('addd'), 303); 
 });
+
 
 $app->post('/admin/admin/setup', function () use ($app) {
     $app->response->redirect($app->urlFor('set'), 303); 
@@ -111,15 +114,14 @@ $app->get('/admin/admin/setup', function () use ($app) {
 });
 
 
-
 $app->get('/admin/admin/calendar', function () use ($app) {
     $app->response->redirect($app->urlFor('cal'), 303); 
 });
 
+
 $app->post('/admin/admin/calendar', function () use ($app) {
     $app->response->redirect($app->urlFor('cl'), 303); 
 });
-
 
 
 $app->get('/admin/user', function () use ($app) {
@@ -132,15 +134,9 @@ $app->get('/admin/root', function () use ($app) {
 });
 
 
-
-
 $app->get('/root', function () use ($app) {
     $app->response->redirect($app->urlFor('root'), 303); 
 });
-
-
-
-
 
 
  ?>

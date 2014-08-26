@@ -118,14 +118,6 @@ $app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr){
 
 
 
-
-
-
-
-
-
-
-
 ////////////////////    global : no login required  ///////////////////////////         use objectid    53d63daa776946f76a8b4567
 
 $app->get('/global/:b', function ($b) use ($app, $sdk) {

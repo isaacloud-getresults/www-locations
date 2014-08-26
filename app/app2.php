@@ -1,5 +1,6 @@
 <?php
 
+
 //Isaacloud sdk files
 defined('VENDOR_PATH') || define('VENDOR_PATH', realpath(__DIR__ . '/../vendor'));
 require VENDOR_PATH . '/autoload.php';
@@ -15,7 +16,6 @@ $google_redirect_url 	= 'http://getresults.isaacloud.com/';
 //$google_redirect_url 	= 'http://localhost/~mac/' ;
 
 
-
 //include google api files
 require_once './src/Google_Client.php';
 require_once './src/contrib/Google_Oauth2Service.php';
@@ -29,7 +29,6 @@ session_start();
 //if (isset($_SESSION['email'])) {echo $_SESSION['email'];}
 
 
-
 // Google Client
 $gClient = new Google_Client();
 
@@ -39,8 +38,6 @@ $gClient->setRedirectUri($google_redirect_url);
 $gClient->setDeveloperKey($google_developer_key);
 
 $google_oauthV2 = new Google_Oauth2Service($gClient);
-
-
 
 
 if (isset($_GET['code'])) 
@@ -55,8 +52,8 @@ if (isset($_GET['code']))
        $domain = end(explode('admin', $_GET['state']));
        $_SESSION['domain']=$domain;
        $_SESSION['state']="admin";
- //     header('Location: http://localhost/~mac/' );
-   header('Location: http://getresults.isaacloud.com/' );	
+ //    header('Location: http://localhost/~mac/' );
+       header('Location: http://getresults.isaacloud.com/' );	
      }
     
       else if (strpos($_GET['state'],'user') !== false) 
@@ -66,11 +63,10 @@ if (isset($_GET['code']))
              $_SESSION['domain']=$domain;
              $_SESSION['state']="user";
    //     header('Location: http://localhost/~mac/user' );
-       header('Location: http://getresults.isaacloud.com/user' );
+          header('Location: http://getresults.isaacloud.com/user' );
              }	    
 	return;
 }
-
 
 
 if (isset($_SESSION['token'])) 
@@ -78,7 +74,6 @@ if (isset($_SESSION['token']))
 	$gClient->setAccessToken($_SESSION['token']);        
 	
 }
-
 
 
 if ($gClient->getAccessToken()) 
@@ -97,11 +92,11 @@ if ($gClient->getAccessToken())
           {
 	           if ($_SERVER['SERVER_NAME'] == "getresults.isaacloud.com")
 	             { 
-	             $sub="";
+	                $sub="";
 	             }
 	             else
 	                 {
-	                  $sub = array_shift(explode(".",$_SERVER['SERVER_NAME']));  
+	                    $sub = array_shift(explode(".",$_SERVER['SERVER_NAME']));  
 	                 }  
 	       
 	       $state = 'user'.$sub;  
@@ -119,7 +114,6 @@ if ($gClient->getAccessToken())
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
-
 //Configuration for running slim framework
 $config = array(
     'debug' => true,
@@ -131,15 +125,15 @@ $config = array(
 //New instance of slim
 $app = new \Slim\Slim($config);
 
+
 // Google Client
 $app->client = $gClient;
+
 
 //Mongo Client
 $m = new MongoClient(); 
 $db = $m->isaa;
 $collection = $db->users;
-
-
 
      
      if (isset($_SESSION['clientid']) && isset($_SESSION['secret']))      // isaacloud instance config
@@ -156,22 +150,13 @@ $collection = $db->users;
 	}
 
 
-
-
-///////////config ////////////////////////////////////////////////////////////////////
-
-
-
 $cr=1; // room's counter
-
-
 
 
 /*******************************     Redirect    **********************************/
 
 
 require_once './routes/redirect.php';
-
 
 
 /*******************************     Define routes    **********************************/
@@ -183,12 +168,11 @@ require_once './routes/userroutes.php';
 require_once './routes/nologinroutes.php';
 
 
-
 /***************************** Run application  *****************************************/
 
 
-
 $app->run();
+
 
 ?>
 

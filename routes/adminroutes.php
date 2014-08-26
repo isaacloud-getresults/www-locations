@@ -9,7 +9,7 @@
 
 $app->get('/admin/dashboard', function () use ($app,$sdk,$isaaConf) {
 
-	if (!isset($_SESSION['email'])) 
+	if (!isset($_SESSION['token'])) 
 	 {
       $app->response->redirect($app->urlFor('e'), 303);
      }
@@ -162,7 +162,7 @@ $app->get('/admin/activate/:code', function ($code) use ($app) {
 
 	/// check in database if the user and token are active (if not->activate)
 	
-if (isset($_SESSION['token'])) {echo $_SESSION['token'];}
+
 	
 
     $_SESSION['activation']= $code;
@@ -233,14 +233,14 @@ $app->get('/admin/ic', function () use ($app) {
     $cursor = $collection->findOne(array( 'token' => $_SESSION['activation'] ));
    
 
-    if(!empty($cursor))   // token exists
+    if(!isset($_SESSION['email']))   // token exists
 	{     	
  	                
- 	$_SESSION['email']= $cursor['email'];    ///// hmmmmmmmm
+ 	$_SESSION['email']= $cursor['email'];    
  
     }
 
-    else echo "nieprawidlowy token";
+ if(empty($cursor)) {  echo "nieprawidlowy token";}
 
 
  	 $app->render('shell.php');

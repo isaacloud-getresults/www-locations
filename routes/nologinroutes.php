@@ -9,7 +9,7 @@
 ////////////////////// kitchen: no login required ////////////////////////////      use objectid    53d63daa776946f76a8b4567
 
 
-$app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr){
+$app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr,$isaaConf){
 
 
       $m = new MongoClient(); 
@@ -46,6 +46,9 @@ $app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr){
 	
 		
 /***** types of notification ***********/
+
+	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+
   		$sdk->path("admin/notifications/types");
 
        $res9 = $sdk->api("admin/notifications/types", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
@@ -53,6 +56,9 @@ $app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr){
 
 
 /***** users ****************************/
+
+	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+
    		$sdk->path("cache/users")
         	->withQuery(array("counterValues.counter" =>$cr ))
           	->withOrder (array("leaderboards.1.position"=>"ASC" ))
@@ -65,6 +71,9 @@ $app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr){
   
       $pref="cache/users/groups/"; 
       $p=$pref.$id; // 
+
+	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+
 
 		$sdk->path($p)
 			->withQueryParameters(array("fields" => array("name")));
@@ -90,13 +99,21 @@ $app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr){
 ////////////////////////////
 
          if(isset($room)){		
-/****** all users *******************/   	
+/****** all users *******************/  
+
+	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+
+ 	
   		$sdk->path("cache/users")
              ->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName", "counterValues")));   	
     	
         $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
 
 /********* notifications ************/
+
+	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+
+
     	 $sdk->path("queues/notifications")
             ->withQuery(array("typeId" =>$room))
             ->withOrder(array("updatedAt"=>"DESC"))
@@ -120,7 +137,7 @@ $app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr){
 
 ////////////////////    global : no login required  ///////////////////////////         use objectid    53d63daa776946f76a8b4567
 
-$app->get('/global/:b', function ($b) use ($app, $sdk) {
+$app->get('/global/:b', function ($b) use ($app, $sdk,$isaaConf) {
 
 
         $m = new MongoClient(); 
@@ -160,11 +177,16 @@ $app->get('/global/:b', function ($b) use ($app, $sdk) {
   		
   	//get statistics
   	
+  	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+  	
+  	
   			$sdk->path("cache/users")
 				->withQueryParameters(array("limit" => 0,"fields" => array("firstName","lastName","leaderboards","email", "gainedAchievements", "counterValues", "wonGames")));
 
 
       $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
+	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
 
 
 	  $sdk->path("cache/users/groups")
@@ -178,12 +200,18 @@ $app->get('/global/:b', function ($b) use ($app, $sdk) {
   		$app->render('midd2.php');
         
         //select from isaacloud    
+        
+        $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+        
             	
   		$sdk->path("cache/users")
   			
 				->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName")));   	
     	
         $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
+
+	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+
 
          $sdk->path("queues/notifications")
               ->withQuery(array("typeId" =>1 ))

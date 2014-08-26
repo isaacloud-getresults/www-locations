@@ -43,9 +43,9 @@ echo
 echo '### Step 4: Create Condition'
 _BODY='{ "counters": [], 
 		 "leftSide": "place", 
-		 "name": "'$3'_visited_condition",
+		 "name": "'$3'_visit_condition",
 		 "operator": "EQ", 
-		 "rightSide": "0.0",
+		 "rightSide": "0",
 		 "transactionSource": '"1"', 
 		 "type": "NORMAL" }'
 CONDITION_ENTER_ID=`IC_POST /admin/conditions "$_BODY" ".id"`
@@ -54,16 +54,16 @@ _BODY='{ "counters": [],
 		 "leftSide": "place", 
 		 "name": "'$3'_exit_condition",
 		 "operator": "EQ", 
-		 "rightSide": "0.0.exit",
+		 "rightSide": "0",
 		 "transactionSource": '"1"', 
 		 "type": "NORMAL" }'
 CONDITION_EXIT_ID=`IC_POST /admin/conditions "$_BODY" ".id"`
 
 _BODY='{ "counters": [], 
 		 "leftSide": "place", 
-		 "name": "'$3'_visited_group_condition", 
+		 "name": "'$3'_visit_group_condition", 
 		 "operator": "EQ", 
-		 "rightSide": "0.0.group", 
+		 "rightSide": "0", 
 		 "transactionSource": '"1"', 
 		 "type": "NORMAL" }'
 CONDITION_GROUP_ENTER_ID=`IC_POST /admin/conditions "$_BODY" ".id"`
@@ -490,7 +490,7 @@ _BODY='{ "active": true,
 		 "expression": "{'"$CONDITION_ENTER_ID"'}",
  "segments": ["'$SEG_1_ID'"], 
 		 "gameType": "GRADUAL",
-		 "name": "'$3'_visited_game",
+		 "name": "'$3'_visit_game",
 		 "notifications": ["'$NOTIFICATION_ENTER_ID'", "'$NOTIFICATION_E1_ID'", "'$NOTIFICATION_E2_ID'", "'$NOTIFICATION_E3_ID'", "'$NOTIFICATION_E4_ID'"],
 		 "transactionSource": '"1"' }' 
 GAME_ID=`IC_POST /admin/games "$_BODY" ".id"` 
@@ -500,7 +500,7 @@ _BODY='{ "active": true,
 		 "expression": "{'"$CONDITION_EXIT_ID"'}",
 "segments": ["'$SEG_2_ID'"], 
 		 "gameType": "GRADUAL",
-		 "name": "'$3'_left_game",
+		 "name": "'$3'_exit_game",
 		 "notifications": ['"1"'],
 		 "transactionSource": '"1"' }' 
 GAME_ID=`IC_POST /admin/games "$_BODY" ".id"` 
@@ -510,7 +510,7 @@ _BODY='{ "active": true,
 		 "expression": "{'"$CONDITION_GROUP_ENTER_ID"'}",
 "segments": ["'$SEG_3_ID'"], 
 		 "gameType": "GRADUAL",
-		 "name": "'$3'_visited_group_game",
+		 "name": "'$3'_visit_group_game",
 		 "notifications": [],
 		 "transactionSource": '"1"' }' 
 GAME_ID=`IC_POST /admin/games "$_BODY" ".id"`

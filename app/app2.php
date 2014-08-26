@@ -23,7 +23,7 @@ require_once './src/contrib/Google_Oauth2Service.php';
 
 //start session
 
-session_name('a' );
+session_name('f' );
 session_start();
 
 //if (isset($_SESSION['email'])) {echo $_SESSION['email'];}
@@ -62,7 +62,7 @@ if (isset($_GET['code']))
              $domain = end(explode('user', $_GET['state']));
              $_SESSION['domain']=$domain;
              $_SESSION['state']="user";
-   //     header('Location: http://localhost/~mac/user' );
+   //    header('Location: http://localhost/~mac/user' );
          header('Location: http://getresults.isaacloud.com/user' );
              }	    
 	return;

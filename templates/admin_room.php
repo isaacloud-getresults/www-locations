@@ -6,7 +6,7 @@ include ("./funkcje/leaderboard.php"); //include class Leaderboard
 // check amount of users
 $obiekt = new Amount_users;
 $tab= $obiekt->amount($users, $roomid);
-
+echo "<center><h2>".$roomid['label']."</h2></center>";
 if($tab==0) 
 	echo "<center>Empty</center>";
 else{

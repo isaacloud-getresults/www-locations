@@ -21,7 +21,7 @@
 			
 		function showPleaseWait() {
 			var butt = document.getElementById("msgDiv");
-			butt.innerHTML="Please wait while your location is being added. It may take a while.";
+			butt.innerHTML="Please wait while your location is being configured. It may take a while.";
 			 document.getElementById('progressbar').style.display = "";
 		 return true;
 		}

@@ -11,7 +11,7 @@
 /// dashboard : my profile, list of all rooms  //////////////////////////////////////////
 
 
-$app->get('/dashboard', function () use ($app,$sdk) {
+$app->get('/dashboard', function () use ($app,$sdk,$isaaConf) {
 
 
   	if (!isset($_SESSION['email'])) {
@@ -21,6 +21,10 @@ $app->get('/dashboard', function () use ($app,$sdk) {
 
 
 	$a=$_SESSION["email"];
+	
+	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+	
+	
 	$sdk->path("cache/users")
  				->withQuery(array("email" => $a))
 				->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email")));
@@ -52,6 +56,8 @@ $app->get('/dashboard', function () use ($app,$sdk) {
 	$pref="cache/users/";
 	$p=$pref.$myid;	
   
+	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+
 
     	$sdk->path($p)
 				->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","leaderboards","email")));
@@ -62,6 +68,8 @@ $app->get('/dashboard', function () use ($app,$sdk) {
 		$app->render('header.php'); //header
 		$app->render('myprofileshort.php', array('myprofile' => $res)); //first column
    
+ 	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+ 
  
     	$sdk->path("cache/users/groups")
     			->withOrder(array("id"=>"ASC"))
@@ -86,7 +94,7 @@ $app->get('/dashboard', function () use ($app,$sdk) {
 //// details : my profile, list of achievements //////////////////////////////////////////
 
 
-$app->get('/details', @function () use ($app,$sdk) {
+$app->get('/details', @function () use ($app,$sdk,$isaaConf) {
 
 
 	    if (!isset($_SESSION['email'])) {
@@ -98,6 +106,9 @@ $app->get('/details', @function () use ($app,$sdk) {
 	$myid=$_SESSION["id"];
 	$pref="cache/users/";
 	$p=$pref.$myid;	
+  
+  $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+  
   
     	$sdk->path($p)
     			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","gainedAchievements","email","leaderboards")));
@@ -112,6 +123,9 @@ $app->get('/details', @function () use ($app,$sdk) {
     
 
 /////////////////// notifications
+
+
+	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
 
  	 $sdk->path("queues/notifications")
             ->withQuery(array("subjectId" =>$myid, "typeId" => 1,))
@@ -135,7 +149,7 @@ $app->get('/details', @function () use ($app,$sdk) {
 // leaderboards: my points, leaderboards ////////////////////////////////////////////////
 
 
-$app->get('/leaderboard', function () use ($app,$sdk) {
+$app->get('/leaderboard', function () use ($app,$sdk,$isaaConf) {
 
 if (!isset($_SESSION['email'])) {
              $app->response->redirect($app->urlFor('e'), 303);
@@ -148,6 +162,8 @@ if (!isset($_SESSION['email'])) {
 	$pref="cache/users/";
 	$p=$pref.$myid; 
   	
+  $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+  
   
     	$sdk->path($p)
 				 ->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email","leaderboards")));
@@ -159,6 +175,9 @@ if (!isset($_SESSION['email'])) {
 		    
   		$app->render('users1.php', array('user' => $res)); //first column
    		$app->render('midd.php');
+   		
+   		$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+   		
    		
    		$sdk->path("cache/users")
                 ->withOrder (array("leaderboards.position"=>"ASC"))
@@ -186,7 +205,7 @@ if (!isset($_SESSION['email'])) {
 
 ///// Room : number of users in x room, list of users ///////////////////////////////////
 
-$app->get('/room/:id', @function($id) use ($app,$sdk){
+$app->get('/room/:id', @function($id) use ($app,$sdk,$isaaConf){
 
 
       if (!isset($_SESSION['email'])) {
@@ -196,6 +215,9 @@ $app->get('/room/:id', @function($id) use ($app,$sdk){
 
  
     	$app->render('header2.php');
+    	
+    	
+    	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
 
    		$sdk->path("cache/users")
               	->withQuery(array("counterValues.counter" => 1))
@@ -210,6 +232,9 @@ $app->get('/room/:id', @function($id) use ($app,$sdk){
   
 	$pref="cache/users/groups/";  
 	$p=$pref.$id;
+
+
+	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
 
     $sdk->path($p)
 				->withQueryParameters(array("limit" =>0,"fields" => array("label")));
@@ -227,7 +252,7 @@ $app->get('/room/:id', @function($id) use ($app,$sdk){
 
 ////// User profile //////////////////////////////////////////////////////////////////////
 
-$app->get('/users/:id', function($id) use ($app,$sdk){
+$app->get('/users/:id', function($id) use ($app,$sdk,$isaaConf){
 
 if (!isset($_SESSION['email'])) {
              $app->response->redirect($app->urlFor('e'), 303);
@@ -239,6 +264,8 @@ if (!isset($_SESSION['email'])) {
     
 	$pref="cache/users/";
 	$p=$pref.$id;
+
+	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
 
     
     $sdk->path($p)

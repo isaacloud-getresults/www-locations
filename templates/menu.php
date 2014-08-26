@@ -14,4 +14,4 @@
   			</div>
 
 	
-			<div class="col-md-10" style="border-left-style:groove">	
+			<div class="col-md-10" >	

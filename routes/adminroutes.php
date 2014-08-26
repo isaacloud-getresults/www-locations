@@ -449,7 +449,7 @@ $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
 
 ///// Room : list of users in x room, feed ///////////////////////////////////
 
-$app->get('/admin/room:id', @function($id) use ($app,$sdk, $cr){
+$app->get('/admin/room:id', @function($id) use ($app,$sdk, $cr,$isaaConf){
 
 
       if (!isset($_SESSION['email'])) {
@@ -457,12 +457,15 @@ $app->get('/admin/room:id', @function($id) use ($app,$sdk, $cr){
         }
 
 /***** types of notification ***********/
+
+$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
   		$sdk->path("admin/notifications/types")
 			->withQueryParameters(array("limit" =>0,"fields" => array("name","createdAt","updatedAt", "action")));
         $res9 = $sdk->api("admin/notifications/types", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
 
 /***** users ****************************/
+$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
    		$sdk->path("cache/users")
         	->withQuery(array("counterValues.counter" =>$cr ))
           	->withOrder (array("leaderboards.1.position"=>"ASC" ))
@@ -475,9 +478,11 @@ $app->get('/admin/room:id', @function($id) use ($app,$sdk, $cr){
   
          $pref="cache/users/groups/"; 
          $p=$pref.$id; // id for restaurant
+         
+         $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
 
 		 $sdk->path($p)
-			->withQueryParameters(array("fields" => array("name")));
+			->withQueryParameters(array("fields" => array("name,label")));
 
          $res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
@@ -504,13 +509,17 @@ $app->get('/admin/room:id', @function($id) use ($app,$sdk, $cr){
  ////////////////////////////
 
          if(isset($room)){		
-/****** all users *******************/   	
+/****** all users *******************/  
+
+$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  	
   		$sdk->path("cache/users")
              ->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName", "counterValues")));   	
     	
          $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
 
 /********* notifications ************/
+
+$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
     	 $sdk->path("queues/notifications")
             ->withQuery(array("typeId" =>$room))
             ->withOrder(array("updatedAt"=>"DESC"))
@@ -758,6 +767,8 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
 	$pre="admin/conditions/";
   	$p=$pre.$c['id'];  
   	
+  	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
+  	
   	$sdk->path($p);  	
 			  	
  	$res2 = $sdk->api($p, "put", $sdk->getParameters(),  $sdk->getQueryParameters() ,  array('rightSide' =>  $c['beacon'])  ); 
@@ -845,7 +856,7 @@ else{
 
 
 
-$app->get('/admin/global', function () use ($app, $sdk) {
+$app->get('/admin/global', function () use ($app, $sdk,$isaaConf) {
 
          if (!isset($_SESSION['email'])) {
              $app->response->redirect($app->urlFor('e'), 303);
@@ -857,6 +868,8 @@ $app->get('/admin/global', function () use ($app, $sdk) {
   		
   		
   		 //get statistics
+  		 
+  		 $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
   	
   			$sdk->path("cache/users")
 				->withQueryParameters(array("limit" => 0,"fields" => array("firstName","lastName","leaderboards","email", "gainedAchievements", "counterValues", "wonGames")));
@@ -864,7 +877,7 @@ $app->get('/admin/global', function () use ($app, $sdk) {
 
             $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
-
+$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
 		
 	      $sdk->path("cache/users/groups")
 	    	->withOrder(array("segments"=>"ASC"))
@@ -877,11 +890,15 @@ $app->get('/admin/global', function () use ($app, $sdk) {
   		  $app->render('midd2.php');
         
         //select from isaacloud 
+            	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
+            	
             	
   	      $sdk->path("cache/users")
   			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName")));   	
     	
           $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
+
+$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
 
           $sdk->path("queues/notifications")
               ->withQuery(array("typeId" =>1 ))

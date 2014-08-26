@@ -798,7 +798,7 @@ $app->post('/admin/calendar', function () use ($app, $sdk) {
     $app->render('menu.php');
 
 // ad base64
- if(empty($_POST['calendar']))
+ if(empty($_POST['calendar1']) || empty($_POST['calendar2']))
  	echo "Enter base64 to your google calendar";
 else{
 	$m = new MongoClient(); 
@@ -815,8 +815,7 @@ else{
  	 $c_base=$_POST['calendar1'].":".$_POST['calendar2'];        
  	$cursor['calendar'] =  base64_encode($c_base);
      
- 	                
- 	$cursor['calendar'] = $_POST['calendar'];
+
  	$collection->save($cursor);
  	echo "Success";
     }

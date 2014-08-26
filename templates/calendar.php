@@ -14,6 +14,7 @@ $m = new MongoClient();
 	{     	
  	                
  	$cal=$cursor['calendar'] ;
+
  
     }
 
@@ -21,6 +22,8 @@ $m = new MongoClient();
 <script>
 function validateForm() {
 	var cal="<?=$cal?>";
+
+	
     var z = document.forms["myForm"]["calendar1"].value;
     var y = document.forms["myForm"]["calendar2"].value;
     var stg = z+":"+y;
@@ -28,13 +31,13 @@ function validateForm() {
 
     if (z == null || z== "" || y == null || y == "" ) {
   
-        alert("Base64 must be filled out");
+        alert("All fields must be filled out");
         return false;
        
     	}
-    if(!(z == null || z== "" || y == null || y == "" ) && x != cal && cal != null ){
+    if(!(z == null || z== "" || y == null || y == "" ) && x != cal && cal  ){
    
-    	if (confirm("Base64 for your eamil is already exist. Are you sure you want to continue?")){
+    	if (confirm("Base64 for your email already exists. Are you sure you want to continue?")){
     		return true;
  		 		}
  		 	else{
@@ -43,7 +46,7 @@ function validateForm() {
  		}
  	if(!(z == null || z== "" || y == null || y == "" ) && x == cal ){
   
-        alert("The same base64's already exist");
+        alert("Base64 already exists in database");
         return false;
        
     }

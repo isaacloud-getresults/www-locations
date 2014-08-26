@@ -1,6 +1,6 @@
 <?php
 
-$cal=0;
+$cal = null;
 
 $m = new MongoClient(); 
     $db = $m->isaa;
@@ -32,7 +32,7 @@ function validateForm() {
         return false;
        
     	}
-    if(!(z == null || z== "" || y == null || y == "" ) && x != cal ){
+    if(!(z == null || z== "" || y == null || y == "" ) && x != cal && cal != null ){
    
     	if (confirm("Base64 for your eamil is already exist. Are you sure you want to continue?")){
     		return true;

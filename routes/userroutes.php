@@ -1,6 +1,8 @@
 <?php
 
 
+
+
 /**************************** user routes **********************************************/
 
 
@@ -16,7 +18,7 @@ $app->get('/dashboard', function () use ($app,$sdk) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
         
-/******************* logged-in user's data (session variables) **************************/
+
 
 	$a=$_SESSION["email"];
 	$sdk->path("cache/users")
@@ -40,7 +42,7 @@ $app->get('/dashboard', function () use ($app,$sdk) {
 /***************************************************************************************/  
         
         
-           //sprawdzenie czy w danej instancji jest taki user
+           // user doesn't exist in current instance
         if (!isset($_SESSION["id"])) {
                  $app->response->redirect($app->urlFor('ue'), 303); 
              } 
@@ -109,7 +111,7 @@ $app->get('/details', @function () use ($app,$sdk) {
      
     
 
-/////////////////// notyfikacje
+/////////////////// notifications
 
  	 $sdk->path("queues/notifications")
             ->withQuery(array("subjectId" =>$myid, "typeId" => 1,))
@@ -252,11 +254,6 @@ if (!isset($_SESSION['email'])) {
     	
     	
 })->name("ui");
-
-
-
-
-
 
 
 

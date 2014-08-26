@@ -130,13 +130,13 @@ $app->get('/user', function () use ($app,$sdk,$authUrl1,$authUrl2,$jest) {
 
  					         if  ($ok)        
      							{     
-   								  $app->response->redirect($app->urlFor('d'), 303);        // jesli jest to dashboard
+   								  $app->response->redirect($app->urlFor('d'), 303);       
     						    }
  							else 
  						     	{  
      							  $app->response->redirect($app->urlFor('ue'), 303);  
        
-    							 }    // jesli nie to error    
+    							 }     
      
      
       }
@@ -149,7 +149,7 @@ $app->get('/user', function () use ($app,$sdk,$authUrl1,$authUrl2,$jest) {
 
 
 
-////////////////////////////////  error   /////////////////////////////////////////////
+////////////////////////////////  error (access denied)  /////////////////////////////////////////////
 
 
 $app->get('/error', function () use ($app) {
@@ -217,6 +217,7 @@ $app->get('/users', function () use ($app) {
 })->name("u");
 
 
+//////////////// update config file for mobile apps /////////////////////////////////////////////////////////////////
 
 $app->get('/mconfig', function () use ($app) {
 

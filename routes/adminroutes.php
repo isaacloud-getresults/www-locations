@@ -323,9 +323,9 @@ $app->get('/admin/mobile', function () use ($app) {
       
     $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
       
-           //get Object id of IsaaCloud instance, generate url for QR code
-    $profileqr= $cursor["domain"];
    
+    $profileqr= $cursor["domain"];
+
         
         
     $app->render('header3.php');
@@ -416,7 +416,7 @@ $app->get('/admin/www', function () use ($app,$sdk) {
       
     $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
       
-    $qrurl = $cursor["_id"];         //get Object id of IsaaCloud instance, generate url for QR code
+    $qrurl = $cursor["_id"];        
     $profileqr= $cursor["domain"];
 
 
@@ -454,9 +454,9 @@ $app->get('/admin/room:id', @function($id) use ($app,$sdk, $cr){
         }
 
 /***** types of notification ***********/
-  		$sdk->path("admin/notifications/types");
-
-        $res9 = $sdk->api("admin/notifications/types", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+  		$sdk->path("admin/notifications/types")
+			->withQueryParameters(array("limit" =>0,"fields" => array("name","createdAt","updatedAt", "action")));
+        $res9 = $sdk->api("admin/notifications/types", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
 
 /***** users ****************************/

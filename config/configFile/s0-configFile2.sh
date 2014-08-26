@@ -867,7 +867,11 @@ _BODY='{ "action": "CUSTOM",
 NOTIFICATION_TYPE_ID=`IC_POST /admin/notifications/types "$_BODY" ".id"`
 
 _BODY='{ "action": "REST", 
-		 "config": {"url":"http://www.getresults.isaacloud.com:8080/meetingNotification"}, 
+		 "config": {
+"headers": {
+        				"Content-Type": "application/json"
+    			},
+"url":"http://3168991440:8080/meetingNotification"}, 
 		 "name": "calendar_notification", 
 		 "priority": "PRIORITY_MEDIUM" }'
 NOTIFICATION_TYPE_ID=`IC_POST /admin/notifications/types "$_BODY" ".id"`
@@ -1577,7 +1581,10 @@ _BODY='{ "data": {
 NOTIFICATION_ID=`IC_POST /admin/notifications "$_BODY" ".id"`
 
 _BODY='{ "data": { 
-				"body":{"data":"{email}"}
+		"body":{"data":"{email}",
+"isaaBase64": "'$1'",
+"calendarBase64": "MzM4OTY4Mzg3NjA4LTU3NW1nbjhjZWpxNXJobTFtajAzNTNuZTJuYWE1cHIxLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tOmF1SU5XbFhGYVpSRlUzWFRXOGtTMnk1bQ=="
+}
 			}, 
 		 "notificationType": '"9"' }'
 NOTIFICATION_ID=`IC_POST /admin/notifications "$_BODY" ".id"`

@@ -767,7 +767,7 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
 	$pre="admin/conditions/";
   	$p=$pre.$c['id'];  
   	
-  	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
+ 
   	
   	$sdk->path($p);  	
 			  	
@@ -790,7 +790,7 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
 
 $app->get('/admin/calendar', function () use ($app, $sdk) {
 
-    if (!isset($_SESSION['token'])) 
+    if (!isset($_SESSION['email'])) 
        {
         $app->response->redirect($app->urlFor('e'), 303);
        }
@@ -808,7 +808,7 @@ $app->get('/admin/calendar', function () use ($app, $sdk) {
 
 $app->post('/admin/calendar', function () use ($app, $sdk) {
 
-    if (!isset($_SESSION['token'])) 
+    if (!isset($_SESSION['email'])) 
        {
         $app->response->redirect($app->urlFor('e'), 303);
        }

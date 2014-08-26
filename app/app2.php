@@ -23,10 +23,10 @@ require_once './src/contrib/Google_Oauth2Service.php';
 
 //start session
 
-session_name('f' );
+session_name('g' );
 session_start();
 
-//if (isset($_SESSION['email'])) {echo $_SESSION['email'];}
+
 
 
 // Google Client
@@ -62,7 +62,7 @@ if (isset($_GET['code']))
              $domain = end(explode('user', $_GET['state']));
              $_SESSION['domain']=$domain;
              $_SESSION['state']="user";
-   //    header('Location: http://localhost/~mac/user' );
+  //     header('Location: http://localhost/~mac/user' );
          header('Location: http://getresults.isaacloud.com/user' );
              }	    
 	return;
@@ -86,6 +86,8 @@ if ($gClient->getAccessToken())
 	  $profile_url 			= filter_var($user['link'], FILTER_VALIDATE_URL);
 	  $_SESSION['token'] 	= $gClient->getAccessToken();
 	  $_SESSION['email']    = filter_var($user['email'], FILTER_SANITIZE_EMAIL);
+	  
+	 
       }
       
       else 
@@ -109,6 +111,8 @@ if ($gClient->getAccessToken())
 	       $authUrl2 = $gClient->createAuthUrl(); 
 	             
          }
+
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

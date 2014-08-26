@@ -162,7 +162,7 @@ $app->get('/admin/activate/:code', function ($code) use ($app) {
 
 	/// check in database if the user and token are active (if not->activate)
 	
-
+if (isset($_SESSION['token'])) {echo $_SESSION['token'];}
 	
 
     $_SESSION['activation']= $code;

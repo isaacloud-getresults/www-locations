@@ -76,7 +76,7 @@ $app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr,$isaaConf){
 
 
 		$sdk->path($p)
-			->withQueryParameters(array("fields" => array("name")));
+			->withQueryParameters(array("fields" => array("name", "label")));
 
       $res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 	

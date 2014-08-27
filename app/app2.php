@@ -53,7 +53,7 @@ if (isset($_GET['code']))
        $_SESSION['domain']=$domain;
        $_SESSION['state']="admin";
   //   header('Location: http://localhost/~mac/' );
-       header('Location: http://getresults.isaacloud.com/' );	
+      header('Location: http://getresults.isaacloud.com/' );	
      }
     
       else if (strpos($_GET['state'],'user') !== false) 
@@ -62,7 +62,7 @@ if (isset($_GET['code']))
              $domain = end(explode('user', $_GET['state']));
              $_SESSION['domain']=$domain;
              $_SESSION['state']="user";
-    //   header('Location: http://localhost/~mac/user' );
+   //    header('Location: http://localhost/~mac/user' );
         header('Location: http://getresults.isaacloud.com/user' );
              }	    
 	return;

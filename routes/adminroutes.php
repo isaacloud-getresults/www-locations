@@ -163,6 +163,8 @@ $app->get('/admin/activate/:code', function ($code) use ($app) {
 	/// check in database if the user and token are active (if not->activate)
 	
 
+	// tu tez spr tokena ale co jesli go nie ma????
+	
 	
 
     $_SESSION['activation']= $code;
@@ -184,7 +186,7 @@ $app->get('/admin/activate/:code', function ($code) use ($app) {
  				$cursor["activation"] = true;
  				$collection->save($cursor);
  				
-  			    $app->render('activate.php'); 
+  			    $app->render('activate.php', array('domain' => $cursor['domain'])); 
  
  	      		}	      		
  	      		

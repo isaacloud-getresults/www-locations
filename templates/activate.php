@@ -13,10 +13,10 @@
          <script src="js/bootstrap.min.js"></script>
        
        
-       <link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
-  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
-  <link rel="stylesheet" href="/resources/demos/style.css">  
+       <link rel="stylesheet" href="../css/jquery-ui.css">
+  <script src="../js/jquery-1.10.2.js"></script>
+  <script src="../js/jquery-ui.js"></script>
+ 
        
        
  <script>
@@ -84,7 +84,7 @@ function updateProgress() {
    		
    		<div class="container" id="act1">
    			<center>
-   			<h4>Domain: <?php echo $_SERVER['SERVER_NAME']; ?> </h4></br>
+   			<h4>Domain: <?php echo $domain.".getresults.isaacloud.com"; ?> </h4></br>
    			
    			
 1. Go to <a href="https://isaacloud.com/sign-up/"  target="_blank">isaacloud.com/sign-up/</a></br>

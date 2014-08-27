@@ -23,7 +23,7 @@ require_once './src/contrib/Google_Oauth2Service.php';
 
 //start session
 
-session_name('j');
+session_name('k');
 session_start();
 
 
@@ -52,7 +52,7 @@ if (isset($_GET['code']))
        $domain = end(explode('admin', $_GET['state']));
        $_SESSION['domain']=$domain;
        $_SESSION['state']="admin";
- //   header('Location: http://localhost/~mac/' );
+   // header('Location: http://localhost/~mac/' );
       header('Location: http://getresults.isaacloud.com/' );	
      }
     
@@ -120,7 +120,7 @@ if ($gClient->getAccessToken())
 
 //Configuration for running slim framework
 $config = array(
-    'debug' => true,
+    'debug' => false,
     
     'templates.path' => TEMPLATES_PATH
 );

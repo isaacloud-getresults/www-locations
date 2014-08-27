@@ -52,7 +52,7 @@ $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
 
 $app->get('/admin/register', function () use ($app) {
     
-    if (!isset($_SESSION['email'])) 
+    if (!isset($_SESSION['token'])) 
     {
     $app->response->redirect($app->urlFor('e'), 303);
     }
@@ -100,7 +100,7 @@ $app->get('/admin/register', function () use ($app) {
 
 $app->post('/admin/register', function () use ($app) {
 
-     if (!isset($_SESSION['email'])) 
+     if (!isset($_SESSION['token'])) 
      {
      $app->response->redirect($app->urlFor('e'), 303);
      }
@@ -233,14 +233,14 @@ $app->get('/admin/ic', function () use ($app) {
     $cursor = $collection->findOne(array( 'token' => $_SESSION['activation'] ));
    
 
-    if(!isset($_SESSION['email']))   // token exists
+    if(!isset($_SESSION['token']))    //////////   w sumie to do usuniecia, jesli nie ma tokena to odeslac do logowania? hm
 	{     	
  	                
- 	$_SESSION['email']= $cursor['email'];    
+ 	//musi sie zalogowac
  
     }
 
- if(empty($cursor)) {  echo "nieprawidlowy token";}
+ if(empty($cursor)) {  echo "nieprawidlowy token";}     
 
 
  	 $app->render('shell.php');
@@ -254,7 +254,7 @@ $app->get('/admin/ic', function () use ($app) {
 $app->get('/admin/init', function () use ($app) {
 
 
-     if (isset($_SESSION['email']) )
+     if (isset($_SESSION['token']) )
                                 {             //checking if user exists in database   
 
    								  $m = new MongoClient(); 
@@ -313,7 +313,7 @@ $app->get('/admin/init', function () use ($app) {
 
 $app->get('/admin/mobile', function () use ($app) {
 
-	if (!isset($_SESSION['email'])) 
+	if (!isset($_SESSION['token'])) 
 	{
     $app->response->redirect($app->urlFor('e'), 303);
     }
@@ -346,7 +346,7 @@ $app->get('/admin/mobile', function () use ($app) {
 
 $app->post('/admin/mobile', function () use ($app) {
 
-	if (!isset($_SESSION['email'])) 
+	if (!isset($_SESSION['token'])) 
 	{
     $app->response->redirect($app->urlFor('e'), 303);
     }
@@ -407,7 +407,7 @@ $app->post('/admin/mobile', function () use ($app) {
 $app->get('/admin/www', function () use ($app,$sdk,$isaaConf) {
 
 
-     if (!isset($_SESSION['email'])) {
+     if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
@@ -452,7 +452,7 @@ $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
 $app->get('/admin/room:id', @function($id) use ($app,$sdk, $cr,$isaaConf){
 
 
-      if (!isset($_SESSION['email'])) {
+      if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
@@ -549,7 +549,7 @@ $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
 
 $app->get('/admin/setup', function () use ($app, $sdk,$isaaConf) {
 
-    if (!isset($_SESSION['email'])) 
+    if (!isset($_SESSION['token'])) 
        {
         $app->response->redirect($app->urlFor('e'), 303);
        }
@@ -592,7 +592,7 @@ $app->get('/admin/setup', function () use ($app, $sdk,$isaaConf) {
 
 $app->get('/admin/add', function () use ($app, $sdk) {
 
-    if (!isset($_SESSION['email'])) 
+    if (!isset($_SESSION['token'])) 
        {
         $app->response->redirect($app->urlFor('e'), 303);
        }
@@ -612,7 +612,7 @@ $app->get('/admin/add', function () use ($app, $sdk) {
 
 $app->post('/admin/add', function () use ($app, $sdk) {
 
-    if (!isset($_SESSION['email'])) 
+    if (!isset($_SESSION['token'])) 
        {
         $app->response->redirect($app->urlFor('e'), 303);
        }
@@ -686,7 +686,7 @@ $app->post('/admin/add', function () use ($app, $sdk) {
 
 $app->post('/admin/setup', function () use ($app, $sdk) {
  
-		if (!isset($_SESSION['email'])) {
+		if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
        
@@ -790,7 +790,7 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
 
 $app->get('/admin/calendar', function () use ($app, $sdk) {
 
-    if (!isset($_SESSION['email'])) 
+    if (!isset($_SESSION['token'])) 
        {
         $app->response->redirect($app->urlFor('e'), 303);
        }
@@ -808,7 +808,7 @@ $app->get('/admin/calendar', function () use ($app, $sdk) {
 
 $app->post('/admin/calendar', function () use ($app, $sdk) {
 
-    if (!isset($_SESSION['email'])) 
+    if (!isset($_SESSION['token'])) 
        {
         $app->response->redirect($app->urlFor('e'), 303);
        }
@@ -858,7 +858,7 @@ else{
 
 $app->get('/admin/global', function () use ($app, $sdk,$isaaConf) {
 
-         if (!isset($_SESSION['email'])) {
+         if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 

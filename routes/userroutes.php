@@ -14,7 +14,7 @@
 $app->get('/dashboard', function () use ($app,$sdk,$isaaConf) {
 
 
-  	if (!isset($_SESSION['email'])) {
+  	if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
         
@@ -97,7 +97,7 @@ $app->get('/dashboard', function () use ($app,$sdk,$isaaConf) {
 $app->get('/details', @function () use ($app,$sdk,$isaaConf) {
 
 
-	    if (!isset($_SESSION['email'])) {
+	    if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
@@ -151,7 +151,7 @@ $app->get('/details', @function () use ($app,$sdk,$isaaConf) {
 
 $app->get('/leaderboard', function () use ($app,$sdk,$isaaConf) {
 
-if (!isset($_SESSION['email'])) {
+if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
@@ -208,7 +208,7 @@ if (!isset($_SESSION['email'])) {
 $app->get('/room/:id', @function($id) use ($app,$sdk,$isaaConf){
 
 
-      if (!isset($_SESSION['email'])) {
+      if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
@@ -254,7 +254,7 @@ $app->get('/room/:id', @function($id) use ($app,$sdk,$isaaConf){
 
 $app->get('/users/:id', function($id) use ($app,$sdk,$isaaConf){
 
-if (!isset($_SESSION['email'])) {
+if (!isset($_SESSION['token'])) {
              $app->response->redirect($app->urlFor('e'), 303);
         }
 

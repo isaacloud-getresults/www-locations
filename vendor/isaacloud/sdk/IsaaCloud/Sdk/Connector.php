@@ -560,7 +560,7 @@ abstract class Connector
         // Check for some curl errors
         $error = curl_error($curl);
         if ($error) {
-            throw new Ex\ConnectorException("!!!!!!!!!     There are error(s) while invoking remote resource: {$method} {$url}, with error(s): $error", 3014);
+            throw new Ex\ConnectorException("There are error(s) while invoking remote resource: {$method} {$url}, with error(s): $error", 3014);
         }
 
         // Check that response is empty

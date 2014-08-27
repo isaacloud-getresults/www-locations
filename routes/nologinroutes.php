@@ -91,7 +91,7 @@ $app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr,$isaaConf){
   		
   		
   		if(strpos($res5['name'], 'eeting') == true)
-		$app->render('meetingroom.php', array('users' => $res4, 'roomid' => $res5));
+		$app->render('meetingroom.php', array('users' => $res4, 'roomid' => $res5, 'cursor' => $cursor));
 	    else
     	$app->render('admin_room.php', array('users' => $res4, 'roomid' => $res5)); 
     	$app->render('midd2.php');

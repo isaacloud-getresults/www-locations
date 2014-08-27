@@ -6,13 +6,7 @@ include ("./funkcje/meeting.php"); //include class Meeting
 
 /************* get data base64 and google calendar's base64 from mongo **/
 
- $m = new MongoClient(); 
-    $db = $m->isaa;
-    $collection = $db->users;
-
-
-    $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
-   
+ 
 
     if(!empty($cursor))   
 	{     	

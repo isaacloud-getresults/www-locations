@@ -404,6 +404,17 @@ $app->get('/admin/room:id', @function($id) use ($app,$sdk, $cr,$isaaConf){
              $app->response->redirect($app->urlFor('e'), 303);
         }
 
+
+$m = new MongoClient(); 
+      $db = $m->isaa;
+      $collection = $db->users;
+   
+        $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
+
+
+
+
+
 /***** types of notification ***********/
 
         $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
@@ -450,7 +461,7 @@ $app->get('/admin/room:id', @function($id) use ($app,$sdk, $cr,$isaaConf){
 		$app->render('column.php');
 		
 	if(strpos($res5['name'], 'eeting') == true)
-		$app->render('meetingroom.php', array('users' => $res4, 'roomid' => $res5));
+		$app->render('meetingroom.php', array('users' => $res4, 'roomid' => $res5, 'cursor' => $cursor));
 	else
     	$app->render('admin_room.php', array('users' => $res4, 'roomid' => $res5)); 
     	$app->render('midd2.php');

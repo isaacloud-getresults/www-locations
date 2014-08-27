@@ -166,6 +166,9 @@ $app->get('/admin/activate/:code', function ($code) use ($app) {
 	// tu tez spr tokena ale co jesli go nie ma????
 	
 	
+	
+	
+	
 
     $_SESSION['activation']= $code;
 

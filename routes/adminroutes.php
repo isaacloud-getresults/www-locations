@@ -4,8 +4,8 @@
 /****************************  admin routes  ******************************************/
 
 
-
 //////////////////////////// admin dashboard : menu, statistics ////////////////////////
+
 
 $app->get('/admin/dashboard', function () use ($app,$sdk,$isaaConf) {
 
@@ -17,29 +17,22 @@ $app->get('/admin/dashboard', function () use ($app,$sdk,$isaaConf) {
 	$app->render('header3.php');
 	$app->render('menu.php');
 	
-	
-	
-	
 	//get statistics 
 	
 	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
 	
 	$sdk->path("cache/users")
 				->withQueryParameters(array("limit" => 0,"fields" => array("firstName","lastName","leaderboards","email", "gainedAchievements", "counterValues", "wonGames")));
-  
- 
     
     $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
     
-$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
+    $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
 
 	$sdk->path("cache/users/groups")
 		->withOrder(array("segments"=>"ASC"))
 		->withQueryParameters(array("limit" => 0, "offset" =>1, "fields" => array("label", "counterValues")));
 
 	$resA = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
-
-
 
     $app->render('admindashboard.php', array('res1' => $res1, 'resA' => $resA) );
 	$app->render('footer.php');
@@ -57,40 +50,26 @@ $app->get('/admin/register', function () use ($app) {
     $app->response->redirect($app->urlFor('e'), 303);
     }
 
-
     $sub=false;   // subdomain doesn't exist
 
-
-	$token= md5($_SESSION['email'].time());        // generate registration token            
+	$token= md5($_SESSION['email'].time());        // generate activation token            
 	$_SESSION['activation']= $token;
 	
-	
-	
-	  $m = new MongoClient(); 
+	$m = new MongoClient(); 
     $db = $m->isaa;
     $collection = $db->users;
 	
 	
-	      $cursor2 = $collection->findOne(array( 'email' => $_SESSION['email']));       
-         if (empty($cursor2))
-       
-       
-       {
-    
-      
-            $set=false;
-         }
-         
+	$cursor2 = $collection->findOne(array( 'email' => $_SESSION['email']));       
+    if (empty($cursor2))
+             {
+              $set=false;
+             }
          else
-         
-         { 
-          $set=true;
-         }         
+             { 
+              $set=true;
+             }         
         
-	
-	
-	
-
 	$app->render('register.php', array('sub' => $sub,'set' => $set));  
  
 })->name("ar");
@@ -117,11 +96,11 @@ $app->post('/admin/register', function () use ($app) {
     
 
     if (empty($cursor)) 
-    {
-        $sub=false;
+           {
+            $sub=false;
        
        
-         $user=array(
+            $user=array(
                 "email" =>  $_SESSION['email'],
                 "token" =>  $_SESSION['activation'],
 			    "base64" =>  null,
@@ -138,19 +117,16 @@ $app->post('/admin/register', function () use ($app) {
               
             $collection->insert($user);  
        
-        $app->render('checkemail.php');          
+            $app->render('checkemail.php');          
         
-
-     }
-    else
+            }
+         else
     
-       {   
-         $sub=true;
-         $set=false;
-         $app->render('register.php', array('sub' => $sub, 'set' => $set));   
-       }
-
-
+               {   
+                $sub=true;
+                $set=false;
+                $app->render('register.php', array('sub' => $sub, 'set' => $set));   
+               }
 
 
 })->name("sar");
@@ -160,14 +136,6 @@ $app->post('/admin/register', function () use ($app) {
 
 $app->get('/admin/activate/:code', function ($code) use ($app) {
 
-	/// check in database if the user and token are active (if not->activate)
-	
-
-	// tu tez spr tokena ale co jesli go nie ma????
-	
-	
-	
-	
 	
 
     $_SESSION['activation']= $code;
@@ -209,17 +177,10 @@ $app->get('/admin/activate/:code', function ($code) use ($app) {
 
 $app->post('/admin/activate/activate', function () use ($app) {
 
-
 	$_SESSION['base64']= $_POST['base64'];
 
-
+ 	$app->response->redirect($app->urlFor('ic'), 303); 
  	   
- 	   $app->response->redirect($app->urlFor('ic'), 303); 
- 	   
- 	      		
-	
-
- 
 
 })->name("scct");
 
@@ -230,25 +191,16 @@ $app->post('/admin/activate/activate', function () use ($app) {
 $app->get('/admin/ic', function () use ($app) {
 
 
-   $m = new MongoClient(); 
+    $m = new MongoClient(); 
     $db = $m->isaa;
     $collection = $db->users;
 
-
     $cursor = $collection->findOne(array( 'token' => $_SESSION['activation'] ));
    
+    if(empty($cursor)) {  echo "Incorrect token";}     
 
-    if(!isset($_SESSION['token']))    //////////   w sumie to do usuniecia, jesli nie ma tokena to odeslac do logowania? hm
-	{     	
- 	                
- 	//musi sie zalogowac
- 
-    }
-
- if(empty($cursor)) {  echo "nieprawidlowy token";}     
-
-
- 	 $app->render('shell.php');
+ 	$app->render('shell.php');
+ 	
 
 })->name("ic");
 
@@ -331,10 +283,7 @@ $app->get('/admin/mobile', function () use ($app) {
       
     $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
       
-   
     $profileqr= $cursor["domain"];
-
-        
         
     $app->render('header3.php');
 	$app->render('menu.php');
@@ -362,35 +311,33 @@ $app->post('/admin/mobile', function () use ($app) {
     $collection = $db->users;
     
       
-        $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
+    $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
    
 
     if(!empty($cursor))   
 	{     	
- 	$profileqr= $cursor["domain"];      
+ 	       $profileqr= $cursor["domain"];      
  	
  	
  		   if (!empty($_POST['iosid']) )     
- 	{$cursor["iosid"] = $_POST["iosid"];
- 	$collection->save($cursor);
- 	}
+ 	             {
+ 	             $cursor["iosid"] = $_POST["iosid"];
+ 	             $collection->save($cursor);
+ 	             }
  	
- 	   if (!empty($_POST['iosbase64']) )     
- 	{$cursor["iosbase64"] = $_POST["iosbase64"];
- 	$collection->save($cursor);
- 	}
+ 	       if (!empty($_POST['iosbase64']) )     
+ 	             {
+ 	             $cursor["iosbase64"] = $_POST["iosbase64"];
+ 	             $collection->save($cursor);
+ 	             }
  	
-     if (!empty($_POST['androidbase64'] )) 
- 	{$cursor["androidbase64"] = $_POST["androidbase64"];
- 	$collection->save($cursor);
- 	}
+           if (!empty($_POST['androidbase64'] )) 
+ 	             {
+                 $cursor["androidbase64"] = $_POST["androidbase64"];
+ 	             $collection->save($cursor);
+ 	             }
  	
- 	
- 	
- 	
-    }
-   
-        
+    }    
         
     $app->render('header3.php');
 	$app->render('menu.php');
@@ -399,10 +346,6 @@ $app->post('/admin/mobile', function () use ($app) {
         
 
 })->name("mop");
-
-
-
-
 
 
 
@@ -427,7 +370,7 @@ $app->get('/admin/www', function () use ($app,$sdk,$isaaConf) {
     $qrurl = $cursor["_id"];        
     $profileqr= $cursor["domain"];
 
-$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
+    $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
 
   	$sdk->path("cache/users/groups")
     			->withOrder(array("id"=>"ASC"))
@@ -463,14 +406,14 @@ $app->get('/admin/room:id', @function($id) use ($app,$sdk, $cr,$isaaConf){
 
 /***** types of notification ***********/
 
-$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+        $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
   		$sdk->path("admin/notifications/types")
 			->withQueryParameters(array("limit" =>0,"fields" => array("name","createdAt","updatedAt", "action")));
         $res9 = $sdk->api("admin/notifications/types", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
 
 /***** users ****************************/
-$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+        $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
    		$sdk->path("cache/users")
         	->withQuery(array("counterValues.counter" =>$cr ))
           	->withOrder (array("leaderboards.1.position"=>"ASC" ))
@@ -507,9 +450,9 @@ $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
 		$app->render('column.php');
 		
 	if(strpos($res5['name'], 'eeting') == true)
-		$app->render('meetingroom.php', array('users' => $res4, 'roomid' => $res5)); //<- list of users (to do)
+		$app->render('meetingroom.php', array('users' => $res4, 'roomid' => $res5));
 	else
-    	$app->render('admin_room.php', array('users' => $res4, 'roomid' => $res5)); //<- list of users (to do)
+    	$app->render('admin_room.php', array('users' => $res4, 'roomid' => $res5)); 
     	$app->render('midd2.php');
  ////////////////////////////
 
@@ -532,10 +475,10 @@ $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
 
          $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
 
-  		$app->render('admin_room2.php', array('data' => $res, 'person' => $res1)); //feed (to do)
+  		$app->render('admin_room2.php', array('data' => $res, 'person' => $res1)); 
             }
             else
-	       echo "<center>"."There's no notification for selected room"."</center>";		
+	       echo "<center>"."There are no notifications for selected room"."</center>";		
     	
 })->name("aroom");
 
@@ -634,7 +577,7 @@ $app->post('/admin/add', function () use ($app, $sdk) {
 		
 			foreach ($_SESSION['dane'] as $d):
 				if($new_room==$d['name']){
-					echo "Location's already exists!<br>";
+					echo "Location already exists!<br>";
 					echo "<h4>List of all locations:</h4>";
 					foreach ($_SESSION['dane'] as $d):
 						if($new_room==$d['name'])
@@ -675,7 +618,7 @@ $app->post('/admin/add', function () use ($app, $sdk) {
 			}
 		}
 		else
-			echo "Nie podano danych";
+			echo "No data given";
 	
 	
 	/************************************/
@@ -912,7 +855,7 @@ $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
 
         $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
     	
-    	$app->render('global2.php', array('data' => $res, 'person' => $res1));// global feed ->to do
+    	$app->render('global2.php', array('data' => $res, 'person' => $res1));
         		
 
 })->name("gl");

@@ -6,7 +6,7 @@
 	
 		public function ago($ptime){
 				
-    			$etime = time() - ($ptime - 950);
+    			$etime = time() - ($ptime);
 
    				 if ($etime < 1){
        				 return '0 seconds';

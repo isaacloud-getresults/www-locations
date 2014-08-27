@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="SoInteractive">
-     	<!-- <meta http-equiv="refresh" content="10" /> -->
+     	<meta http-equiv="refresh" content="4" /> 
         <title>Get Results </title>
 
         <link href="../css/bootstrap.min.css" rel="stylesheet">

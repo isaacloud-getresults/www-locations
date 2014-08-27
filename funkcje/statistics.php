@@ -12,13 +12,17 @@
  			$achievements = 0;
   			$arr= array();
   			
-			for ($i=0;$i<sizeof($res1);$i++){
-				if (!empty($res1[$i]['leaderboards'][1]['score']))
-					$points=$points+ $res1[$i]['leaderboards'][1]['score'];
-				$achievements=$achievements+ sizeof($res1[$i]['gainedAchievements']);
+			foreach ($res1 as $res):
+				if (!empty($res['leaderboards'])){
+						foreach($res['leaderboards'] as $leadb):
+						if (!empty($leadb['score'])){
+							$points=$points+ $leadb['score'];
+							}
+						endforeach;
+					}
+				$achievements=$achievements+ sizeof($res['gainedAchievements']);
 			
-
-				}
+			endforeach;
 			$arr['points']=$points;
 			$arr['achievements']=$achievements;
 		

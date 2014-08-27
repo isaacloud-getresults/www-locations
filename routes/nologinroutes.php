@@ -88,17 +88,12 @@ $app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr,$isaaConf){
  	
   		$app->render('column.php');
   		
+  		
+  		
   		if(strpos($res5['name'], 'eeting') == true)
 		$app->render('meetingroom.php', array('users' => $res4, 'roomid' => $res5));
-	else
+	    else
     	$app->render('admin_room.php', array('users' => $res4, 'roomid' => $res5)); 
-    	$app->render('midd2.php');
-  		
-  		
-  		
-  		
-  		
-    	$app->render('admin_room.php', array('users' => $res4, 'roomid' => $res5)); //<- list of users (to do)
     	$app->render('midd2.php');
 
 ////////////////////////////

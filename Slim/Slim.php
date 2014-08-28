@@ -1407,6 +1407,6 @@ class Slim
     protected function defaultError($e)
     {
         $this->getLog()->error($e);
-        echo self::generateTemplateMarkup('Error', '<p>An error has occurred. Please try refreshing the page.</p>');
+              echo self::generateTemplateMarkup('Error', '<p>A website error has occurred. The website administrator has been notified of the issue. Sorry for the temporary inconvenience.</p>');
     }
 }

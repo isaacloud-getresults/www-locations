@@ -109,6 +109,11 @@ $app->post('/admin/admin/setup', function () use ($app) {
 });
 
 
+$app->get('/admin/admin/exec', function () use ($app) {
+    $app->response->redirect($app->urlFor('exec'), 303); 
+});
+
+
 $app->get('/admin/admin/setup', function () use ($app) {
     $app->response->redirect($app->urlFor('se'), 303); 
 });

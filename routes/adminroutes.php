@@ -22,6 +22,7 @@ $app->get('/admin/dashboard', function () use ($app,$sdk,$isaaConf) {
 	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
 	
 	$sdk->path("cache/users")
+	            ->withOrder (array("leaderboards.position"=>"ASC"))
 				->withQueryParameters(array("limit" => 0,"fields" => array("firstName","lastName","leaderboards","email", "gainedAchievements", "counterValues", "wonGames")));
     
     $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
@@ -515,6 +516,90 @@ $app->get('/admin/setup', function () use ($app, $sdk,$isaaConf) {
         
     $app->render('header3.php');
     $app->render('menu.php');
+    
+    //////////////////////////////////////////////////////////////////////////////////////        
+        //get conditions
+      $sdk->path("admin/conditions")
+   				 		->withQuery(array("leftSide" => "place"))
+   				 		->withQueryParameters(array("limit" => 0, "fields" => array("name","leftSide", "rightSide")));
+   				 		   
+				$resN = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters()  ); 
+   				 
+   				 
+   				// print_r($res);  
+        $i=0;
+        $cond= array();
+        $mm=array();
+    	$nr=array();
+        foreach ($resN as $r):
+        
+        	if(strpos($r['rightSide'], 'exit') == true &&  $r['rightSide'] !=0){
+        		$cond[$i]=$r['id'];
+        		$nr[$i]= explode(".exit", $r['rightSide']);
+        		$mm[$i]=$nr[$i][0];
+        		
+        		$i++;
+        		}
+        endforeach;
+        
+        
+        //get games
+        $sdk->path("cache/games")
+   				 	
+   				 		->withQueryParameters(array("limit" => 0, "fields" => array("segments","conditions")));
+   				 		   
+				$resN2 = $sdk->api("cache/games", "get", $sdk->getParameters(),  $sdk->getQueryParameters()  ); 
+        
+        //print_r($res2);
+         $i=0;
+        $segments= array();
+        foreach($resN2 as $game):
+        	foreach($game['conditions'] as $condition):
+        		foreach($cond as $c):
+        			if($c == $condition){
+        				$segments[$i]=$game['segments'][0];
+        				$i++;
+        				break;
+        				}
+        		endforeach;
+        	endforeach;
+        
+        endforeach;
+        
+     // print_r($segments); // segmenty
+      //get user groups
+           $sdk->path("cache/users/groups")
+   				 	
+   				 		->withQueryParameters(array("limit" => 0, "fields" => array("segments","label")));
+      
+       $resN3 = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters()  );
+      
+        $beacons= array();
+        $i=0;
+        $k=1;
+        foreach($resN3 as $group):
+        	foreach($group['segments'] as $sm):
+        		foreach($segments as $s):
+        			if($s==$sm){
+        			$beacons[$i]['location']=$group['label'];
+        			$beacons[$i]['beacon']="Beacon ".$k;
+        			$k++;
+        			$i++;
+        			break;
+        			}
+        		endforeach;
+        	endforeach;
+        endforeach;
+        
+
+        
+        if(isset($_SESSION["beacons"]))
+  			$_SESSION["beacons"]= array();
+  		$_SESSION["beacons"]=	$beacons;
+  			
+//////// //////////////////////////////////////////////////////////////////////////////
+    
+    
         
    $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
         
@@ -546,7 +631,7 @@ $app->get('/admin/setup', function () use ($app, $sdk,$isaaConf) {
 })->name("se");
 
 
-//////////////////// admin add :  (get) /////////////////////////
+//////////////////// admin setup :  beacon's location add  (get) /////////////////////////
 
 
 $app->get('/admin/add', function () use ($app, $sdk) {
@@ -555,6 +640,7 @@ $app->get('/admin/add', function () use ($app, $sdk) {
        {
         $app->response->redirect($app->urlFor('e'), 303);
        }
+      
         
     $app->render('header3.php');
     $app->render('menu.php');
@@ -562,11 +648,13 @@ $app->get('/admin/add', function () use ($app, $sdk) {
  	$app->render('add.php') ;
   	
   	$app->render('footer.php'); 
- 
+  	
+  	
+ 		 
 
 })->name("add");
 
-//////////////////// admin add :  (post) /////////////////////////
+//////////////////// admin setup :  beacon's location add (post)  /////////////////////////
 
 
 $app->post('/admin/add', function () use ($app, $sdk) {
@@ -586,31 +674,21 @@ $app->post('/admin/add', function () use ($app, $sdk) {
 		if($option=='add'){
 			$new_room=$_POST['newroom']; 
 		
-			foreach ($_SESSION['dane'] as $d):
-				if($new_room==$d['name']){
-					echo "Location already exists!<br>";
-					echo "<h4>List of all locations:</h4>";
-					foreach ($_SESSION['dane'] as $d):
-						if($new_room==$d['name'])
-							echo "<strong><font color=\"red\">- ".$d['name']."</font></strong><br>";
-						else
-							echo "- ".$d['name']."<br>";
-					endforeach;
-					break;}
-				else{
 				$new= strtolower($new_room);
 				$new=str_replace(" ","_","$new");
 				$command1= "sudo config/configFile/s1-createGroup.sh";
    				$command2=" ";
    				$command=$command1.$command2.$_SESSION['base64'].$command2."\"".$new_room."\"".$command2.$new;
-   				//echo $command;
-   				exec($command,$result,$exit);
-   				if ($exit ==0)
+   				echo $command;
+   				 if (exec($command)){
+   				 
+   		
+   				 
 					echo "Success!";
-					
-				break;}
-			endforeach;
-			}
+					break; }
+				
+			
+}
 		else{
 			$selected_room=$_POST['room'];
 			
@@ -619,7 +697,8 @@ $app->post('/admin/add', function () use ($app, $sdk) {
 		 	if($d['name']==$selected_room)
 		 		$del=$d['id_r'];
 		 endforeach;
-		 
+		 echo $selected_room;
+		 echo $del;
 		$pre="admin/users/groups/";
   		$p=$pre.$del;  
   	
@@ -629,7 +708,7 @@ $app->post('/admin/add', function () use ($app, $sdk) {
 			}
 		}
 		else
-			echo "No data given";
+			echo "Nie podano danych";
 	
 	
 	/************************************/
@@ -637,6 +716,81 @@ $app->post('/admin/add', function () use ($app, $sdk) {
  
 
 })->name("addd");
+
+
+
+///// admin ecex //
+
+$app->get('/admin/exec', function () use ($app, $sdk) {
+
+
+     if (!isset($_SESSION['token'])) {
+             $app->response->redirect($app->urlFor('e'), 303);
+        }
+
+
+
+
+if (isset($_GET['location'])){
+	echo $_GET['location'];
+	$room=$_GET['location'];
+	}
+
+$i=0;
+$b_del= array();
+ foreach ($_SESSION['dane'] as $r):
+ 
+ 	if($r['name'] == $room){
+ 		foreach($r['segments'] as $condition):
+ 			$b_del[$i]=$condition['condition'];
+ 			$i++;
+ 		
+ 		endforeach;
+ 		break;
+ 		}
+ 
+ endforeach;
+
+
+
+  foreach ($b_del as $c):
+
+	$pre="admin/conditions/";
+  	$p=$pre.$c;  
+  	echo "$p";
+  	$sdk->path($p);  	
+			  	
+ 	$res2 = $sdk->api($p, "put", $sdk->getParameters(),  $sdk->getQueryParameters() ,  array('rightSide'=> "0" )  ); 
+  	
+  endforeach;
+
+
+$beacons=$_SESSION['beacons'];
+
+
+foreach ($beacons as $key => $value) { 
+
+    if ($value["location"] == $room) { unset($beacons[$key]); }
+
+}
+$new = array();
+$i=0;
+foreach($beacons as $b):
+
+	$new[$i]=$b;
+	$i++;
+endforeach;
+
+ $_SESSION['beacons']= $new;
+ 
+ if($_GET['w'] == "1")
+    $app->response->redirect($app->urlFor('add'), 303);
+else
+	$app->response->redirect($app->urlFor('se'), 303);
+        
+
+})->name("exec");
+
 
 
 //////////////////// admin setup (post)  /////////////////////////

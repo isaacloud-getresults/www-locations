@@ -1,9 +1,4 @@
 
-  <link rel="stylesheet" href="../css/jquery-ui.css">
-  <script src="../js/jquery-1.10.2.js"></script>
-  <script src="../js/jquery-ui.js"></script>
-
-
 	<script type="text/javascript">
 			function disable(){
 				if(document.getElementById('nazwa').options[document.getElementById('nazwa').selectedIndex].value =='add')
@@ -11,66 +6,76 @@
 				document.getElementById('text2').disabled=false;}
 				if(document.getElementById('nazwa').options[document.getElementById('nazwa').selectedIndex].value =='delete') 
 				{document.getElementById('text1').disabled=false;
+				document.getElementById('text2').value=null;
 				document.getElementById('text2').disabled=true;}
 			
 			}
 			
+			function delete_element(clicked_id){
 			
-			
-			
-		function showPleaseWait() {
-			var butt = document.getElementById("msgDiv");
-			butt.innerHTML="Please wait while your location is being configured. It may take a while.";
-			 document.getElementById('progressbar').style.display = "";
-		 return true;
-		}
-  
-  
-  $(function() {
-$("#progressbar").progressbar({ value: 0 });
-setTimeout(updateProgress, 1000);
-});
 
-function updateProgress() {
-  var progress;
-  progress = $("#progressbar")
-    .progressbar("option","value");
-  if (progress < 100) {
-      $("#progressbar")
-        .progressbar("option", "value", progress + 1);
-      setTimeout(updateProgress, 1000);
-  }
-}
-
-
-
+				var beac=<?php echo json_encode($_SESSION['beacons']); ?>;
+				var i=0;
+				var loc=0;
+					for (i; i < beac.length; i++){
+					if (beac[i]['beacon'] == clicked_id ){
+						//alert (beac[i]['location']);
+						loc= beac[i]['location'];
+						}
+				}
+				
+				
 	
-			
-			
-			
+
+var w = "1";
+ window.location.href = "./exec?location=" + loc + "&w="+ w;
+ }
+ 
+ 
+ 
+function validateForm() {
+var mm=<?php echo json_encode($_SESSION['dane']); ?>;
+var y = document.forms["myForm"]["option"].value;
+var x = document.forms["myForm"]["room"].value;
+var z = document.forms["myForm"]["newroom"].value;
+
+
+
+  if ( (!z && y == "add") || (!x && y == "delete")) {
+  
+        alert("All fields must be filled out");
+        return false;
+       }
+  
+  	
+  	
+  	
+  	if(z && mm){
+    
+	for(i=0;i< mm.length;i++){
+		
+		if(z == mm[i]['name']){
+				alert ("Location's exists!")
+    		return false;
+}
+}
+}
+}
+ 
+ 
+ 
+ 
 			
 		</script>
 
 
-<style>
-  #progressbar {
-    margin-top: 20px;
-  }
- 
-  .progress-label {
-    font-weight: bold;
-    text-shadow: 1px 1px 0 #fff;
-  }
- 
-  .ui-dialog-titlebar-close {
-    display: none;
-  }
-  </style>
 
-<div class= "continer" style="width:600px" >
+
+<div class="modal-body row">
+   <div class="col-md-6" >	
 
     	<h3><center>Add/delete location:</center></h3>	<br>
-	<form action="./add" method="POST" name="myForm" onSubmit="return showPleaseWait()">
+	<form name="myForm" action="./add" method="POST" onsubmit="return validateForm()" >
 	
 	<dl class="dl-horizontal">
 	<dt>Option: </dt>
@@ -99,23 +104,29 @@ function updateProgress() {
 		<br>	
 	<dl>
 	<center><button type="submit" name="execute" value="ok" class="btn btn-primary btn-lg"><font color="white">
-OK</font></button></center>
+Ok</font></button></center>
+	
 	</form>
-	
-	
-	
-	 </br></br>  	
-      <center>   	
-	<div id="msgDiv"></div></br></br>
-	
-	<div id="progressbar" style="display: none;"></div> 
-	
-	</center>
-         		
-        </div>
-	
-	
-	
-	
-	
 </div>
+
+<div class="col-md-5 col-md-offset-1" >	
+  	<h3><center>Beacons:</center></h3>	<br>
+  
+<table class="table table-striped table-hover">
+                
+                	<?php $i=0;
+                		foreach ($_SESSION['beacons'] as $b): ?>
+                			<tr>
+                				<td><?php echo $b['beacon']; ?></td>
+                				<td ><?php echo $b['location']; ?></td>
+                				<td ><button id="<?php echo $b['beacon']; ?>" onclick="return delete_element(this.id); "class="btn btn-default " >Delete</button></td>
+                			</tr>
+                	<?php $i++;
+                	endforeach; ?>
+               
+    </table>
+    
+
+
+
+</div></div>

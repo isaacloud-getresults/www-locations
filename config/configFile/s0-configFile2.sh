@@ -478,9 +478,18 @@ CONDITION_ID=`IC_POST /admin/conditions "$_BODY" ".id"`
 
 _BODY='{ "counters": [], 
 		 "leftSide": "be_on_time_counter", 
-		 "name": "meeting_room_on_time_10_cond", 
+		 "name": "meeting_on_time_10_cond", 
 		 "operator": "EQ", 
 		 "rightSide": "10", 
+		 "transactionSource": '"$TRANSACTION_SOURCE_ID"', 
+		 "type": "NORMAL" }'
+CONDITION_ID=`IC_POST /admin/conditions "$_BODY" ".id"`
+
+_BODY='{ "counters": [], 
+		 "leftSide": "status", 
+		 "name": "meeting_punctual_cond", 
+		 "operator": "EQ", 
+		 "rightSide": "punctual", 
 		 "transactionSource": '"$TRANSACTION_SOURCE_ID"', 
 		 "type": "NORMAL" }'
 CONDITION_ID=`IC_POST /admin/conditions "$_BODY" ".id"`
@@ -808,9 +817,15 @@ _BODY='{ "name": "restaurant_visit_group_10000t_achiev",
 ACHIEVEMENT_LOGIN_ID=`IC_POST /admin/achievements "$_BODY" ".id"`
 
 _BODY='{ "name": "enter_meeting_on_time_10t_achiev", 
-		 "label": "Punktual worker", 
+		 "label": "Punktual Attendance", 
 		 "description": "Be on time at 10 meetings!", 
 		 "data": { "how_to": "Be on time at 10 meetings!" } }'
+ACHIEVEMENT_LOGIN_ID=`IC_POST /admin/achievements "$_BODY" ".id"`
+
+_BODY='{ "name": "meeting_punctual_1t_achiev", 
+		 "label": "Perfect Meeting Sync", 
+		 "description": "You and few more be on time at meeting", 
+		 "data": { "how_to": "Be punctual" } }'
 ACHIEVEMENT_LOGIN_ID=`IC_POST /admin/achievements "$_BODY" ".id"`
 
 echo "Your achievements are ready!"
@@ -1676,11 +1691,47 @@ NOTIFICATION_ID=`IC_POST /admin/notifications "$_BODY" ".id"`
 _BODY='{ "data": { 
 				"body":{"message":"just entered on time in 10 meetings!"}
 			}, 
+		 "notificationType": '"5"' }'
+NOTIFICATION_ID=`IC_POST /admin/notifications "$_BODY" ".id"`
+
+_BODY='{ "data": { 
+				"body":{"message":"just entered on time in 10 meetings!"}
+			}, 
 		 "notificationType": '"7"' }'
 NOTIFICATION_ID=`IC_POST /admin/notifications "$_BODY" ".id"`
 
 _BODY='{ "data": { 
 				"body":{"message":"just entered on time in 10 meetings!"}
+			}, 
+		 "notificationType": '"8"' }'
+NOTIFICATION_ID=`IC_POST /admin/notifications "$_BODY" ".id"`
+
+_BODY='{ "data": { 
+				"achievementId": '"34"' 
+			}, 
+		 "notificationType": '"2"' }'
+NOTIFICATION_ID=`IC_POST /admin/notifications "$_BODY" ".id"`
+
+_BODY='{ "data": { 
+				"body":{"message":"just entered meeting on time with others!"}
+			}, 
+		 "notificationType": '"1"' }'
+NOTIFICATION_ID=`IC_POST /admin/notifications "$_BODY" ".id"`
+
+_BODY='{ "data": { 
+				"body":{"message":"just entered meeting on time with others!"}
+			}, 
+		 "notificationType": '"5"' }'
+NOTIFICATION_ID=`IC_POST /admin/notifications "$_BODY" ".id"`
+
+_BODY='{ "data": { 
+				"body":{"message":"just entered meeting on time with others!"}
+			}, 
+		 "notificationType": '"7"' }'
+NOTIFICATION_ID=`IC_POST /admin/notifications "$_BODY" ".id"`
+
+_BODY='{ "data": { 
+				"body":{"message":"just entered meeting on time with others!"}
 			}, 
 		 "notificationType": '"8"' }'
 NOTIFICATION_ID=`IC_POST /admin/notifications "$_BODY" ".id"`
@@ -2081,7 +2132,7 @@ _BODY='{ "active": true,
 		 "conditions": ['"43"'], 
 		 "expression": "{'"43"'}",
 		 "gameType": "GRADUAL",
-		 "name": "add_2_points_game",
+		 "name": "meeting_punctual_game",
 		 "notifications": ['"149"', '"150"', '"151"'],
 		 "transactionSource": '"$TRANSACTION_SOURCE_ID"' }' 
 GAME_ID=`IC_POST /admin/games "$_BODY" ".id"` 
@@ -2118,7 +2169,16 @@ _BODY='{ "active": true,
 		 "expression": "{'"47"'}",
 		 "gameType": "ONE_TIME",
 		 "name": "meeting_room_on_time_10_game",
-		 "notifications": ['"161"', '"162"', '"163"', '"164"'],
+		 "notifications": ['"161"', '"162"', '"163"', '"164"', '"165"'],
+		 "transactionSource": '"$TRANSACTION_SOURCE_ID"' }' 
+GAME_ID=`IC_POST /admin/games "$_BODY" ".id"` 
+
+_BODY='{ "active": true, 
+		 "conditions": ['"48"'], 
+		 "expression": "{'"48"'}",
+		 "gameType": "ONE_TIME",
+		 "name": "meeting_group_punctual_1t_game",
+		 "notifications": ['"166"', '"167"', '"168"', '"169"', '"169"'],
 		 "transactionSource": '"$TRANSACTION_SOURCE_ID"' }' 
 GAME_ID=`IC_POST /admin/games "$_BODY" ".id"` 
 

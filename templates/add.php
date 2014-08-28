@@ -93,6 +93,16 @@ var y = document.forms["myForm"]["option"].value;
 var x = document.forms["myForm"]["room"].value;
 var z = document.forms["myForm"]["newroom"].value;
 
+  	if(z && mm){
+    
+	for(i=0;i< mm.length;i++){
+		
+		if(z == mm[i]['name']){
+				alert ("Location's exists!")
+    		return false;
+}
+}
+}
 if((z && y == "add") || (x && y == "delete")){
 
 showPleaseWait();
@@ -106,16 +116,7 @@ showPleaseWait();
        }
   
   
-  	if(z && mm){
-    
-	for(i=0;i< mm.length;i++){
-		
-		if(z == mm[i]['name']){
-				alert ("Location's exists!")
-    		return false;
-}
-}
-}
+
 
 
 

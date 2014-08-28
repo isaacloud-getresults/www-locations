@@ -679,7 +679,7 @@ $app->post('/admin/add', function () use ($app, $sdk) {
 				$command1= "sudo config/configFile/s1-createGroup.sh";
    				$command2=" ";
    				$command=$command1.$command2.$_SESSION['base64'].$command2."\"".$new_room."\"".$command2.$new;
-   				echo $command;
+   				//echo $command;
    				 if (exec($command)){
    				 
    		
@@ -693,17 +693,42 @@ $app->post('/admin/add', function () use ($app, $sdk) {
 			$selected_room=$_POST['room'];
 			
 			
-		 foreach ($_SESSION['dane'] as $d):
-		 	if($d['name']==$selected_room)
-		 		$del=$d['id_r'];
-		 endforeach;
-		 echo $selected_room;
-		 echo $del;
-		$pre="admin/users/groups/";
-  		$p=$pre.$del;  
-  	
-  		$sdk->path($p);  	
-		$res2 = $sdk->api($p, "delete", $sdk->getParameters(),  $sdk->getQueryParameters()  ); 
+			$sdk->path("admin/users/groups")
+				->withQuery(array("label" => $selected_room))
+   				 ->withQueryParameters(array("fields" => array("name","label")));
+			  	
+			$res2 = $sdk->api("admin/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters()  ); 
+			
+		$name= $res2[0]['name']; // arg pierwszy
+		
+		 $m = new MongoClient(); 
+   		 $db = $m->isaa;
+    	$collection = $db->users;
+
+
+   		 $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
+   
+
+    if(!empty($cursor))   
+	{     	
+ 
+ 	$base=$cursor['base64'] ;// arg drugi
+ 	
+	}
+	
+ $url_delete="http://188.226.248.208:8080/deleteRoom?iB64=".$base."&name=".$name;
+	
+	
+	// create a new cURL resource
+	$ch = curl_init($url_delete);
+	// grab URL and pass it to the browser
+curl_exec($ch);
+
+// close cURL resource, and free up system resources
+curl_close($ch);
+	 $app->response->redirect($app->urlFor('se'), 303);
+  	 // http://188.226.248.208:8080/deleteRoom?iB64=MjgwOjM5Yjk4ZjQ4YWNjYjQ2Y2ZhMzM3YjIxMDcyZDJlZmY=&name=boss_room
+  		
 		
 			}
 		}
@@ -716,7 +741,6 @@ $app->post('/admin/add', function () use ($app, $sdk) {
  
 
 })->name("addd");
-
 
 
 ///// admin ecex //

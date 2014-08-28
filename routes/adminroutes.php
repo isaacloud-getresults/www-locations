@@ -682,10 +682,16 @@ $app->post('/admin/add', function () use ($app, $sdk) {
    				//echo $command;
    				 if (exec($command)){
    				 
+   		?>
    		
-   				 
-					echo "Success!";
-					break; }
+   		<script> 
+   		alert("Success!");
+   		
+   		</script>
+   			<?php	
+   			 $app->response->redirect($app->urlFor('se'), 303);
+   			 
+					 }
 				
 			
 }

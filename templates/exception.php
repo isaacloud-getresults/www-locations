@@ -7,9 +7,9 @@
         <meta name="author" content="SoInteractive">	
         <title>Get Results</title>
 
-         <link href="css/bootstrap.min.css" rel="stylesheet">
-         <script src="js/jquery-1.9.1.min.js"></script>
-         <script src="js/bootstrap.min.js"></script>
+         
+<link rel="stylesheet" href=" http://getresults.isaacloud.com/css/bootstrap.min.css">
+        
    
         
     </head>

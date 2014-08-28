@@ -45,6 +45,8 @@ $app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr,$isaaConf){
 
 	
 		
+		try {
+		
 /***** types of notification ***********/
 
 	    $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
@@ -77,6 +79,12 @@ $app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr,$isaaConf){
 
        $res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
+}
+catch (\Exception $e){
+      throw $e;
+      }
+
+
 // notification id for selected room
          
         foreach ($res9 as $type):
@@ -101,6 +109,10 @@ $app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr,$isaaConf){
          if(isset($room)){		
 /****** all users *******************/  
 
+
+try {
+
+
 	    $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
 
   		$sdk->path("cache/users")
@@ -119,6 +131,14 @@ $app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr,$isaaConf){
 			->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
 
         $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+        
+        
+        }
+catch (\Exception $e){
+      throw $e;
+      }
+        
+        
 
   		$app->render('admin_room2.php', array('data' => $res, 'person' => $res1)); 
          }
@@ -165,6 +185,11 @@ $app->get('/global/:b', function ($b) use ($app, $sdk,$isaaConf) {
      "secret" => $secret
 	);
 
+
+
+try {
+
+
 	//create new instance of IsaaCloud SDK
 	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
 
@@ -190,13 +215,24 @@ $app->get('/global/:b', function ($b) use ($app, $sdk,$isaaConf) {
 
     $resA = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
+     }
+catch (\Exception $e){
+      throw $e;
+      }
+     
+     
      
     $app->render('global.php', array('res1' => $res1, 'resA' => $resA ) );
   	$app->render('midd2.php');   
         
+        try {
+        
+        
     $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
         
-            	
+         
+         
+           	
   	$sdk->path("cache/users")
   			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName")));   	
     	
@@ -211,6 +247,13 @@ $app->get('/global/:b', function ($b) use ($app, $sdk,$isaaConf) {
               ->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
 
     $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );		
+    	
+    	
+    	}
+catch (\Exception $e){
+      throw $e;
+      }
+    	
     	
     $app->render('global2.php', array('data' => $res, 'person' => $res1));// global feed ->to do
         	

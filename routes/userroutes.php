@@ -22,6 +22,9 @@ $app->get('/dashboard', function () use ($app,$sdk,$isaaConf) {
 
 	$a=$_SESSION["email"];
 	
+	
+	try {
+	
 	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
 	
 	
@@ -31,6 +34,13 @@ $app->get('/dashboard', function () use ($app,$sdk,$isaaConf) {
 
   
 	$res = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
+}
+catch (\Exception $e){
+      throw $e;
+      }
+
+
 
 	foreach ($res as $r): 
     
@@ -56,6 +66,9 @@ $app->get('/dashboard', function () use ($app,$sdk,$isaaConf) {
 	$pref="cache/users/";
 	$p=$pref.$myid;	
   
+  
+  try {
+  
 	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
 
 
@@ -77,6 +90,13 @@ $app->get('/dashboard', function () use ($app,$sdk,$isaaConf) {
     
 
 	$res = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+	
+	}
+catch (\Exception $e){
+      throw $e;
+      }
+
+	
 
 		$app->render('midd.php'); // part between column
 		$app->render('roomlist.php', array('rooms' => $res)); //second column
@@ -107,6 +127,8 @@ $app->get('/details', @function () use ($app,$sdk,$isaaConf) {
 	$pref="cache/users/";
 	$p=$pref.$myid;	
   
+  try {
+  
   $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
   
   
@@ -116,11 +138,21 @@ $app->get('/details', @function () use ($app,$sdk,$isaaConf) {
 
   
 	$res = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+	
+	
+	}
+catch (\Exception $e){
+      throw $e;
+      }
+
+	
 
      	$app->render('myprofileshort2.php', array('myprofile' => $res)); // first column
     	$app->render('midd.php');
      
     
+try {
+
 
 /////////////////// notifications
 
@@ -134,6 +166,10 @@ $app->get('/details', @function () use ($app,$sdk,$isaaConf) {
 
 	$res7 = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
+}
+catch (\Exception $e){
+      throw $e;
+      }
 
  
  	 	$app->render('history.php', array('data' => $res7)); // second column
@@ -162,6 +198,9 @@ if (!isset($_SESSION['token'])) {
 	$pref="cache/users/";
 	$p=$pref.$myid; 
   	
+  	
+  	try {
+  	
   $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
   
   
@@ -186,6 +225,13 @@ if (!isset($_SESSION['token'])) {
 
   
 	$res = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );		
+   		
+   		
+   		}
+catch (\Exception $e){
+      throw $e;
+      }
+
    		
    		
     	$app->render('users2.php', array('users' => $res)); //second column
@@ -217,6 +263,9 @@ $app->get('/room/:id', @function($id) use ($app,$sdk,$isaaConf){
     	$app->render('header2.php');
     	
     	
+    	try {
+    	
+    	
     	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
 
    		$sdk->path("cache/users")
@@ -240,6 +289,14 @@ $app->get('/room/:id', @function($id) use ($app,$sdk,$isaaConf){
 				->withQueryParameters(array("limit" =>0,"fields" => array("label")));
 
 	$res2 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+	
+	
+	
+	}
+catch (\Exception $e){
+      throw $e;
+      }
+
     
 
 		$app->render('currentroom.php', array('roomid' => $res2,'users' => $res )); // first column
@@ -264,6 +321,10 @@ if (!isset($_SESSION['token'])) {
     
 	$pref="cache/users/";
 	$p=$pref.$id;
+	
+	
+	try {
+	
 
 	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
 
@@ -272,6 +333,13 @@ if (!isset($_SESSION['token'])) {
 				 ->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email","leaderboards")));
     
 	$res2 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+    
+    
+    }
+catch (\Exception $e){
+      throw $e;
+      }
+
     
   
    		$app->render('user.php', array('users' => $res2)); // first column

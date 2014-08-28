@@ -23,7 +23,7 @@ require_once './src/contrib/Google_Oauth2Service.php';
 
 //start session
 
-session_name('l');
+session_name('m');
 session_start();
 
 
@@ -161,8 +161,7 @@ $cr=1; // room's counter
 
 
 $app->error(function ( Exception $e ) use ($app) {
-    //echo "error : " . $e;
-   //echo " An error has occurred. Please try refreshing the page.";
+
     $app->render('exception.php');
     
 });

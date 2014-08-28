@@ -384,6 +384,10 @@ $app->get('/admin/www', function () use ($app,$sdk,$isaaConf) {
     $qrurl = $cursor["_id"];        
     $profileqr= $cursor["domain"];
 
+
+try {
+
+
     $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
 
   	$sdk->path("cache/users/groups")
@@ -393,7 +397,10 @@ $app->get('/admin/www', function () use ($app,$sdk,$isaaConf) {
 
 	$res = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
-
+}
+catch (\Exception $e){
+      throw $e;
+      }
 
 
  	$app->render('header3.php');
@@ -426,7 +433,7 @@ $m = new MongoClient();
         $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
 
 
-
+try {
 
 
 /***** types of notification ***********/
@@ -505,6 +512,12 @@ $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
             else
 	       echo "<center>"."There are no notifications for selected room"."</center>";		
     	
+    	}
+catch (\Exception $e){
+      throw $e;
+      }
+    	
+    	
 })->name("aroom");
 
 
@@ -530,13 +543,26 @@ $app->get('/admin/setup', function () use ($app, $sdk,$isaaConf) {
     $app->render('header3.php');
     $app->render('menu.php');
     
-    //////////////////////////////////////////////////////////////////////////////////////        
+    //////////////////////////////////////////////////////////////////////////////////////     
+    
+    try {
+    
+    
+    
+     $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);    
         //get conditions
       $sdk->path("admin/conditions")
    				 		->withQuery(array("leftSide" => "place"))
    				 		->withQueryParameters(array("limit" => 0, "fields" => array("name","leftSide", "rightSide")));
    				 		   
 				$resN = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters()  ); 
+   				 
+   				 
+   		}
+catch (\Exception $e){
+      throw $e;
+      }		 
+   				 
    				 
    				 
    				// print_r($res);  
@@ -555,13 +581,22 @@ $app->get('/admin/setup', function () use ($app, $sdk,$isaaConf) {
         		}
         endforeach;
         
+        try {
         
+        
+         $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
         //get games
         $sdk->path("cache/games")
    				 	
    				 		->withQueryParameters(array("limit" => 0, "fields" => array("segments","conditions")));
    				 		   
 				$resN2 = $sdk->api("cache/games", "get", $sdk->getParameters(),  $sdk->getQueryParameters()  ); 
+        
+        }
+catch (\Exception $e){
+      throw $e;
+      }
+        
         
         //print_r($res2);
          $i=0;
@@ -581,11 +616,22 @@ $app->get('/admin/setup', function () use ($app, $sdk,$isaaConf) {
         
      // print_r($segments); // segmenty
       //get user groups
+      
+      try {
+      
+      
+       $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
            $sdk->path("cache/users/groups")
    				 	
    				 		->withQueryParameters(array("limit" => 0, "fields" => array("segments","label")));
       
        $resN3 = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters()  );
+      
+      }
+catch (\Exception $e){
+      throw $e;
+      }
+      
       
         $beacons= array();
         $i=0;
@@ -612,7 +658,7 @@ $app->get('/admin/setup', function () use ($app, $sdk,$isaaConf) {
   			
 //////// //////////////////////////////////////////////////////////////////////////////
     
-    
+    try {
         
    $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
         
@@ -635,6 +681,11 @@ $app->get('/admin/setup', function () use ($app, $sdk,$isaaConf) {
 						
     $res2 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
     
+    
+    }
+catch (\Exception $e){
+      throw $e;
+      }
    
   	$app->render('setup.php', array('games' => $res, 'groups' => $res1, 'conditions' => $res2 )); 
   	
@@ -712,11 +763,20 @@ $app->post('/admin/add', function () use ($app, $sdk) {
 			$selected_room=$_POST['room'];
 			
 			
+			
+			try {
+			
 			$sdk->path("admin/users/groups")
 				->withQuery(array("label" => $selected_room))
    				 ->withQueryParameters(array("fields" => array("name","label")));
 			  	
 			$res2 = $sdk->api("admin/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters()  ); 
+			
+			
+			}
+catch (\Exception $e){
+      throw $e;
+      }
 			
 		$name= $res2[0]['name']; // arg pierwszy
 		
@@ -801,6 +861,9 @@ $b_del= array();
 	$pre="admin/conditions/";
   	$p=$pre.$c;  
   	echo "$p";
+  	
+  	
+  	
   	$sdk->path($p);  	
 			  	
  	$res2 = $sdk->api($p, "put", $sdk->getParameters(),  $sdk->getQueryParameters() ,  array('rightSide'=> "0" )  ); 
@@ -849,6 +912,10 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
         $app->render('header3.php');
         $app->render('menu.php');
         
+        
+        try {
+        
+        
         // games
             $sdk->path("cache/games")
 				->withQueryParameters(array("limit" =>0,"fields" => array("conditions","segments", "name")));
@@ -866,6 +933,12 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
       		->withQueryParameters(array("limit" =>0,"fields" => array("name")));
 					
       $res2 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );  
+       
+       
+       }
+catch (\Exception $e){
+      throw $e;
+      }
        
   
      /*********************** check ***************************/
@@ -1021,7 +1094,7 @@ $app->get('/admin/global', function () use ($app, $sdk,$isaaConf) {
   		    $app->render('column.php');
   		
   		
-  		
+  		try {
   		
   		 //get statistics
   		 
@@ -1062,6 +1135,12 @@ $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
               ->withQueryParameters(array("limit" =>0,"fields" => array("data","subjectId", "updatedAt", "typeId")));
 
         $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+    	
+    	}
+catch (\Exception $e){
+      throw $e;
+      }
+    	
     	
     	$app->render('global2.php', array('data' => $res, 'person' => $res1));
         		

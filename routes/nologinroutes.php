@@ -184,9 +184,9 @@ $app->get('/global/:b', function ($b) use ($app, $sdk,$isaaConf) {
 	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
 
 
-	$sdk->path("cache/users/groups")
-		->withOrder(array("segments"=>"ASC"))
-		->withQueryParameters(array("limit" => 0, "offset" => 1,"fields" => array("segments", "label")));
+	 $sdk->path("cache/users/groups")
+	    	->withOrder(array("segments"=>"ASC"))
+	    	->withQueryParameters(array("limit" => 0, "offset" => 1, "fields" => array("counterValues", "label")));
 
     $resA = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 

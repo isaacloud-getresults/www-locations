@@ -17,6 +17,10 @@ $app->get('/admin/dashboard', function () use ($app,$sdk,$isaaConf) {
 	$app->render('header3.php');
 	$app->render('menu.php');
 	
+	
+	try {
+	
+	
 	//get statistics 
 	
 	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);  
@@ -34,6 +38,15 @@ $app->get('/admin/dashboard', function () use ($app,$sdk,$isaaConf) {
 		->withQueryParameters(array("limit" => 0, "offset" =>1, "fields" => array("label", "counterValues")));
 
 	$resA = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+
+}
+catch (\Exception $e){
+      throw $e;
+      }
+
+
+
+
 
     $app->render('admindashboard.php', array('res1' => $res1, 'resA' => $resA) );
 	$app->render('footer.php');

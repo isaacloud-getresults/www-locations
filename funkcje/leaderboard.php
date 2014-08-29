@@ -16,23 +16,22 @@
 				foreach($user['counterValues'] as $counter):
  					if(($counter["counter"]==1) and ($counter["value"]== $roomid["id"])){
 	
- 						if(!empty($user["leaderboards"])){
-	
+ 											
+ 						$tab[$i]['id']=$user['id'];
+ 						$tab[$i]['email']=$user['email'];
+ 						if ((!empty($user["firstName"])) || (!empty($user["lastName"])) )
+ 						$tab[$i]['name']=$user["firstName"]." ".$user["lastName"];
+ 						
+ 						
  						foreach($user["leaderboards"] as $leaderboard):
  							if (!empty($leaderboard)){		
- 								$tab2[$i]['id']=$user['id'];
- 								$tab2[$i]['email']=$user['email'];
- 								if ((!empty($user["firstName"])) || (!empty($user["lastName"])) )
- 									$tab2[$i]['name']=$user["firstName"]." ".$user["lastName"];
- 								$tab2[$i]['position']=$leaderboard["position"];
- 								if(empty($leaderboard["score"])) 	$tab2[$i]['score']="0";
- 								else $tab2[$i]['score']=$leaderboard["score"];
-
- 								$i++;	
- 								break;
- 								}
- 						endforeach;
- 							}
+ 						if(!empty($leaderboard["position"])) 
+ 							$tab[$i]['position']=$leaderboard["position"];
+ 						if(empty($leaderboard["score"])) 	$tab[$i]['score']="0";
+ 						else $tab[$i]['score']=$leaderboard["score"];
+							}
+						endforeach;
+ 						$i++;	
  							}
 				endforeach;
 			

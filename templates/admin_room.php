@@ -13,6 +13,10 @@ else{
 	$obiekt2 = new Leaderboard;
 	$data = $obiekt2-> create_array($users, $roomid);
 
+
+	if(empty($data))
+		echo "<center>Empty</center>";
+	else{
 ?>
 
 
@@ -41,4 +45,7 @@ else{
                 </tbody>
 		</table>
 		
-<?php } ?>
+<?php 
+	}
+}
+ ?>

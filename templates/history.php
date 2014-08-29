@@ -16,7 +16,7 @@ include ("./funkcje/feed.php"); //include class Feed
 
 ?>
 
-<div style="width: 750px; height: 400px; overflow: scroll;">
+<div style="width: 750px;  overflow: scroll;">
 	<table class="table table-striped">
 
 

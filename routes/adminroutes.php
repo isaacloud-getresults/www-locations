@@ -598,180 +598,65 @@ $app->get('/admin/setup', function () use ($app, $sdk,$isaaConf) {
     
     //////////////////////////////////////////////////////////////////////////////////////     
     
+    
+    
+    
+    /************* get from isaa **********************/
+    
     try {
     
+     //get conditions
     
-    
-     $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);    
-        //get conditions
-      $sdk->path("admin/conditions")
-   				 		->withQuery(array("leftSide" => "place"))
-   				 		->withQueryParameters(array("limit" => 0, "fields" => array("name","leftSide", "rightSide")));
+    	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);    
+       
+      	$sdk->path("admin/conditions")
+   			->withQuery(array("leftSide" => "place"))
+   			->withQueryParameters(array("limit" => 0, "fields" => array("name","leftSide", "rightSide")));
    				 		   
-				$resN = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters()  ); 
+$resN = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters()  ); 
    				 
    				 
    		}
 catch (\Exception $e){
       throw $e;
-      }		 
-   				 
-   		 
-    $i=0;
-        $check_beacon=array();
-        $cond= array();
-        $mm=array();
-    	$nr=array();
-        foreach ($resN as $r):
-        
-        	if(strpos($r['rightSide'], 'exit') == true &&  $r['rightSide'] !=0){
-        		$cond[$i]['id']=$r['id'];
-        		$nr[$i]= explode(".exit", $r['rightSide']);
-        		$mm[$i]=$nr[$i][0];
-        		$cond[$i]['mm']=$nr[$i][0];
-        		$check_beacon[$i]['condition']=$r['id'];
-        		$check_beacon[$i]['mm']=$nr[$i][0];
-        		
-        		$i++;
-        		}
-        endforeach;
-
-        
-        try {
-        
-        
-         $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
-        //get games
+      }	
+      
+      try {
+         
+     //get games
+        $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+       
         $sdk->path("cache/games")
-   				 	
-   				 		->withQueryParameters(array("limit" => 0, "fields" => array("segments","conditions")));
+   			->withQueryParameters(array("limit" => 0, "fields" => array("segments","conditions", "name")));
    				 		   
-				$resN2 = $sdk->api("cache/games", "get", $sdk->getParameters(),  $sdk->getQueryParameters()  ); 
+$resN2 = $sdk->api("cache/games", "get", $sdk->getParameters(),  $sdk->getQueryParameters()  ); 
         
         }
 catch (\Exception $e){
       throw $e;
-      }
-        
-        
-        //print_r($res2);
-         $i=0;
-        $segments= array();
-        foreach($resN2 as $game):
-        	foreach($game['conditions'] as $condition):
-        		foreach($cond as $c):
-        			if($c['id'] == $condition){
-        				$segments[$i]['segment']=$game['segments'][0];
-        				$segments[$i]['condition']=$c['id'];
-        				$i++;
-        				break;
-        				}
-        		endforeach;
-        	endforeach;
-        
-        endforeach;
-        
-   
-        
-     // print_r($segments); // segmenty
-      //get user groups
+      }	
+      
+       
+
       
       try {
       
+     
+     //get user groups
       
-       $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
-           $sdk->path("cache/users/groups")
-   				 	 ->withOrder (array("label"=>"ASC" ))
-   				 		->withQueryParameters(array("limit" => 0, "fields" => array("segments","label")));
+    	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+   		$sdk->path("cache/users/groups")
+   			->withOrder (array("label"=>"ASC" ))
+   			->withQueryParameters(array("limit" => 0, "fields" => array("segments","label", "name")));
       
        $resN3 = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters()  );
       
       }
 catch (\Exception $e){
       throw $e;
-      }
+      } 
       
-      
-        $beacons1= array();
-        $i=0;
-        $k=1;
-        foreach($resN3 as $group):
-        	foreach($group['segments'] as $sm):
-        		foreach($segments as $s):
-        			if($s['segment']==$sm){
-        			$beacons1[$i]['location']=$group['label'];
-        			$beacons1[$i]['beacon']="Beacon ".$k;
-        			$beacons1[$i]['condition']=$s['condition'];
-        			$k++;
-        			$i++;
-        			break;
-        			}
-        		endforeach;
-        	endforeach;
-        endforeach;
-    
-$beacons= array(); 
-$i=0;
-
-
-foreach($beacons1 as $b):
-	foreach($check_beacon as $c):
-		if($b['condition'] == $c['condition']){
-					$beacons[$i]['location']=$b['location'];
-        			$beacons[$i]['beacon']=	$b['beacon'];
-        			$beacons[$i]['condition']=$b['condition'];
-        			$beacons[$i]['mm']=$c['mm'];
-        		
-        			$i++;
-		
-		}
-	endforeach;
-
-endforeach;
-
-
-
-        
-        if(isset($_SESSION["beacons"]))
-  			$_SESSION["beacons"]= array();
-  		$_SESSION["beacons"]=	$beacons;
-  			
-//////// //////////////////////////////////////////////////////////////////////////////
-    
-  
-        
-   $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
-   
-   
-   try {
-        
-    $sdk->path("cache/games")
-				->withQueryParameters(array("limit" =>0,"fields" => array("conditions","segments", "name")));
-				
-    $res = $sdk->api("cache/games", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );      
- 
-     	}
-catch (\Exception $e){
-      throw $e;
-      }
- 
- 
- 
- $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
- 
- try {
- 
-    $sdk->path("cache/users/groups")
-     ->withOrder (array("label"=>"ASC" ))
-				->withQueryParameters(array("limit" =>0,"fields" => array("label","segments")));
-				
-    $res1 = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
-     
-         	}
-catch (\Exception $e){
-      throw $e;
-      }
-     
+       
      
      $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
      
@@ -785,9 +670,97 @@ catch (\Exception $e){
     	}
 catch (\Exception $e){
       throw $e;
-      }
+      }    
+      
+      
+      
+      
+      
+$i=0;
+       				$check_beacon=array();
+       				$cond= array();
+        			$mm=array();
+    				$nr=array();
+        				foreach ($resN as $r):
+        
+        					if(strpos($r['rightSide'], 'exit') == true &&  $r['rightSide'] !=0){
+        						$cond[$i]['id']=$r['id'];
+        						$nr[$i]= explode(".exit", $r['rightSide']);
+        						$mm[$i]=$nr[$i][0];
+        						$cond[$i]['mm']=$nr[$i][0];
+        						$check_beacon[$i]['condition']=$r['id'];
+        						$check_beacon[$i]['mm']=$nr[$i][0];
+        		
+        						$i++;
+        						}
+        				endforeach;
+
    
-  	$app->render('setup.php', array('games' => $res, 'groups' => $res1, 'conditions' => $res2, 'mm' => $mm, 'resN' => $resN)); 
+         			$i=0;
+        			$segments= array();
+        			foreach($resN2 as $game):
+        				foreach($game['conditions'] as $condition):
+        					foreach($cond as $c):
+        						if($c['id'] == $condition){
+        							$segments[$i]['segment']=$game['segments'][0];
+        							$segments[$i]['condition']=$c['id'];
+        							$i++;
+        							break;
+        							}
+        					endforeach;
+        				endforeach;
+        
+       				 endforeach;
+        
+   
+   
+      
+        			$beacons1= array();
+        			$i=0;
+       				$k=1;
+       					 foreach($resN3 as $group):
+        					foreach($group['segments'] as $sm):
+        						foreach($segments as $s):
+        							if($s['segment']==$sm){
+        								$beacons1[$i]['location']=$group['label'];
+        								$beacons1[$i]['beacon']="Beacon ".$k;
+        								$beacons1[$i]['condition']=$s['condition'];
+        								$k++;
+        								$i++;
+        								break;
+        								}
+        						endforeach;
+        					endforeach;
+        				endforeach;
+    
+				$beacons= array(); 
+				$i=0;
+
+
+					foreach($beacons1 as $b):
+						foreach($check_beacon as $c):
+							if($b['condition'] == $c['condition']){
+								$beacons[$i]['location']=$b['location'];
+        						$beacons[$i]['beacon']=	$b['beacon'];
+        						$beacons[$i]['condition']=$b['condition'];
+        						$beacons[$i]['mm']=$c['mm'];
+        		
+        						$i++;
+		
+							}
+						endforeach;
+
+					endforeach;
+        
+        if(isset($_SESSION["beacons"]))
+  			$_SESSION["beacons"]= array();
+  		$_SESSION["beacons"]=	$beacons;
+  			
+//////// //////////////////////////////////////////////////////////////////////////////
+    
+
+   
+  	$app->render('setup.php', array('games' => $resN2, 'groups' => $resN3, 'conditions' => $res2, 'mm' => $mm, 'resN' => $resN)); 
   	
   	$app->render('footer.php'); 
  

@@ -126,7 +126,7 @@ if ($gClient->getAccessToken())
 
 //Configuration for running slim framework
 $config = array(
-    'debug' => true,
+    'debug' => false,
     
     'templates.path' => TEMPLATES_PATH
 );
@@ -165,7 +165,7 @@ $cr=1; // room's counter
 
 /*******************************     Exceptions    **********************************/
 
-/*
+
 $app->error(function ( Exception $e ) use ($app) {
 
 $number=$e->getCode();
@@ -180,7 +180,7 @@ else
 
     
 });
-*/
+
 
 /*******************************     Redirect    **********************************/
 

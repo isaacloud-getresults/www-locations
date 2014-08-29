@@ -5,7 +5,7 @@
     				
 				 <div class="col-md-6" >
 						<p class="bg-info" style="text-align:center"><font size="6pt">iOS</font></p><br>
-						<center><a href="http://www.appstore.com/myweb" target="_blank"><img src="../images/App_Store_Badge_EN.gif" height="70px" width="220px"></a>
+						<center><a href="https://github.com/isaacloud-getresults" target="_blank"><img src="../images/App_Store_Badge_EN.gif" height="70px" width="220px"></a>
 
     					
 							

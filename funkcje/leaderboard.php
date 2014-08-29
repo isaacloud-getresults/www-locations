@@ -133,7 +133,7 @@
 			
 					$guests[$i]['name']=$d['name'];
 					$guests[$i]['email']=$d['email'];
-					$guests[$i]['score']=$d['score'];
+				
 				
 				}
 					
@@ -144,7 +144,7 @@
 			
 				$guests[$i]['name']=$d['name'];
 					$guests[$i]['email']=$d['email'];
-					$guests[$i]['score']=$d['score'];
+				
 			
 			
 			}

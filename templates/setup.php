@@ -19,7 +19,7 @@ $i=0;
     if(!empty($cursor))   
 	{     	
  	                
- 	$uu=$cursor['UUID'];
+ 	$uu=$cursor['uuid'];
  
  	
     }    
@@ -154,7 +154,7 @@ include ("./funkcje/setup_data.php"); //include class Setup_data
 	$cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
    
    	if(!empty($cursor))                   
- 		$uuid=$cursor['UUID'];
+ 		$uuid=$cursor['uuid'];
  	?>
 
 <div class="modal-body row">

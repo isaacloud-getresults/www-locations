@@ -899,7 +899,7 @@ else
 
 
 
-//////////////////// admin setup (post)  /////////////////////////
+///////////////////// admin setup (post)  /////////////////////////
 
 
 
@@ -911,10 +911,6 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
        
         $app->render('header3.php');
         $app->render('menu.php');
-        
-        
-        try {
-        
         
         // games
             $sdk->path("cache/games")
@@ -934,19 +930,35 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
 					
       $res2 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );  
        
-       
-       }
-catch (\Exception $e){
-      throw $e;
-      }
-       
   
      /*********************** check ***************************/
     
   	
 
-    if((empty($_POST["uuid"])) || (empty($_POST["location"])) || (empty($_POST["major1"])) || (empty($_POST["minor1"]))) 
-    	echo "You didn't fill all fields.";
+    if((empty($_POST["uuid"])) || (empty($_POST["location"])) || (empty($_POST["major1"])) || (empty($_POST["minor1"]))) {
+    	if((!empty($_POST["uuid"])) && ((empty($_POST["location"])) || (empty($_POST["major1"])) || (empty($_POST["minor1"])))){
+        //mongo
+    $m = new MongoClient(); 
+    $db = $m->isaa;
+    $collection = $db->users;
+
+
+    $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
+   
+
+    if(!empty($cursor))   
+	{     	
+ 	                
+ 	$cursor['UUID'] = $_POST['uuid'];
+ 	$collection->save($cursor);
+ 	
+    }
+    echo "ok";
+    }
+    else
+    
+    	echo "Nie podano wszystkich danych!";
+    	}
     else {
     //mongo
     $m = new MongoClient(); 
@@ -960,7 +972,7 @@ catch (\Exception $e){
     if(!empty($cursor))   
 	{     	
  	                
- 	$cursor['uuid'] = $_POST['uuid'];
+ 	$cursor['UUID'] = $_POST['uuid'];
  	$collection->save($cursor);
  	
     }
@@ -996,8 +1008,6 @@ catch (\Exception $e){
 	$pre="admin/conditions/";
   	$p=$pre.$c['id'];  
   	
- 
-  	
   	$sdk->path($p);  	
 			  	
  	$res2 = $sdk->api($p, "put", $sdk->getParameters(),  $sdk->getQueryParameters() ,  array('rightSide' =>  $c['beacon'])  ); 
@@ -1005,7 +1015,7 @@ catch (\Exception $e){
   endforeach;		echo "Success!";
   	}	
 }
-  		$app->render('footer.php'); 
+  		$app->render('footer.php');
 
 
 

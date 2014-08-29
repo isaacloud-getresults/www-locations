@@ -18,17 +18,20 @@
 			else 
 				$arr['lastName']= $users["lastName"];	
 				
-			if(empty($users["leaderboards"]["1"]["score"]))
-				$arr['score']= "0";
-			else 
-				$arr['score']= $users["leaderboards"]["1"]["score"];
+			foreach ($users["leaderboards"] as $leaderboard):
+			
+				if(empty($leaderboard["score"]))
+					$arr['score']= "0";
+				else 
+					$arr['score']= $leaderboard["score"];
+	
 				
-			if(empty($users["leaderboards"]["1"]["position"]))
-				$arr['position']= "---------";
-			else 
-				$arr['position']= $users["leaderboards"]["1"]["position"];	
+				if(empty($leaderboard["position"]))
+					$arr['position']= "---------";
+				else 
+					$arr['position']= $leaderboard["position"];	
 	
-	
+			endforeach;
 	
 		return $arr;
 		

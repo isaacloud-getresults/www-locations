@@ -1,141 +1,10 @@
 <?php
-$i=0;
-  $zmienna= array();
-      foreach ($_SESSION["beacons"] as $b): 
-       $zmienna[$i]="</br>".$b['beacon'].": ".$b['location']." "."<a id="."\"".$b['beacon']."\""." onclick=\"return delete_element(this.id);\" href=\"#\">delete</a>";
-       $i++;
-      endforeach;
- 
-      
-     $uu=0; 
-      $m = new MongoClient(); 
-    $db = $m->isaa;
-    $collection = $db->users;
-
-
-    $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
-   
-
-    if(!empty($cursor))   
-	{     	
- 	                
- 	$uu=$cursor['uuid'];
- 
- 	
-    }    
-      
-      
- 
-       ?>
-<script>
-
-
-function showtext(){
-		
-			 var zmienna=<?php echo json_encode($zmienna); ?>;
-				
-					document.getElementById("field").innerHTML = ("<br>" + "List of all beacons:"+ zmienna + ".");
-				
-
-			}
-
-
-
-
-
-
-
-
-
-
-
-			function delete_element(clicked_id){
-			
-
-				var beac=<?php echo json_encode($_SESSION['beacons']); ?>;
-				var i=0;
-				var loc=0;
-					for (i; i < beac.length; i++){
-					if (beac[i]['beacon'] == clicked_id ){
-						//alert (beac[i]['location']);
-						loc= beac[i]['location'];
-						}
-				}
-				
-				
-	
-		
-var w = "2";
- window.location.href = "./exec?location=" + loc + "&w="+ w;
-
- }
-
-
-
-
-function validateForm() {
-
-
-
-var mm=<?php echo json_encode($mm); ?>;
-var u="<?=$uu?>";
-var z = document.forms["myForm"]["major1"].value;
-var y = document.forms["myForm"]["minor1"].value;
-var x = document.forms["myForm"]["uuid"].value;
-var beacon = z+"."+y;
-
-
-  if ((u=0 && !x) || !x)   {
-  
-        alert("All fields must be filled out");
-        return false;
-       }
-  
-  	
-  	if(z && y && mm){
-    
-	for(i=0;i< mm.length;i++){
-		
-		if(beacon == mm[i]){
-				if(confirm ("Entered major.minor's assigned to the other location. Are you sure you want to continue?")){
-    		return true;
- 		}
- 			else{
-    			return false;
- 			}
-				
-				}
-			
-				
-	}	
-	}
-
-}
-
- 		  	//var jArr= <?php echo json_encode($_SESSION['beacons']); ?>; //pass array from php to javascipt
-  		
-
-		
-
-
-
-
-
-
-
-
-</script>
-
-
-
-
-
-<?php 
-
-/************ create a form to assign a beacon to selected localizaation ***************/
 include ("./funkcje/setup_data.php"); //include class Setup_data
-  
-  	if(isset($_SESSION["dane"]))
+include ("./funkcje/mongo_get.php"); //include class Setup_data
+
+
+
+ 	if(isset($_SESSION["dane"]))
   		$_SESSION["dane"]= array();
   		
   	if(isset($_SESSION["mm"]))
@@ -143,19 +12,92 @@ include ("./funkcje/setup_data.php"); //include class Setup_data
   		
   		
   		
-?>		
+$i=0;
+$zmienna= array();
+      foreach ($_SESSION["beacons"] as $b): 
+       $zmienna[$i]="</br>".$b['beacon'].": ".$b['location']." "."<a id="."\"".$b['beacon']."\""." onclick=\"return delete_element(this.id);\" href=\"#\">delete</a>";
+       $i++;
+      endforeach;
+ 
+      
+      
+$obj1= new Mongo_get;
+$uu= $obj1->get_uuid();
+
+$obiekt= new Setup_data;				
+$data=$obiekt->create_data($games, $groups); //create an array including: labels, conditions and number of locations in the select list
+				
+      
+ ?>
+<script>
+
+
+	function showtext(){
+		
+			var zmienna=<?php echo json_encode($zmienna); ?>;
+			document.getElementById("field").innerHTML = ("<br>" + "List of all beacons:"+ zmienna + ".");
+				
+			}
+
+
+	function delete_element(clicked_id){
+			
+
+				var beac=<?php echo json_encode($_SESSION['beacons']); ?>;
+				var i=0;
+				var loc=0;
+					for (i; i < beac.length; i++){
+						if (beac[i]['beacon'] == clicked_id ){
+							loc= beac[i]['location'];
+						}
+					}
+				var w = "2";
+ 				window.location.href = "./exec?location=" + loc + "&w="+ w;
+			 }
+
+
+		function validateForm() {
+
+				var mm=<?php echo json_encode($mm); ?>;
+				var u="<?=$uu?>";
+				var z = document.forms["myForm"]["major1"].value;
+				var y = document.forms["myForm"]["minor1"].value;
+				var x = document.forms["myForm"]["uuid"].value;
+				var beacon = z+"."+y;
+
+
+ 				 if ((u=0 && !x) || !x)   {
+  
+       				 alert("All fields must be filled out");
+        			return false;
+      				 }
+  
+  	
+  				if(z && y && mm){
+    
+					for(i=0;i< mm.length;i++){
+		
+						if(beacon == mm[i]){
+							if(confirm ("Entered major.minor's assigned to the other location. Are you sure you want to continue?")){
+    							return true;
+ 								}
+ 							else{
+    							return false;
+ 							}
+				
+						}
+				
+					}	
+				}
+
+			}
+
+</script> 
+
+
+	
 <h2>SetUp </h2></br></br>
 
-	<?php
-    /*************************/
-    $m = new MongoClient(); 
-    $db = $m->isaa;
-    $collection = $db->users;
-	$cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
-   
-   	if(!empty($cursor))                   
- 		$uuid=$cursor['uuid'];
- 	?>
 
 <div class="modal-body row">
    <div class="col-md-7" >	
@@ -164,17 +106,15 @@ include ("./funkcje/setup_data.php"); //include class Setup_data
  				
  				<dl class="dl-horizontal">
  					<dt><strong>UUID: </strong></dt>
-  						<?php if(!isset($uuid))
+  						<?php if(!isset($uu))
 								echo  "<dd><input type=\"text\" name=\"uuid\" size=\"40\"></dd><br>";
 							else 
-								echo  "<dd><input type=\"text\" name=\"uuid\" value=$uuid size=\"40\" ></dd><br>";	
+								echo  "<dd><input type=\"text\" name=\"uuid\" value=$uu size=\"40\" ></dd><br>";	
   					 	?>
   					<dt><strong>Location: </strong></dt>	
   						<dd><a onclick="showtext()" href="javascript:void(0);"><select name="location" >
   							<option disabled>--Select location--</option>
 				<?php
-				$obiekt= new Setup_data;				
-				$data=$obiekt->create_data($games, $groups); //create an array including: labels, conditions and number of locations in the select list
 				
 					foreach ($data as $d): ?>
 					

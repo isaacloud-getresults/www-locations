@@ -45,19 +45,30 @@ $app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr,$isaaConf){
 
 	
 		
-		try {
 		
 /***** types of notification ***********/
 
 	    $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+	    
+	    
+	    try {
 
   		$sdk->path("admin/notifications/types");
 
         $res9 = $sdk->api("admin/notifications/types", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
+        
+        
+        }
+catch (\Exception $e){
+      throw $e;
+      }
 
 /***** users ****************************/
 
 	    $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+	    
+	    
+	    try {
 
    		$sdk->path("cache/users")
         	->withQuery(array("counterValues.counter" =>$cr ))
@@ -65,6 +76,12 @@ $app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr,$isaaConf){
 			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
 				
         $res4 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+        
+        
+        }
+catch (\Exception $e){
+      throw $e;
+      }
 
 /***** Room's name *********************/
   
@@ -72,6 +89,8 @@ $app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr,$isaaConf){
         $p=$pref.$id; // 
 
      	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+
+try {
 
 
 		$sdk->path($p)
@@ -83,7 +102,6 @@ $app->get('/room:id/:b', @function($id,$b) use ($app,$sdk, $cr,$isaaConf){
 catch (\Exception $e){
       throw $e;
       }
-
 
 // notification id for selected room
          
@@ -110,21 +128,29 @@ catch (\Exception $e){
 /****** all users *******************/  
 
 
-try {
 
 
 	    $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
+	    
+	    
+	    try {
 
   		$sdk->path("cache/users")
              ->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName", "counterValues")));   	
     	
-        $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
+        $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 
+        
+        
+        }
+catch (\Exception $e){
+      throw $e;
+      }	
 
 /********* notifications ************/
 
      	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
 
-
+try {
     	$sdk->path("queues/notifications")
             ->withQuery(array("typeId" =>$room))
             ->withOrder(array("updatedAt"=>"DESC"))
@@ -132,11 +158,11 @@ try {
 
         $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
         
-        
         }
 catch (\Exception $e){
       throw $e;
       }
+
         
         
 
@@ -187,7 +213,7 @@ $app->get('/global/:b', function ($b) use ($app, $sdk,$isaaConf) {
 
 
 
-try {
+
 
 
 	//create new instance of IsaaCloud SDK
@@ -200,14 +226,25 @@ try {
   	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
   	
   	
+  	try {
+  	
+  	
   	$sdk->path("cache/users")
 				->withQueryParameters(array("limit" => 0,"fields" => array("firstName","lastName","leaderboards","email", "gainedAchievements", "counterValues", "wonGames")));
 
 
     $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+    
+            }
+catch (\Exception $e){
+      throw $e;
+      }
+    
 
 	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
 
+
+try {
 
 	 $sdk->path("cache/users/groups")
 	    	->withOrder(array("segments"=>"ASC"))
@@ -215,31 +252,39 @@ try {
 
     $resA = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
-     }
+
+             }
 catch (\Exception $e){
       throw $e;
       }
      
      
-     
     $app->render('global.php', array('res1' => $res1, 'resA' => $resA ) );
   	$app->render('midd2.php');   
         
-        try {
+  
         
         
     $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
         
          
-         
+         try {
            	
   	$sdk->path("cache/users")
   			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName")));   	
     	
     $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
+    
+    
+            }
+catch (\Exception $e){
+      throw $e;
+      }
 
 	$sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
 
+
+try {
 
     $sdk->path("queues/notifications")
               ->withQuery(array("typeId" =>1 ))
@@ -248,8 +293,7 @@ catch (\Exception $e){
 
     $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );		
     	
-    	
-    	}
+        }
 catch (\Exception $e){
       throw $e;
       }

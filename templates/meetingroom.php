@@ -60,7 +60,7 @@ if (!empty($members)){
                       <th>Name</th>
                         <th style="text-align:center ">Confirmation</th>
                         <th style="text-align:center ">Status</th>
-                        <th style="text-align:right ">Score</th>
+                      
                    </tr>
                 </thead>
                 <tbody>
@@ -70,7 +70,7 @@ if (!empty($members)){
 							<td width= "45%" ><?php echo $member['name']; ?></td>
 							<td align="center" ><?php echo $member['confirm']; ?></td>
 							<td align="center" ><?php echo $member['status']; ?></td>
-							<td align="right"><span class="badge "><?php echo $member['score']; ?></span></td>	
+							
             			</tr>
                		<?php endforeach; ?>
                		

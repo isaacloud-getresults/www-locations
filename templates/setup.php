@@ -15,9 +15,10 @@ include ("./funkcje/setup_data.php"); //include class Setup_data
 $i=0;
 $zmienna= array();
       foreach ($_SESSION["beacons"] as $b): 
-       $zmienna[$i]="</br>".$b['beacon'].": ".$b['location']." "."<a id="."\"".$b['beacon']."\""." onclick=\"return delete_element(this.id);\" href=\"#\">delete</a>";
+       $zmienna[$i]="</br>".$b['beacon']." (".$b['mm'].")"." : ".$b['location']." "."<a id="."\"".$b['beacon']."\""." onclick=\"return delete_element(this.id);\" href=\"#\">delete</a>";
        $i++;
       endforeach;
+
  
       
       

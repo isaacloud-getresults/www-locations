@@ -23,7 +23,7 @@ $tab = $obiekt2->create_array($users, $roomid); //create leaderboard data
                         
  						<th>Email</th>
                         <th>Name</th>
-                        <th>Score</th>
+                    
                    
                     </tr>
                 </thead>
@@ -34,7 +34,7 @@ $tab = $obiekt2->create_array($users, $roomid); //create leaderboard data
  						<tr>
 							<td><a href="./users/<?php echo $t["id"];?>"><?php  echo $t["email"];?></a></td>
             				<td><?php if(empty($t["name"])) echo "----------"; else echo $t["name"]; ?></td>
-            				<td><?php echo $t['score']; ?></td>	
+            	
            				</tr>
  					<?php endforeach; ?>
 

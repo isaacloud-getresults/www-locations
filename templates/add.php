@@ -160,9 +160,10 @@ Ok</font></button></center>
                 	<?php $i=0;
                 		foreach ($_SESSION['beacons'] as $b): ?>
                 			<tr>
-                				<td><?php echo $b['beacon']; ?></td>
+                				<td><?php echo $b['beacon']." (".$b['mm'].")"; ?></td>
                 				<td ><?php echo $b['location']; ?></td>
                 				<td ><button id="<?php echo $b['beacon']; ?>" onclick="return delete_element(this.id); "class="btn btn-default " >Delete</button></td>
+
                 			</tr>
                 	<?php $i++;
                 	endforeach; ?>

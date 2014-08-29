@@ -617,20 +617,25 @@ catch (\Exception $e){
       }		 
    				 
    		 
-        $i=0;
+    $i=0;
+        $check_beacon=array();
         $cond= array();
         $mm=array();
     	$nr=array();
         foreach ($resN as $r):
         
         	if(strpos($r['rightSide'], 'exit') == true &&  $r['rightSide'] !=0){
-        		$cond[$i]=$r['id'];
+        		$cond[$i]['id']=$r['id'];
         		$nr[$i]= explode(".exit", $r['rightSide']);
         		$mm[$i]=$nr[$i][0];
+        		$cond[$i]['mm']=$nr[$i][0];
+        		$check_beacon[$i]['condition']=$r['id'];
+        		$check_beacon[$i]['mm']=$nr[$i][0];
         		
         		$i++;
         		}
         endforeach;
+
         
         try {
         
@@ -655,8 +660,9 @@ catch (\Exception $e){
         foreach($resN2 as $game):
         	foreach($game['conditions'] as $condition):
         		foreach($cond as $c):
-        			if($c == $condition){
-        				$segments[$i]=$game['segments'][0];
+        			if($c['id'] == $condition){
+        				$segments[$i]['segment']=$game['segments'][0];
+        				$segments[$i]['condition']=$c['id'];
         				$i++;
         				break;
         				}
@@ -664,6 +670,8 @@ catch (\Exception $e){
         	endforeach;
         
         endforeach;
+        
+   
         
      // print_r($segments); // segmenty
       //get user groups
@@ -684,15 +692,16 @@ catch (\Exception $e){
       }
       
       
-        $beacons= array();
+        $beacons1= array();
         $i=0;
         $k=1;
         foreach($resN3 as $group):
         	foreach($group['segments'] as $sm):
         		foreach($segments as $s):
-        			if($s==$sm){
-        			$beacons[$i]['location']=$group['label'];
-        			$beacons[$i]['beacon']="Beacon ".$k;
+        			if($s['segment']==$sm){
+        			$beacons1[$i]['location']=$group['label'];
+        			$beacons1[$i]['beacon']="Beacon ".$k;
+        			$beacons1[$i]['condition']=$s['condition'];
         			$k++;
         			$i++;
         			break;
@@ -700,7 +709,27 @@ catch (\Exception $e){
         		endforeach;
         	endforeach;
         endforeach;
-        
+    
+$beacons= array(); 
+$i=0;
+
+
+foreach($beacons1 as $b):
+	foreach($check_beacon as $c):
+		if($b['condition'] == $c['condition']){
+					$beacons[$i]['location']=$b['location'];
+        			$beacons[$i]['beacon']=	$b['beacon'];
+        			$beacons[$i]['condition']=$b['condition'];
+        			$beacons[$i]['mm']=$c['mm'];
+        		
+        			$i++;
+		
+		}
+	endforeach;
+
+endforeach;
+
+
 
         
         if(isset($_SESSION["beacons"]))

@@ -50,7 +50,7 @@
 											$arr[$i]['name']= $d['name'];
 										$arr[$i]['confirm']=$in['confirm'];
 										$arr[$i]['status']=$in['status'];
-										$arr[$i]['score']=$d['score'];
+										//$arr[$i]['score']=$d['score'];
 										$arr[$i]['id']= $in['id'];
 										$i++;
 										

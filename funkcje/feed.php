@@ -20,7 +20,7 @@ class Feed{
 				if($d["subjectId"]==$p["id"]){
 	
 					$mil = $d["updatedAt"];
-					$seconds = ($mil / 1000)-950;
+					$seconds = ($mil / 1000);
 					$prevtime = date("d-m-Y H:i:s", $seconds);
 					$time=$d["updatedAt"]/1000;
 				
@@ -42,6 +42,33 @@ class Feed{
 		endforeach; 
 		
 		return $feed;
+		}
+		
+		
+		
+		public function build_history($data){
+				$k=0;
+				$feed= array();
+				// create array with data
+			foreach ($data as $d):
+	
+				$mil = $d["updatedAt"];
+				$seconds = ($mil / 1000) ;  // diff between 
+				$prevtime = date("d-m-Y H:i:s", $seconds);
+				$time=$d["updatedAt"]/1000;
+				$obiekt= new Time_ago;
+				
+				$feed[$k]["ago"]=$obiekt->ago($time);
+				$feed[$k]["message"]=$d["data"]["body"]["message"];
+				$feed[$k]["time"]=$prevtime;
+					
+				$k++;
+		
+	
+			endforeach;
+		
+		return $feed;
+		
 		}
 		
 	}

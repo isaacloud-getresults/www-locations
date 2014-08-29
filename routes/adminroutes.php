@@ -381,7 +381,7 @@ $app->get('/admin/www', function () use ($app,$sdk,$isaaConf) {
         }
 
 
-   $db= new Mongo_get;
+            $db= new Mongo_get;
            $collection=$db->db_init();
     
       
@@ -394,18 +394,33 @@ $app->get('/admin/www', function () use ($app,$sdk,$isaaConf) {
 
 
 
-    $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
-
-
-try {
-
-
-  	$sdk->path("cache/users/groups")
-    			->withOrder(array("id"=>"ASC"))
-				->withQueryParameters(array("limit" =>0, "offset"=>1, "fields" => array("counterValues","label")));
-    
-
-	$res = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
+   $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
+        
+      try {  
+        
+    $sdk->path("cache/games")
+				->withQueryParameters(array("limit" =>0,"fields" => array("conditions","segments", "name")));
+				
+    $res = $sdk->api("cache/games", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );      
+ 
+ 
+ 
+}
+catch (\Exception $e){
+      throw $e;
+      }
+ 
+ 
+ $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
+ 
+ try {
+ 
+    $sdk->path("cache/users/groups")
+    	 ->withOrder (array("label"=>"ASC" ))
+				->withQueryParameters(array("limit" =>0, "offset" =>1, "fields" => array("label","segments")));
+				
+    $res1 = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
+     
 
 }
 catch (\Exception $e){
@@ -415,13 +430,11 @@ catch (\Exception $e){
 
  	$app->render('header3.php');
 	$app->render('menu.php');
-	$app->render('www.php'  ,  array('rooms' => $res,'qrurl' => $qrurl, 'profileqr' => $profileqr ));
+	$app->render('www.php'  ,  array('games' => $res,'groups' => $res1, 'qrurl' => $qrurl, 'profileqr' => $profileqr ));
     $app->render('footer.php'); 
 
 
 })->name("ww");
-
-
 
 
 
@@ -436,7 +449,7 @@ $app->get('/admin/room:id', @function($id) use ($app,$sdk, $cr,$isaaConf){
         }
 
 
-   $db= new Mongo_get;
+  $db= new Mongo_get;
            $collection=$db->db_init();
    
         $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
@@ -449,36 +462,37 @@ $app->get('/admin/room:id', @function($id) use ($app,$sdk, $cr,$isaaConf){
 
         $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
         
-  try {      
+        try {
+        
         
   		$sdk->path("admin/notifications/types")
 			->withQueryParameters(array("limit" =>0,"fields" => array("name","createdAt","updatedAt", "action")));
         $res9 = $sdk->api("admin/notifications/types", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
-}
+
+    	}
 catch (\Exception $e){
       throw $e;
       }
-  
 
 /***** users ****************************/
         $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
         
-        
-      try {  
+        try {
         
    		$sdk->path("cache/users")
         	->withQuery(array("counterValues.counter" =>$cr ))
-          	->withOrder (array("leaderboards.1.position"=>"ASC" ))
+          	->withOrder (array("leaderboards.position"=>"ASC" ))
 			->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName","email", "counterValues", "leaderboards")));
 				
         $res4 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
 
-}
+    	}
 catch (\Exception $e){
       throw $e;
       }
+
 
 /***** Room's name *********************/
   
@@ -486,16 +500,17 @@ catch (\Exception $e){
          $p=$pref.$id; // id for restaurant
          
          $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
-
-try {
-
+         
+         
+         try {
+         
 
 		 $sdk->path($p)
-			->withQueryParameters(array("fields" => array("name,label")));
+			->withQueryParameters(array("fields" => array("name", "label")));
 
          $res5 = $sdk->api($p, "get", $sdk->getParameters(),  $sdk->getQueryParameters() );
 
-}
+    	}
 catch (\Exception $e){
       throw $e;
       }
@@ -531,23 +546,19 @@ try {
              ->withQueryParameters(array("limit" =>0,"fields" => array("firstName","lastName", "counterValues")));   	
     	
          $res1 = $sdk->api("cache/users", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 	
-
-
-}
+         
+         
+             	}
 catch (\Exception $e){
       throw $e;
       }
 
 /********* notifications ************/
 
-
+try {
 
 
 $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
-
-
-try {
-
     	 $sdk->path("queues/notifications")
             ->withQuery(array("typeId" =>$room))
             ->withOrder(array("updatedAt"=>"DESC"))
@@ -555,11 +566,11 @@ try {
 
          $res = $sdk->api("queues/notifications", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );	
 
-
-}
+    	}
 catch (\Exception $e){
       throw $e;
       }
+
 
   		$app->render('admin_room2.php', array('data' => $res, 'person' => $res1)); 
             }
@@ -570,15 +581,6 @@ catch (\Exception $e){
     	
     	
 })->name("aroom");
-
-
-
-
-
-
-
-
-
 
 
 //////////////////// admin setup :   (get)  /////////////////////////
@@ -596,15 +598,12 @@ $app->get('/admin/setup', function () use ($app, $sdk,$isaaConf) {
     
     //////////////////////////////////////////////////////////////////////////////////////     
     
-
+    try {
     
     
     
      $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);    
         //get conditions
-        
-     try {   
-        
       $sdk->path("admin/conditions")
    				 		->withQuery(array("leftSide" => "place"))
    				 		->withQueryParameters(array("limit" => 0, "fields" => array("name","leftSide", "rightSide")));
@@ -617,9 +616,7 @@ catch (\Exception $e){
       throw $e;
       }		 
    				 
-   				 
-   				 
-   				// print_r($res);  
+   		 
         $i=0;
         $cond= array();
         $mm=array();
@@ -635,14 +632,11 @@ catch (\Exception $e){
         		}
         endforeach;
         
-     
+        try {
         
         
          $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
         //get games
-        
-        try {
-        
         $sdk->path("cache/games")
    				 	
    				 		->withQueryParameters(array("limit" => 0, "fields" => array("segments","conditions")));
@@ -679,7 +673,7 @@ catch (\Exception $e){
       
        $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
            $sdk->path("cache/users/groups")
-   				 	
+   				 	 ->withOrder (array("label"=>"ASC" ))
    				 		->withQueryParameters(array("limit" => 0, "fields" => array("segments","label")));
       
        $resN3 = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters()  );
@@ -715,34 +709,36 @@ catch (\Exception $e){
   			
 //////// //////////////////////////////////////////////////////////////////////////////
     
-
+  
         
    $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
-        
-        
-        try {
+   
+   
+   try {
         
     $sdk->path("cache/games")
 				->withQueryParameters(array("limit" =>0,"fields" => array("conditions","segments", "name")));
 				
     $res = $sdk->api("cache/games", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );      
  
- 
- }
+     	}
 catch (\Exception $e){
       throw $e;
       }
+ 
+ 
  
  $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
  
  try {
  
     $sdk->path("cache/users/groups")
+     ->withOrder (array("label"=>"ASC" ))
 				->withQueryParameters(array("limit" =>0,"fields" => array("label","segments")));
 				
     $res1 = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
      
-     }
+         	}
 catch (\Exception $e){
       throw $e;
       }
@@ -757,13 +753,12 @@ catch (\Exception $e){
 						
     $res2 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
     
-    }
+    	}
 catch (\Exception $e){
       throw $e;
       }
-
    
-  	$app->render('setup.php', array('games' => $res, 'groups' => $res1, 'conditions' => $res2, 'mm' => $mm, 'resN' => $resN));
+  	$app->render('setup.php', array('games' => $res, 'groups' => $res1, 'conditions' => $res2, 'mm' => $mm, 'resN' => $resN)); 
   	
   	$app->render('footer.php'); 
  
@@ -784,8 +779,22 @@ $app->get('/admin/add', function () use ($app, $sdk) {
         
     $app->render('header3.php');
     $app->render('menu.php');
+    
+    try {
         
- 	$app->render('add.php') ;
+     $sdk->path("cache/users/groups")
+      ->withOrder (array("label"=>"ASC" ))
+				->withQueryParameters(array("limit" =>0,  "fields" => array("label", "name")));
+				
+    $res1 = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
+    
+        	}
+catch (\Exception $e){
+      throw $e;
+      } 
+        
+        
+ 	$app->render('add.php', array('groups' => $res1)) ;
   	
   	$app->render('footer.php'); 
   	
@@ -820,17 +829,15 @@ $app->post('/admin/add', function () use ($app, $sdk) {
    				$command2=" ";
    				$command=$command1.$command2.$_SESSION['base64'].$command2."\"".$new_room."\"".$command2.$new;
    				//echo $command;
-   				 if (exec($command)){
+   				 if ($c=exec($command)){
    				 
-   		?>
-   		
-   		<script> 
-   		alert("Success!");
-   		
-   		</script>
-   			<?php	
-   			 $app->response->redirect($app->urlFor('se'), 303);
+   	
+   	 $app->response->redirect($app->urlFor('se'), 303);
    			 
+					 }
+					 else {
+					 
+					 echo "<h4>Error :  <a href=\"./admin/add\"> Please try again </a></h4>";
 					 }
 				
 			
@@ -856,7 +863,7 @@ catch (\Exception $e){
 			
 		$name= $res2[0]['name']; // arg pierwszy
 		
-   $db= new Mongo_get;
+	  $db= new Mongo_get;
            $collection=$db->db_init();
 
 
@@ -870,18 +877,25 @@ catch (\Exception $e){
  	
 	}
 	
- $url_delete="http://188.226.248.208:8080/deleteRoom?iB64=".$base."&name=".$name;
+ $url_delete="http://getresults.isaacloud.com:8080/deleteRoom?iB64=".$base."&name=".$name;
 	
 	
 	// create a new cURL resource
 	$ch = curl_init($url_delete);
 	// grab URL and pass it to the browser
-curl_exec($ch);
+
+
+if (curl_exec($ch) == true){
 
 // close cURL resource, and free up system resources
 curl_close($ch);
-	 $app->response->redirect($app->urlFor('se'), 303);
-  	 // http://188.226.248.208:8080/deleteRoom?iB64=MjgwOjM5Yjk4ZjQ4YWNjYjQ2Y2ZhMzM3YjIxMDcyZDJlZmY=&name=boss_room
+
+	$app->response->redirect($app->urlFor('add'), 303);
+}
+else {
+echo "<h4>Error :  <a href=\"./admin/add\"> Please try again </a></h4>";
+
+}
   		
 		
 			}
@@ -937,11 +951,16 @@ $b_del= array();
   	$p=$pre.$c;  
   	echo "$p";
   	
-  	
+  	try {
   	
   	$sdk->path($p);  	
 			  	
  	$res2 = $sdk->api($p, "put", $sdk->getParameters(),  $sdk->getQueryParameters() ,  array('rightSide'=> "0" )  ); 
+  	
+  	    	}
+catch (\Exception $e){
+      throw $e;
+      }
   	
   endforeach;
 
@@ -964,7 +983,7 @@ endforeach;
 
  $_SESSION['beacons']= $new;
  
- if($_GET['w'] == "1")
+ if($_GET['w'] == "1" )
     $app->response->redirect($app->urlFor('add'), 303);
 else
 	$app->response->redirect($app->urlFor('se'), 303);
@@ -974,7 +993,7 @@ else
 
 
 
-///////////////////// admin setup (post)  /////////////////////////
+//////////////////// admin setup (post)  /////////////////////////
 
 
 
@@ -987,37 +1006,37 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
         $app->render('header3.php');
         $app->render('menu.php');
         
-        // games
         
         try {
         
+        
+        // games
             $sdk->path("cache/games")
 				->withQueryParameters(array("limit" =>0,"fields" => array("conditions","segments", "name")));
 				
-        $res = $sdk->api("cache/games", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );      
+        $res = $sdk->api("cache/games", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );    
         
-        
-        }
+            	}
 catch (\Exception $e){
       throw $e;
       }
         
-        
         try {
-        
+          
        // groups
           $sdk->path("cache/users/groups")
 				->withQueryParameters(array("limit" =>0,"fields" => array("label","segments")));
 				
-       $res1 = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
-        
-        
-        }
+       $res1 = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );  
+       
+       
+           	}
 catch (\Exception $e){
       throw $e;
       }
-        
-        try {
+      
+      
+      try { 
         
          //conditions
       $sdk->path("admin/conditions")
@@ -1027,20 +1046,20 @@ catch (\Exception $e){
       $res2 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );  
        
        
-       }
+    	}
 catch (\Exception $e){
       throw $e;
       }
+       
   
      /*********************** check ***************************/
     
   	
-
-    if((empty($_POST["uuid"])) || (empty($_POST["location"])) || (empty($_POST["major1"])) || (empty($_POST["minor1"]))) {
+ if((empty($_POST["uuid"])) || (empty($_POST["location"])) || (empty($_POST["major1"])) || (empty($_POST["minor1"]))) {
     	if((!empty($_POST["uuid"])) && ((empty($_POST["location"])) || (empty($_POST["major1"])) || (empty($_POST["minor1"])))){
         //mongo
    $db= new Mongo_get;
-           $collection=$db->db_init();
+   $collection=$db->db_init();
 
 
     $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
@@ -1053,15 +1072,20 @@ catch (\Exception $e){
  	$collection->save($cursor);
  	
     }
-    echo "ok";
+ 
+  $app->response->redirect($app->urlFor('se'), 303);
+  
     }
     else
     
-    	echo "Nie podano wszystkich danych!";
+    
+    	echo "<h4>All fields must be fill :  <a href=\"./admin/setup\"> Please try again </a></h4>";
+    	
+    	
     	}
     else {
     //mongo
-   $db= new Mongo_get;
+  $db= new Mongo_get;
            $collection=$db->db_init();
 
 
@@ -1094,14 +1118,120 @@ catch (\Exception $e){
 
  	if(empty($c_id))
 
-		echo "There's no condition for selected id";
+
+		
+		echo "<h4>There's no condition for selected id : <a href=\"./admin/add\"> Please try again </a></h4>";
+		
 		
 	else{
 	
+  $b_exit= $beacon_id.".exit";
+   $b_group= $beacon_id.".group";	
+   
+   try {
+  
+   $sdk->path("admin/conditions")
+   		->withQuery(array("rightSide" => $beacon_id));
 
-		  	
+$reS1 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );  
+
+
+    	}
+catch (\Exception $e){
+      throw $e;
+      }
+
+try {
+
+
+ $sdk->path("admin/conditions")
+   		->withQuery(array("rightSide" => $b_exit));
+
+$reS2 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );  
+
+    	}
+catch (\Exception $e){
+      throw $e;
+      }
+
+
+try {
+
+ $sdk->path("admin/conditions")
+   		->withQuery(array("rightSide" => $b_group));
+
+$reS3 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() ); 
+
+
+    	}
+catch (\Exception $e){
+      throw $e;
+      }
+	
 	$obiekt2= new Setup_data;
   	$con= $obiekt2->data_to_save($beacon_id, $c_id); //check if condition for selected id exists
+  
+  
+  $id_del=array(); 
+ $i=0;
+ if(!empty($reS1)){
+  foreach ($reS1 as $r):
+  	$id_del[$i]=$r['id'];
+  $i++;
+  endforeach;
+  
+  }
+  
+     $id_del2= array(); 
+   if(!empty($reS2)){
+
+ $i=0;
+  foreach ($reS2 as $r):
+  	$id_del2[$i]=$r['id'];
+  $i++;
+  endforeach;
+  
+
+  }
+  
+   $id_del3=array();
+  
+   if(!empty($reS3)){
+   
+ $i=0;
+  foreach ($reS3 as $r):
+  	$id_del3[$i]=$r['id'];
+  $i++;
+  endforeach;
+  
+
+}
+$wynik = array_merge($id_del, $id_del2, $id_del3);
+ foreach ($wynik as $c):
+	$pre="admin/conditions/";
+  	$p=$pre.$c; 
+  	
+  	try {
+  	
+  	$sdk->path($p);  	
+			  	
+ 	$res2 = $sdk->api($p, "put", $sdk->getParameters(),  $sdk->getQueryParameters() ,  array('rightSide' =>  "0")  ); 
+ 	
+  	    	}
+catch (\Exception $e){
+      throw $e;
+      }
+  	
+  	
+  endforeach;
+
+  
+  
+  
+  
+  
+  
+  
   
   foreach ($con as $c):
 	$pre="admin/conditions/";
@@ -1109,26 +1239,28 @@ catch (\Exception $e){
   	
   	try {
   	
-  	
   	$sdk->path($p);  	
 			  	
  	$res2 = $sdk->api($p, "put", $sdk->getParameters(),  $sdk->getQueryParameters() ,  array('rightSide' =>  $c['beacon'])  ); 
  	
- 	}
+  	    	}
 catch (\Exception $e){
       throw $e;
       }
   	
-  endforeach;		echo "Success!";
+  endforeach;
+
+ 
+$app->response->redirect($app->urlFor('se'), 303);
+ 
   	}	
 }
-  		$app->render('footer.php');
+  		$app->render('footer.php'); 
 
 
 
 
 })->name("set");
-
 
 
 

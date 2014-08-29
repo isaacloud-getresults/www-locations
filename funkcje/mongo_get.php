@@ -3,7 +3,7 @@
 	class Mongo_get{
 	
 	
-	    public function db_init(){
+		public function db_init(){
 	    
 	        $m = new MongoClient(); 
 			$db = $m->isaa;
@@ -11,6 +11,7 @@
 			return $collection;
 	    
 	    }
+	
 	
 	
 		//get UUID
@@ -62,12 +63,5 @@
  	          return $uu;
  			} 
  			
- 			
+ 	}		
 	}
-
-
-
-}
-
-
-?>

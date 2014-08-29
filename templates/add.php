@@ -1,4 +1,4 @@
-	    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
   <link rel="stylesheet" href="/resources/demos/style.css"> 
@@ -46,10 +46,10 @@ var w = "1";
 		 return true;
 		}
   
-
  
  
  </script>
+ 
  
  
  
@@ -120,11 +120,11 @@ showPleaseWait();
 		<dd><select name="room" id='text1'  disabled >
 		<option ></option>
 		<option disabled>-- locations --</option>
-			<?php foreach ($_SESSION['dane'] as $d):?>
+			<?php foreach ($groups as $d):?>
 		
 			
 			
-			<option value='<?php echo $d['name']; ?>'><?php echo $d['name']; ?></option>
+			<option value='<?php echo $d['label']; ?>'><?php echo $d['label']; ?></option>
 		<?php endforeach; ?>
 		</select></dd><br>
 		<dt>New location: </dt>
@@ -142,7 +142,8 @@ Ok</font></button></center>
       <center>   	
 	<div id="msgDiv"></div></br>
 	
-	<div> <img src="../images/wait.gif" id="spinnerImg" style="display: none;" /></div>
+
+	<div> <img src="../images/wait.gif" id="spinnerImg" style="display: none;" /></div> 
 	
 	</center>
 

@@ -29,7 +29,7 @@ require_once './src/contrib/Google_Oauth2Service.php';
 
 //start session
 
-session_name('o');
+session_name('p');
 session_start();
 
 

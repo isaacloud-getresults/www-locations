@@ -1,3 +1,10 @@
+<?php
+include ("./funkcje/setup_data.php"); //include class Setup_data
+
+$obiekt= new Setup_data;				
+$rooms=$obiekt->create_data($games, $groups); //create an array including: labels, conditions and number of locations in the select list
+?>
+
 <h1> WWW Apps </h1><br>
 	
 			
@@ -61,10 +68,10 @@
 
 						<div class="col-md-3" >
 		
-                          <br><p class="bg-info" style="text-align:center"><font size="4pt"><?php echo $room["label"]; 
-                          $room_id=$room["id"];?></a></font></p><br>
+                          <br><p class="bg-info" style="text-align:center"><font size="4pt"><?php echo $room["name"]; 
+                          $room_id=$room["id_r"];?></a></font></p><br>
                           
-                          <center><a href="./room<?php echo $room["id"];?>"><button class="btn btn-primary" style="width:120px"><font color="white">Open</font></button></a>
+                          <center><a href="./room<?php echo $room["id_r"];?>"><button class="btn btn-primary" style="width:120px"><font color="white">Open</font></button></a>
 							<BR><br>
                           
                           

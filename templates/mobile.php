@@ -52,7 +52,7 @@ base64: <input type="text" name="androidbase64" size="40" ></br></br>
 				
 				<div class="col-md-6">	
 						<p class="bg-info" style="text-align:center"><font size="6pt">Android</font></p><br>
-						<center><a href="http://www.appstore.com/myweb" target="_blank"><img src="../images/google-play.png" height="70px" width="220px"></a>
+						<center><a href="https://github.com/isaacloud-getresults/mobile-android/releases/tag/0.91" target="_blank"><img src="../images/google-play.png" height="70px" width="220px"></a>
 
     					
 							

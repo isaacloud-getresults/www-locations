@@ -1,6 +1,12 @@
 <?php
 
 
+define('ERR', '40001');
+define('EXPIRED_TOKEN', '40101');
+define('TIMEOUT', '3014');
+
+
+
 //Isaacloud sdk files
 defined('VENDOR_PATH') || define('VENDOR_PATH', realpath(__DIR__ . '/../vendor'));
 require VENDOR_PATH . '/autoload.php';
@@ -23,7 +29,7 @@ require_once './src/contrib/Google_Oauth2Service.php';
 
 //start session
 
-session_name('n');
+session_name('o');
 session_start();
 
 
@@ -62,7 +68,7 @@ if (isset($_GET['code']))
              $domain = end(explode('user', $_GET['state']));
              $_SESSION['domain']=$domain;
              $_SESSION['state']="user";
-    //   header('Location: http://localhost/~mac/user' );
+   //    header('Location: http://localhost/~mac/user' );
        header('Location: http://getresults.isaacloud.com/user' );
              }	    
 	return;
@@ -120,7 +126,7 @@ if ($gClient->getAccessToken())
 
 //Configuration for running slim framework
 $config = array(
-    'debug' => true,
+    'debug' => false,
     
     'templates.path' => TEMPLATES_PATH
 );
@@ -159,13 +165,22 @@ $cr=1; // room's counter
 
 /*******************************     Exceptions    **********************************/
 
-/*
+
 $app->error(function ( Exception $e ) use ($app) {
 
-    $app->render('exception.php');
+$number=$e->getCode();
+
+//echo $number;
+
+if (($number == EXPIRED_TOKEN) || ($number == TIMEOUT)|| ($number == ERR) )
+{  $app->render('exception.php'); }
+
+else
+{  $app->render('exception2.php'); }
+
     
 });
-*/
+
 
 /*******************************     Redirect    **********************************/
 

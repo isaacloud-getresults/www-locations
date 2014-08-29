@@ -2,6 +2,17 @@
 //get data from database
 	class Mongo_get{
 	
+	
+	    public function db_init(){
+	    
+	        $m = new MongoClient(); 
+			$db = $m->isaa;
+			$collection = $db->users;
+			return $collection;
+	    
+	    }
+	
+	
 		//get UUID
 		public function get_uuid(){
 		

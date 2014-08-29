@@ -1,8 +1,7 @@
 <h1> WWW Apps </h1><br>
 	
 			
-	
-    				<div class="modal-body row">
+<div class="modal-body row">
     					<div class="col-md-6" >
 				 		
 				 			<div class="modal-body row">
@@ -52,7 +51,7 @@
 						</div>
 					</div>
 				</div>	
-			
+	
 			<center><br><h2> Rooms: </h2></center>
 				<?php 	if(empty($rooms)) echo "<center>Empty</center>";
 						else { ?>
@@ -61,8 +60,8 @@
 			    		<?php $i=4; foreach ($rooms as $room): ?>
 
 						<div class="col-md-3" >
-					
-                          <p class="bg-info" style="text-align:center"><font size="4pt"><?php echo $room["label"]; 
+		
+                          <br><p class="bg-info" style="text-align:center"><font size="4pt"><?php echo $room["label"]; 
                           $room_id=$room["id"];?></a></font></p><br>
                           
                           <center><a href="./room<?php echo $room["id"];?>"><button class="btn btn-primary" style="width:120px"><font color="white">Open</font></button></a>
@@ -85,11 +84,11 @@
                     <?php 
                      $i++; 
                     if(!($i % 4))
-                    	echo "</div></div><br>";
+                    	echo "</div><br>";
                     else 
                     	echo "</div>";
                     endforeach; } ?> 
                     	
                     	
 			
-		</div></div><br>	
+	</div></div><br>

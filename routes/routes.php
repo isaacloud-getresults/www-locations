@@ -1,6 +1,6 @@
 <?php 
 
-
+include ("./funkcje/mongo_get.php"); //include class Setup_data
 
 ////////////////////////////////  root   /////////////////////////////////////////////
 
@@ -19,9 +19,8 @@ $app->get('/', function () use ($app,$sdk,$authUrl,$authUrl1,$authUrl2,$jest) {
                               if (isset($_SESSION['email']) && $_SESSION['state']="admin"  )
                                 {             //checking if user exists in database   
 
-   								  $m = new MongoClient(); 
-  								  $db = $m->isaa;
-  								  $collection = $db->users;
+   								 $db= new Mongo_get;
+                                  $collection=$db->db_init();
     
   								  $cursor = $collection->find(array( 'email' => $_SESSION['email'] ));
    
@@ -92,9 +91,8 @@ $app->get('/user', function () use ($app,$sdk,$authUrl1,$authUrl2,$jest) {
                               if (isset($_SESSION['email']) && isset($_SESSION['domain'] ) && $_SESSION['state']="user" )
                               {             
 
-								$m = new MongoClient(); 
-								$db = $m->isaa;
-								$collection = $db->users;
+								$db= new Mongo_get;
+          					 $collection=$db->db_init();
     
     							$ok=false; 
     

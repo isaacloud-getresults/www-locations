@@ -1,6 +1,6 @@
 <?php
 include ("./funkcje/setup_data.php"); //include class Setup_data
-include ("./funkcje/mongo_get.php"); //include class Setup_data
+
 
 
 

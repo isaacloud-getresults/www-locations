@@ -42,43 +42,14 @@ var w = "1";
   		function showPleaseWait() {
 			var butt = document.getElementById("msgDiv");
 			butt.innerHTML="Please wait while your location is being configured. It may take a while.";
-			 document.getElementById('progressbar').style.display = "";
+			 document.getElementById('spinnerImg').style.display = "";
 		 return true;
 		}
   
-  
-  $(function() {
-$("#progressbar").progressbar({ value: 0 });
-setTimeout(updateProgress, 1000);
-});
 
-function updateProgress() {
-  var progress;
-  progress = $("#progressbar")
-    .progressbar("option","value");
-  if (progress < 100) {
-      $("#progressbar")
-        .progressbar("option", "value", progress + 1);
-      setTimeout(updateProgress, 1000);
-  }
-}
  
  
  </script>
- <style>
-  #progressbar {
-    margin-top: 20px;
-  }
- 
-  .progress-label {
-    font-weight: bold;
-    text-shadow: 1px 1px 0 #fff;
-  }
- 
-  .ui-dialog-titlebar-close {
-    display: none;
-  }
-  </style>
  
  
  
@@ -167,11 +138,11 @@ Ok</font></button></center>
 	
 	</form>
 	
-		 </br></br>  	
+		 </br> 	
       <center>   	
-	<div id="msgDiv"></div></br></br>
+	<div id="msgDiv"></div></br>
 	
-	<div id="progressbar" style="display: none;"></div> 
+	<div> <img src="../images/wait.gif" id="spinnerImg" style="display: none;" /></div>
 	
 	</center>
 

@@ -37,6 +37,8 @@ $app->get('/admin/dashboard', function () use ($app,$sdk,$isaaConf) {
     
     }
 catch (\Exception $e){
+
+
       throw $e;
       }
     
@@ -82,9 +84,8 @@ $app->get('/admin/register', function () use ($app) {
 	$token= md5($_SESSION['email'].time());        // generate activation token            
 	$_SESSION['activation']= $token;
 	
-	$m = new MongoClient(); 
-    $db = $m->isaa;
-    $collection = $db->users;
+	   $db= new Mongo_get;
+           $collection=$db->db_init();
 	
 	
 	$cursor2 = $collection->findOne(array( 'email' => $_SESSION['email']));       
@@ -113,9 +114,8 @@ $app->post('/admin/register', function () use ($app) {
 
     $sub=false;
 
-    $m = new MongoClient(); 
-    $db = $m->isaa;
-    $collection = $db->users;
+       $db= new Mongo_get;
+           $collection=$db->db_init();
     
     $cursor = $collection->findOne(array( 'domain' => $_POST['domain'] ));
     
@@ -167,9 +167,8 @@ $app->get('/admin/activate/:code', function ($code) use ($app) {
 
     $_SESSION['activation']= $code;
 
-    $m = new MongoClient(); 
-    $db = $m->isaa;
-    $collection = $db->users;
+   $db= new Mongo_get;
+           $collection=$db->db_init();
 
     $cursor = $collection->findOne(array( 'token' => $code ));
    
@@ -218,9 +217,8 @@ $app->post('/admin/activate/activate', function () use ($app) {
 $app->get('/admin/ic', function () use ($app) {
 
 
-    $m = new MongoClient(); 
-    $db = $m->isaa;
-    $collection = $db->users;
+   $db= new Mongo_get;
+           $collection=$db->db_init();
 
     $cursor = $collection->findOne(array( 'token' => $_SESSION['activation'] ));
    
@@ -241,9 +239,8 @@ $app->get('/admin/init', function () use ($app) {
      if (isset($_SESSION['token']) )
                                 {             //checking if user exists in database   
 
-   								  $m = new MongoClient(); 
-  								  $db = $m->isaa;
-  								  $collection = $db->users;
+   				   $db= new Mongo_get;
+           $collection=$db->db_init();
     
   								  $cursor = $collection->find(array( 'email' => $_SESSION['email'] ));
    
@@ -303,9 +300,8 @@ $app->get('/admin/mobile', function () use ($app) {
     }
         
         
-    $m = new MongoClient(); 
-    $db = $m->isaa;
-    $collection = $db->users;
+   $db= new Mongo_get;
+           $collection=$db->db_init();
     
       
     $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
@@ -332,10 +328,8 @@ $app->post('/admin/mobile', function () use ($app) {
     $app->response->redirect($app->urlFor('e'), 303);
     }
         
-        
-    $m = new MongoClient(); 
-    $db = $m->isaa;
-    $collection = $db->users;
+   $db= new Mongo_get;
+           $collection=$db->db_init();
     
       
     $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
@@ -387,9 +381,8 @@ $app->get('/admin/www', function () use ($app,$sdk,$isaaConf) {
         }
 
 
-    $m = new MongoClient(); 
-    $db = $m->isaa;
-    $collection = $db->users;
+   $db= new Mongo_get;
+           $collection=$db->db_init();
     
       
     $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
@@ -443,9 +436,8 @@ $app->get('/admin/room:id', @function($id) use ($app,$sdk, $cr,$isaaConf){
         }
 
 
-$m = new MongoClient(); 
-      $db = $m->isaa;
-      $collection = $db->users;
+   $db= new Mongo_get;
+           $collection=$db->db_init();
    
         $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
 
@@ -604,12 +596,15 @@ $app->get('/admin/setup', function () use ($app, $sdk,$isaaConf) {
     
     //////////////////////////////////////////////////////////////////////////////////////     
     
-    try {
+
     
     
     
      $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);    
         //get conditions
+        
+     try {   
+        
       $sdk->path("admin/conditions")
    				 		->withQuery(array("leftSide" => "place"))
    				 		->withQueryParameters(array("limit" => 0, "fields" => array("name","leftSide", "rightSide")));
@@ -640,11 +635,14 @@ catch (\Exception $e){
         		}
         endforeach;
         
-        try {
+     
         
         
          $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf); 
         //get games
+        
+        try {
+        
         $sdk->path("cache/games")
    				 	
    				 		->withQueryParameters(array("limit" => 0, "fields" => array("segments","conditions")));
@@ -717,9 +715,12 @@ catch (\Exception $e){
   			
 //////// //////////////////////////////////////////////////////////////////////////////
     
-    try {
+
         
    $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
+        
+        
+        try {
         
     $sdk->path("cache/games")
 				->withQueryParameters(array("limit" =>0,"fields" => array("conditions","segments", "name")));
@@ -727,24 +728,40 @@ catch (\Exception $e){
     $res = $sdk->api("cache/games", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );      
  
  
+ }
+catch (\Exception $e){
+      throw $e;
+      }
+ 
  $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
+ 
+ try {
+ 
     $sdk->path("cache/users/groups")
 				->withQueryParameters(array("limit" =>0,"fields" => array("label","segments")));
 				
     $res1 = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
      
+     }
+catch (\Exception $e){
+      throw $e;
+      }
+     
      
      $sdk = new IsaaCloud\Sdk\IsaaCloud($isaaConf);
+     
+     try {
+     
     $sdk->path("admin/conditions")
       		->withOrder(array("id"=>"ASC"));
 						
     $res2 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
     
-    
     }
 catch (\Exception $e){
       throw $e;
       }
+
    
   	$app->render('setup.php', array('games' => $res, 'groups' => $res1, 'conditions' => $res2, 'mm' => $mm, 'resN' => $resN));
   	
@@ -839,9 +856,8 @@ catch (\Exception $e){
 			
 		$name= $res2[0]['name']; // arg pierwszy
 		
-		 $m = new MongoClient(); 
-   		 $db = $m->isaa;
-    	$collection = $db->users;
+   $db= new Mongo_get;
+           $collection=$db->db_init();
 
 
    		 $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
@@ -972,15 +988,36 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
         $app->render('menu.php');
         
         // games
+        
+        try {
+        
             $sdk->path("cache/games")
 				->withQueryParameters(array("limit" =>0,"fields" => array("conditions","segments", "name")));
 				
         $res = $sdk->api("cache/games", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );      
+        
+        
+        }
+catch (\Exception $e){
+      throw $e;
+      }
+        
+        
+        try {
+        
        // groups
           $sdk->path("cache/users/groups")
 				->withQueryParameters(array("limit" =>0,"fields" => array("label","segments")));
 				
        $res1 = $sdk->api("cache/users/groups", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );   
+        
+        
+        }
+catch (\Exception $e){
+      throw $e;
+      }
+        
+        try {
         
          //conditions
       $sdk->path("admin/conditions")
@@ -989,6 +1026,11 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
 					
       $res2 = $sdk->api("admin/conditions", "get", $sdk->getParameters(),  $sdk->getQueryParameters() );  
        
+       
+       }
+catch (\Exception $e){
+      throw $e;
+      }
   
      /*********************** check ***************************/
     
@@ -997,9 +1039,8 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
     if((empty($_POST["uuid"])) || (empty($_POST["location"])) || (empty($_POST["major1"])) || (empty($_POST["minor1"]))) {
     	if((!empty($_POST["uuid"])) && ((empty($_POST["location"])) || (empty($_POST["major1"])) || (empty($_POST["minor1"])))){
         //mongo
-    $m = new MongoClient(); 
-    $db = $m->isaa;
-    $collection = $db->users;
+   $db= new Mongo_get;
+           $collection=$db->db_init();
 
 
     $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
@@ -1020,9 +1061,8 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
     	}
     else {
     //mongo
-    $m = new MongoClient(); 
-    $db = $m->isaa;
-    $collection = $db->users;
+   $db= new Mongo_get;
+           $collection=$db->db_init();
 
 
     $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
@@ -1067,9 +1107,17 @@ $app->post('/admin/setup', function () use ($app, $sdk) {
 	$pre="admin/conditions/";
   	$p=$pre.$c['id'];  
   	
+  	try {
+  	
+  	
   	$sdk->path($p);  	
 			  	
  	$res2 = $sdk->api($p, "put", $sdk->getParameters(),  $sdk->getQueryParameters() ,  array('rightSide' =>  $c['beacon'])  ); 
+ 	
+ 	}
+catch (\Exception $e){
+      throw $e;
+      }
   	
   endforeach;		echo "Success!";
   	}	
@@ -1118,9 +1166,8 @@ $app->post('/admin/calendar', function () use ($app, $sdk) {
  if(empty($_POST['calendar1']) || empty($_POST['calendar2']))
  	echo "Enter base64 to your google calendar";
 else{
-	$m = new MongoClient(); 
-    $db = $m->isaa;
-    $collection = $db->users;
+   $db= new Mongo_get;
+           $collection=$db->db_init();
 
 
     $cursor = $collection->findOne(array( 'email' => $_SESSION['email'] ));
